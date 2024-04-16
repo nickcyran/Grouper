@@ -1,9 +1,11 @@
 import './styles/App.css';
+import {Messaging} from './pages'
 
 function App() {
   return (
     <div className="App">
-     <h1>grouper!</h1>
+      <Messaging />
+     
     </div>
   );
 }

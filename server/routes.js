@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 // [CHATROOM(messaging) ROUTES] ------------------------------------------------
-const { createChatroom, getChatroom } = require('../controllers/chatroomController');
-router.post('/createChat', createChatroom);
-router.get('/getChat', getChatroom);
+const { createChat, getChat } = require('./controllers/chatroomController');
+router.post('/createChat', createChat); 
+router.get('/getChat', getChat);
 
 // --ADD ROUTES HERE---
 // EX SMTHING LIKE THIS)
@@ -23,3 +23,4 @@ router.get('/getChat', getChatroom);
     //router.get('/getProjects', getProjects);
     //router.post('/createProject', postProject);
 
+module.exports = router; 

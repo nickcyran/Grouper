@@ -7,7 +7,7 @@ const cors = require('cors');
 const app = express();
 
 // database
-const mongoString = "PLACEHOLDERATM";
+const mongoString = "mongodb+srv://ncyran:jVxcRzyBTgfhhRO3@cluster0.diytgzw.mongodb.net/"; 
 mongoose.connect(mongoString);
 const database = mongoose.connection;
 
