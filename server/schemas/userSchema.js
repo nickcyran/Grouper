@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 // users are kind of gonna be a beefy model ----> elements to add
 // i) user info (username, password, profile elements)
-// ii) servers/existing chat/dms
+// ii) all ids of their existing servers/dms 
 // iii) 
 
 // controller needs to store user._id, username?

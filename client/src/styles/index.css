@@ -4,10 +4,10 @@
   /* border: solid 1px red; */
   font-family: "Poppins", sans-serif;
   scroll-behavior: smooth;
-  color:white;
 }
 
 body, html, #root {
+  color:white;
   width: 100%;
   margin: 0;
   padding: 0;

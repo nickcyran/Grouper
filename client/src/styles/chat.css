@@ -1,0 +1,8 @@
+.msgBar{
+    font-size: 16px;
+    color: black;
+    width: 40%;
+    height: 5vh;
+    border-radius: 16px;
+    padding: 0 8px;
+}
