@@ -1,11 +1,10 @@
 import './styles/App.css';
-import {Messaging} from './pages'
+import {Messaging, Main} from './pages'
 
 function App() {
   return (
     <div className="App">
-      <Messaging />
-     
+      <Main />
     </div>
   );
 }

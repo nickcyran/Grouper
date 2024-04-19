@@ -1,0 +1,32 @@
+.page{
+    width: 100%;
+    background-color: #2b2d31;
+    display: flex;
+    flex-direction: row;
+}
+
+.leftSideBar{
+    object-fit: contain;
+    flex-basis: 16%;
+   
+}
+
+.rightSideBar{
+    object-fit: contain;
+    flex-basis: 19%;
+
+}
+
+.mainContent{
+    object-fit: contain;
+    flex-basis: 65%;
+
+}
+
+.mainContent.expanded {
+    flex-basis: 75%;
+}
+
+.leftSideBar.expanded {
+    flex-basis: 25%;
+}
