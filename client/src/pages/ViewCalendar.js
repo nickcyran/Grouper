@@ -2,7 +2,7 @@ import axios from "axios";
 import '../styles/Calendar.css';
 import Select from 'react-select'
 import { React, useState } from "react";
-import Multiselect from 'multiselect-react-dropdown';
+import CalendarGrid from "./CalendarGrid";
 
 function ViewCalendar() {
      /* VIEW SETTING */
@@ -22,75 +22,70 @@ function ViewCalendar() {
      //const [calendars, setCalendars] = useState([]);
      const calendars = ['Personal Calendar', 'Work Calendar', 'Family Calendar'];
      const [selectedCalendars, setSelectedCalendars] = useState([])
-     const [calendarNum, setNum] = useState(0)
-
-     const calendarOptions = calendars.map((cal) => {
-          return { label: cal, value: cal }
-     })
-
-     //use effect to get calendars
+     //use effect to get calendars from database
 
      /* TAGS */
+     const tags = ['High Priority', 'Medium Priority', 'Low Priority'];
+     const [selectedTags, setSelectedTags] = useState([])
 
      return (
           <div>
-               <label>View Setting</label>
-               <Select id="select"
-                    onChange={handleViewChange}
-                    options={viewOptions}
-                    value={viewSetting}
-               />
+               <div id="top">
+                    {viewSetting === 'Daily' &&
+                         <p id="view">Daily</p>}
 
-               <p></p>
+                    {viewSetting === 'Weekly' &&
+                         <p id="view">Weekly</p>}
 
-               <label>Calendars</label>
-               <Multiselect id="select"
-                    options={calendarOptions}
-                    displayValue="label"
-                    value={selectedCalendars}
-                    onSelect={(e) => {
-                         e.map((u) => {
-                              let ex = (selectedCalendars.includes(u.value))
-                              if (ex === false) {
-                                   selectedCalendars.push(u.value)
-                              }
-                              return null
-                         })
-                    }}
-                    onRemove={(e) => {
-                         selectedCalendars.length = 0; //clear selectedCalendars
-                         e.map((u) => {
-                              let ex = (selectedCalendars.includes(u.value))
-                              if (ex === false) {
-                                   selectedCalendars.push(u.value)
-                              }
-                              return null
-                         })
-                    }
-                    }
+                    {viewSetting === 'Monthly' &&
+                         <p id="view">Monthly</p>}
 
-               />
+                    {viewSetting === 'Yearly' &&
+                         <p id="view">Yearly</p>}
 
-               <p></p>
+                    <Select id="viewselect"
+                         onChange={handleViewChange}
+                         options={viewOptions}
+                         value={viewSetting}
+                    />
+               </div>
 
+               <div id="side">
+                    <label id="sideheader">Calendars</label><br />
+                    <form>
+                         {calendars.map((cal, index) => {
+                              return (
+                                   <label key={index}>
+                                        <input
+                                             name={cal}
+                                             type="checkbox"
+                                             value={cal}
+                                        />{cal}<br />
+                                   </label>
+                              );
+                         })}
+                    </form>
+                    <br/>
+                    <label id="sideheader">Tags</label><br />
+                    <form>
+                         {tags.map((t, index) => {
+                              return (
+                                   <label key={index}>
+                                        <input
+                                             name={t}
+                                             type="checkbox"
+                                             value={t}
+                                        />{t}<br />
+                                   </label>
+                              );
+                         })}
+                    </form>
+               </div>
 
-               {/*DISPLAY */}
-               {viewSetting === 'Daily' &&
-                    <p>You are now viewing daily.</p>}
+           {<CalendarGrid id="cal"/>} 
 
-               {viewSetting === 'Weekly' &&
-                    <p>You are now viewing weekly.</p>}
-
-               {viewSetting === 'Monthly' &&
-                    <p>You are now viewing monthly.</p>}
-
-               {viewSetting === 'Yearly' &&
-                    <p>You are now viewing yearly.</p>}
-
-               {(selectedCalendars.length) === 0 &&
-                    <p>Please select at least one calendar to view.</p>}
-               
           </div>
+          
      )
 }
 
