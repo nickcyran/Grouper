@@ -1,3 +1,8 @@
 -------------RUN IN CLIENT----------
 npm install react-scripts --save
+npm install react-select react-router-dom
 npm i --save axios
+
+----- make sure to add your page to: -----
+Navbar.js (add Link to your page)
+App.js (add Route to your page)
