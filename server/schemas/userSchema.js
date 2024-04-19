@@ -9,7 +9,16 @@ const mongoose = require("mongoose");
 // controller needs to store user._id, username?
 
 const userSchema = new mongoose.Schema({
-    username: String
+    f_name: String,
+    l_name: String,
+    Username: String,
+    Password: String,
+    profile_id: mongoose.Schema.Types.ObjectId,
+    messages: [{type: mongoose.Schema.Types.ObjectId}],
+    calanders_id: [{type: mongoose.Schema.Types.ObjectId}],
+    groups_id: [{type: mongoose.Schema.Types.ObjectId}],
+    isAdmin_id: [{type: mongoose.Schema.Types.ObjectId}],
+    availibility: mongoose.Schema.Types.ObjectId
 });
 
 const User = mongoose.model("user", userSchema);
