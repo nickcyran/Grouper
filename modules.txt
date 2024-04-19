@@ -1,6 +1,5 @@
 -------------RUN IN CLIENT----------
-npm install react-scripts --save
-npm install react-select react-router-dom
+npm install react-scripts --save react-select react-router-dom multiselect-react-dropdown
 npm i --save axios
 
 ----- make sure to add your page to: -----
