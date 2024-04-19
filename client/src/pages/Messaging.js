@@ -47,26 +47,23 @@ const MessageBar = () => {
         event.preventDefault();
 
         if (!(/^\s*$/.test(message))) {
-            var groupID =  localStorage.getItem('currentGroup');
-            var userID =  localStorage.getItem('userID');
+            var groupID = localStorage.getItem('currentGroup');
+            var userID = localStorage.getItem('userID');
 
-            axios.post('http://localhost:9000/sendChat/', {group_id: groupID, user_id: userID, message: message})
-            .then(res => {
-                console.log("SENT: " + message)
-            })
-            .catch((err) => {
-                console.error('Error in getting chat:', err);
-                alert('Error in getting chat');
-            });
-
-            // SEND THE MESSAGE IF EXISTING ELSE CREATE CHAT AND APPEND THE NEW ID TO BOTH USERS
+            axios.post('http://localhost:9000/sendChat/', { group_id: groupID, user_id: userID, message: message })
+                .then(res => {
+                    console.log("SENT: " + message)
+                })
+                .catch((err) => {
+                    console.error('Error in sending chat:', err);
+                });
             setMessage('');
         }
     };
 
     return (
         <form onSubmit={handleSubmit}>
-            <input 
+            <input
                 className="msgBar"
                 autoComplete="off"
                 type="text"
@@ -82,6 +79,8 @@ const MessageBar = () => {
 
 const Messaging = ({ group }) => {
     const [chat, setChat] = useState([]);
+
+    console.log(group)
 
     useEffect(() => {
         axios.get('http://localhost:9000/getChat/', { params: { groupId: group } })

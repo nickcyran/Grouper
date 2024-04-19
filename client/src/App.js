@@ -8,6 +8,7 @@ function App() {
     <div className="App">
       <Navbar />
       <Routes>
+        <Route path="/" element={<Main />} />
         <Route path="/main" element={<Main />} />
         <Route path="/viewcalendar" element={<ViewCalendar />} />
       </Routes>
