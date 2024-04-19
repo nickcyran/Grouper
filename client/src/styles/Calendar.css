@@ -1,0 +1,59 @@
+#viewselect {
+     font-size: 10px;
+     color: #313338;
+     width:100px;
+     right: 50px;
+     position: fixed;
+     top: 50px;
+     background: #3d3f46;
+}
+
+#view {
+     font-size: 20px;
+     top: 0;
+     left: 10px;
+}
+
+#sideheader {
+     font-size: 15px;
+     position: fixed;
+     width: 150px;
+     left: 0;
+     text-align: left
+}
+
+#side {
+     font-size: 12px;
+     width: 200px;
+     position: fixed;
+     left: 0;
+     text-align: left
+}
+
+#cal {
+     position: fixed;
+     align-self: center;
+}
+
+table {
+     font-size: 15px;
+     border-collapse: collapse;
+     margin-left: 200px;
+     border-width: 1px;
+     border-style: solid;
+     border-color: azure;
+     width: 75%;
+     position: fixed;
+}
+
+th {
+     border-collapse: collapse;
+     border-style: solid;
+     border-color: azure;  
+}
+
+td {
+     border-collapse: collapse;
+     border-style: solid;
+     border-color: azure;
+}

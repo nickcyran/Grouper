@@ -1,48 +1,91 @@
 import axios from "axios";
+import '../styles/Calendar.css';
 import Select from 'react-select'
-import { React, useState} from "react";
+import { React, useState } from "react";
+import CalendarGrid from "./CalendarGrid";
 
 function ViewCalendar() {
+     /* VIEW SETTING */
      const [viewSetting, setViewSetting] = useState('Monthly')
      const viewArray = ['Daily', 'Weekly', 'Monthly', 'Yearly']
-     const selection = '';
 
      const viewOptions = viewArray.map((prior) => {
           return { label: prior, value: prior }
      })
 
      // reset view setting
-     const setView = (event) => {
-          setViewSetting = event.data
-          localStorage.clear()
-          localStorage.setItem('viewSelection', viewSetting)
-          selection = localStorage.getItem('viewSetting')
+     const handleViewChange = (event) => {
+          setViewSetting(event.label);
      }
+
+     /* CALENDAR SELECTION */
+     //const [calendars, setCalendars] = useState([]);
+     const calendars = ['Personal Calendar', 'Work Calendar', 'Family Calendar'];
+     const [selectedCalendars, setSelectedCalendars] = useState([])
+     //use effect to get calendars from database
+
+     /* TAGS */
+     const tags = ['High Priority', 'Medium Priority', 'Low Priority'];
+     const [selectedTags, setSelectedTags] = useState([])
 
      return (
           <div>
-               <label>View Setting</label>
-               <Select
-                    value={viewSetting}
-                    onChange={setView}
-                    options={viewOptions}
-               />
+               <div id="top">
+                    {viewSetting === 'Daily' &&
+                         <p id="view">Daily</p>}
 
-               <p></p>
-               {selection === 'Daily' &&
-                    <p>You are now viewing daily.</p>}
+                    {viewSetting === 'Weekly' &&
+                         <p id="view">Weekly</p>}
 
-               {selection === 'Weekly' &&
-                    <p>You are now viewing weekly.</p>}
+                    {viewSetting === 'Monthly' &&
+                         <p id="view">Monthly</p>}
 
-               {selection === 'Monthly' &&
-                    <p>You are now viewing monthly.</p>}
+                    {viewSetting === 'Yearly' &&
+                         <p id="view">Yearly</p>}
 
-               {selection === 'Yearly' &&
-                    <p>You are now viewing yearly.</p>}
+                    <Select id="viewselect"
+                         onChange={handleViewChange}
+                         options={viewOptions}
+                         value={viewSetting}
+                    />
+               </div>
 
+               <div id="side">
+                    <label id="sideheader">Calendars</label><br />
+                    <form>
+                         {calendars.map((cal, index) => {
+                              return (
+                                   <label key={index}>
+                                        <input
+                                             name={cal}
+                                             type="checkbox"
+                                             value={cal}
+                                        />{cal}<br />
+                                   </label>
+                              );
+                         })}
+                    </form>
+                    <br/>
+                    <label id="sideheader">Tags</label><br />
+                    <form>
+                         {tags.map((t, index) => {
+                              return (
+                                   <label key={index}>
+                                        <input
+                                             name={t}
+                                             type="checkbox"
+                                             value={t}
+                                        />{t}<br />
+                                   </label>
+                              );
+                         })}
+                    </form>
+               </div>
+
+           {<CalendarGrid id="cal"/>} 
 
           </div>
+          
      )
 }
 
