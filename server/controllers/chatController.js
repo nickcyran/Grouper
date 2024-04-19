@@ -1,14 +1,36 @@
 const Chat = require('../schemas/chatSchema');
+const User  = require('../schemas/userSchema');
 
 exports.getChat = async (req, res) => {
+    var knownUserNames = {}
+
     try {
-        const id = req.query.groupId;
+        const id = req.query.groupId
         const chat = await Chat.findById(id);
-       
+
         if (!chat) { 
             return res.status(404).send("Chat not found");
         }
-        res.send(chat);
+    
+        var messages = [];
+    
+        for (const msg of chat.messages) {
+            var usrID = msg.user_id;
+
+            if(usrID == null){
+                continue;
+            }
+            else if (!(usrID in knownUserNames)) {
+                knownUserNames[usrID] = (await User.findById(usrID)).username;
+            } 
+            
+            messages.push({
+                username: knownUserNames[usrID],
+                message: msg.message,
+                _id: msg._id
+            });
+        }
+        res.send(messages);
     }
     catch (error) { 
         res.status(500).send(error)
@@ -35,10 +57,8 @@ exports.sendChat = async (req, res) => {
     }
 }; 
 
-
 exports.createChat = async (req, res) => {
     try {
-        console.log(req.body)
         const chatroom = new Chat(req.body);
         chatroom.save()
         console.log(`chat created! ${chatroom}`)

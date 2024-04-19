@@ -9,7 +9,13 @@ const mongoose = require("mongoose");
 // controller needs to store user._id, username?
 
 const userSchema = new mongoose.Schema({
-    username: String
+    username: String,
+    friends: [{
+        user_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user'  
+        },
+    }]
 });
 
 const User = mongoose.model("user", userSchema);

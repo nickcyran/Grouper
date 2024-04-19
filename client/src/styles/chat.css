@@ -8,17 +8,24 @@
 
 .pastChats{
     margin: 0 4px;
-    flex-basis: 90%;
+    flex-basis: 93%;
+    
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
+
+.pastChats::-webkit-scrollbar {
+    width: 0; 
+  }
 
 /*BOTTOM vvvv*/
 
-.msgBar{
+.msgBar{  
     width: 88%;
     font-size: 16px;
     color: black;
     border-radius: 12px;
-    padding: 0 8px;
+    padding: 0 8px; 
 }
 
 .submit{

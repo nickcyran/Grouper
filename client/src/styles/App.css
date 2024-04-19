@@ -3,12 +3,15 @@ body{
 }
 
 .App{
+    display: flex;
+    flex-direction: column;
     text-align: center;
     margin: 0 auto;
 }
 
+
 .main{
-    height: 100vh;
+    height: 92vh;
     display: flex;
     flex-direction: row;
 }

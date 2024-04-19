@@ -25,7 +25,7 @@ const Right = () => {
 }
 
 const Group = ({ group }) => {
-    return <PageContent Left={Left} Main={Main} Right={Right}  group={group} />
+    return <PageContent Left={Left} Main={Main} Right={Right} group={group} />
 }
 
 export default Group;

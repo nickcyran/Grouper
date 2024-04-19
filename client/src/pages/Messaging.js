@@ -1,28 +1,12 @@
 import axios from 'axios';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import '../styles/chat.css'
 
 const MsgDisplay = ({ chatLog }) => {
-    const [usernames, setUsernames] = useState('');
+    const messagesEndRef = useRef(null);
 
     useEffect(() => {
-        const fetchUsernames = async () => {
-            const usernames = {};
-            for (const chat of chatLog) {
-                try {
-                    const res = await axios.get('http://localhost:9000/getUsername/', { params: { id: chat.user_id } });
-                    usernames[chat.user_id] = res.data;
-                } catch (err) {
-                    console.error('Error in getting username:', err);
-                    alert('Error in getting username');
-                }
-            }
-            setUsernames(usernames);
-        };
-
-        if (Array.isArray(chatLog)) {
-            fetchUsernames();
-        }
+        messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
     }, [chatLog]);
 
     if (!Array.isArray(chatLog)) {
@@ -31,14 +15,17 @@ const MsgDisplay = ({ chatLog }) => {
 
     return (
         <div className="msg">
-            {chatLog.map((chat, index) => (
-                <div key={index}>
-                    <p>{usernames[chat.user_id]}:&nbsp; {chat.message}</p>
+            {chatLog.map((chat) => (
+                <div key={chat._id}>
+                    <p>
+                        {chat.username}:&nbsp; {chat.message}
+                    </p>
                 </div>
             ))}
+            <div ref={messagesEndRef} />
         </div>
-    )
-}
+    );
+};
 
 const MessageBar = () => {
     const [message, setMessage] = useState('');
@@ -77,29 +64,39 @@ const MessageBar = () => {
     )
 }
 
+const GetMessages = (group, setChat) => {
+    axios.get('http://localhost:9000/getChat/', { params: { groupId: group } })
+        .then(res => {
+            setChat(res.data);
+        })
+        .catch((err) => {
+            console.error('Error in getting chat:', err);
+        });
+}
+
 const Messaging = ({ group }) => {
     const [chat, setChat] = useState([]);
 
-    console.log(group)
+    useEffect(() => {
+        const socket = new WebSocket('ws://localhost:9000/change');
+
+        socket.onmessage = (event) => {
+            GetMessages(group, setChat)
+        }
+        return () => {
+            socket.close();
+        };
+    }, [group])
 
     useEffect(() => {
-        axios.get('http://localhost:9000/getChat/', { params: { groupId: group } })
-            .then(res => {
-                setChat(res.data.messages);
-            })
-            .catch((err) => {
-                console.error('Error in getting chat:', err);
-                alert('Error in getting chat');
-            });
+        GetMessages(group, setChat)
     }, [group]);
 
     return (
         <div className="msgContainer">
-
             <div className="pastChats">
                 <MsgDisplay chatLog={chat} />
             </div>
-
             <MessageBar />
         </div>
     );
