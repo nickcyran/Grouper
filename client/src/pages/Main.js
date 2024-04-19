@@ -32,7 +32,8 @@ const Main = () => {
                     <div className="groupBar">
                         {/* {[...Array(8)].map((x, i) =>
                         <GroupIcon />
-                    )} */}
+                        )} */}
+
                         <GroupIcon onClick={() => {
                             setOnFriendsPage(false);
                             updateLocalStorage('66205239d5a9031a80a56968')
@@ -46,6 +47,7 @@ const Main = () => {
                     </div>
                 </div>
 
+                     {/* WETHER FRIEND/DMS or GROUP IS DISPLAYED */}
                 {onFriendsPage ? <Friends group={group} /> : <Group group={group} />}
             </div>
     );

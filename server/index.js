@@ -33,7 +33,7 @@ function startServer() {
 
     // WebSocket connection handling
     wss.on('connection', function connection(ws) {
-        console.log('WebSocket client connected');
+       
     });
 
     // Change stream setup after the database connection is established

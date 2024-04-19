@@ -11,6 +11,19 @@ exports.createUser = async (req, res) => {
     }
 };
 
+exports.addToGroup = async (req, res) => {
+    try {
+        const {groupId, user_id} = req.body;
+        
+        const user = new User(req.body);
+        user.save()
+        res.send(user)
+    }
+    catch (error) {
+        res.status(500).send(error)
+    }
+};
+
 exports.getFriends = async (req, res) => {
     try {
         const id = req.query.id

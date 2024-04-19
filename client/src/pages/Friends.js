@@ -4,6 +4,10 @@ const Left = () => {
     return (
         <>
             Friends
+
+            <div>
+                
+            </div>
         </>
     )
 }
