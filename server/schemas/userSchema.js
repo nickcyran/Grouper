@@ -5,7 +5,11 @@ const userSchema = new mongoose.Schema({
     l_name: String,
     username: String,
     password: String,
-    profile_id: mongoose.Schema.Types.ObjectId,
+
+    profile_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: null
+    },
     
     calanders_id: [{type: mongoose.Schema.Types.ObjectId}],
 
@@ -16,7 +20,11 @@ const userSchema = new mongoose.Schema({
         },
     }],
 
-    availibility: mongoose.Schema.Types.ObjectId,
+    availibility: {
+        type: mongoose.Schema.Types.ObjectId,
+        default: null
+    },
+
     directMessages: [{type: mongoose.Schema.Types.ObjectId}],
 
     friends: [{

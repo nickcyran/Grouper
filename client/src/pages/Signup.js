@@ -5,13 +5,13 @@ import { useState } from "react";
 function SignUp(){
     const [f_name, setf_name] = useState()
     const [l_name, setl_name] = useState()
-    const [Username, setUserName] = useState()
-    const [Password, setPassword] = useState()
+    const [username, setUserName] = useState()
+    const [password, setPassword] = useState()
     const navigate = useNavigate()
 
     const handleSignUp = (event) => {
         event.preventDefault()
-        axios.post('http://localhost:9000/createUser', {f_name, l_name, Username, Password})
+        axios.post('http://localhost:9000/createUser', {f_name, l_name, username, password})
             .then(navigate('/'))
             .catch((err) => alert('Error in Signing Up'))
     }
@@ -47,7 +47,7 @@ function SignUp(){
             <Link className="Login-link" to="/"> LogIn</Link>
             </header>
         </div>
-    )
+    );
 }
 
 

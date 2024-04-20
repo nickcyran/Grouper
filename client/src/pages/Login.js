@@ -2,14 +2,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useState } from 'react';
 
-function Login() {
-const [Username, setUserName] = useState('');
-const [Password, setPassword] = useState('');
+function Login(){
+const [username, setUserName] = useState('');
+const [password, setPassword] = useState('');
 const navigate = useNavigate();
 
 const handleLogin = (event) => {
     event.preventDefault()
-    axios.get('http://localhost:9000/getUser', { params: { Username, Password } })
+    axios.get('http://localhost:9000/getUser', { params: { username, password } })
         .then((res) => {            
           if(res.data){
             localStorage.clear()
