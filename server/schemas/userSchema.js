@@ -8,13 +8,12 @@ const userSchema = new mongoose.Schema({
     profile_id: mongoose.Schema.Types.ObjectId,
     
     calanders_id: [{type: mongoose.Schema.Types.ObjectId}],
-    
+
     groups: [{
         group_id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'group'
         },
-        
     }],
 
     availibility: mongoose.Schema.Types.ObjectId,

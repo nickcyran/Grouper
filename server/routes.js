@@ -8,27 +8,15 @@ router.get('/getChat', getChat);
 router.post('/sendChat', sendChat);
 
 // [USER ROUTES] ---------------------------------------------------------------
-const { createUser, getUsername, addToGroup } = require('./controllers/userController');
+const { createUser, getUsername, addToGroup, getGroups } = require('./controllers/userController');
 router.post('/createUser', createUser); 
 router.post('/addToGroup', addToGroup); 
 router.get('/getUsername', getUsername); 
+router.get('/getGroups', getGroups); 
 
-
-// --ADD ROUTES HERE---
-// EX SMTHING LIKE THIS)
-
-//---USER ROUTES---
-
-//const { getUser, getUsers, getUserByID, postUser } = require('../controllers/userController');
-    //router.get('/getUser', getUser);
-    //router.get('/getUsers', getUsers);
-    //router.get('/getUserByID', getUserByID);
-    //router.post('/createUser', postUser);
-
-// ---PROJECT ROUTES---
-
-//const { getProjects, postProject } = require('../controllers/projectController')
-    //router.get('/getProjects', getProjects);
-    //router.post('/createProject', postProject);
+// [GROUP ROUTES] ---------------------------------------------------------------
+const { createGroup, getTextChannels } = require('./controllers/groupController');
+router.post('/createGroup', createGroup); 
+router.get('/getTextChannels', getTextChannels); 
 
 module.exports = router; 
