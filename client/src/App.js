@@ -1,7 +1,5 @@
 import './styles/App.css';
-import { Main, ViewCalendar } from './pages'
-import Login from './pages/Login.js';
-import SignUp from './pages/Signup.js';
+import { Main, ViewCalendar, Events, Login, Signup } from './pages'
 import {Routes, Route} from "react-router-dom"
 import Navbar from './Navbar.js'
 
@@ -13,9 +11,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/main" element={<Main />} />
-        <Route path="/viewcalendar" element={<ViewCalendar />} />        
+        <Route path="/viewcalendar" element={<ViewCalendar />} />
+        <Route path="/events" element={<Events />} />
         <Route path="/login" element = {<Login/>}/>
-        <Route path="/signup" element = {<SignUp/>}/>
+        <Route path="/signup" element = {<Signup/>}/>
       </Routes>
     </div>
   );

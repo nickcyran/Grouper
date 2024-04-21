@@ -5,12 +5,12 @@ const userSchema = new mongoose.Schema({
     l_name: String,
     username: String,
     password: String,
-
+    
     profile_id: {
         type: mongoose.Schema.Types.ObjectId,
         default: null
     },
-    
+
     calanders_id: [{type: mongoose.Schema.Types.ObjectId}],
 
     groups: [{
@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         default: null
     },
-
+    
     directMessages: [{type: mongoose.Schema.Types.ObjectId}],
 
     friends: [{
@@ -32,7 +32,14 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user'  
         },
-    }]
+    }],
+
+    events: [{
+        event_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'event'
+        },
+    }],
 });
 
 const User = mongoose.model("user", userSchema);

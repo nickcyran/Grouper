@@ -19,4 +19,9 @@ const { createGroup, getTextChannels } = require('./controllers/groupController'
 router.post('/createGroup', createGroup); 
 router.get('/getTextChannels', getTextChannels); 
 
+// [EVENT ROUTES] ---------------------------------------------------------------
+const { createEvent, getUsers } = require('./controllers/eventController');
+router.post('/createEvent', createEvent);
+router.get('/getUsers', getUsers);
+
 module.exports = router; 
