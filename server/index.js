@@ -5,6 +5,7 @@ const cors = require('cors');
 const WebSocket = require('ws');
 
 const User = require("./schemas/userSchema");
+const Event = require("./schemas/eventSchema");
 
 // app
 const app = express();
@@ -64,25 +65,21 @@ function startServer() {
         }
     })
 
-    //get calendars
-    app.get('/getcalenders', async (req, res) => {
-        /* WHEN LOGIN WORKS 
-        const username = req.query.loggedInUser
-        const user = await User.findOne({ username })
-        const calendarsArray = user.calanders_id
-        */
-
-        //find all events for now
-        const eventsList = await Event.find({}, {calendarsArray});
-        
-        res.send(eventsList)
-    })
-
-    //get tags
-    app.get('/gettags', async (req, res) => {
+    app.get('/getTags'), async (req, res) => {
+        //not being called? 
+        console.log('In index... tags\n')
         //finds all tags for now
-        const tagsArray = await Event.find({}, {event_tags:1})
+        const events = await Event.find()
+        let tagList = []
+        for (const event of events) {
+            const tags = event.event_tags;
+            for (const tag of tags) {
+                if (!(tagList.includes(tag)))
+                    tagList.push(tag)
+            }
+        }
+        res.send(tagList)
+    }
 
-        res.send(tagsArray)
-    })
+    
 }

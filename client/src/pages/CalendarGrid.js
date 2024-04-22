@@ -6,6 +6,10 @@ function CalendarGrid() {
           <div>
                {loggedInUser == null &&
                          <p>Please login.</p>}
+
+               {loggedInUser != null &&
+                <p> {"Welcome " + loggedInUser + "!"}</p>
+            }
           </div>
      )
 
