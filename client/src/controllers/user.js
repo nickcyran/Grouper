@@ -4,6 +4,7 @@ const getUser = async (body) => {
     axios.post('http://localhost:9000/getUser/', body)
     .then(res => {
         if(res.username === body.username && res.password === body.password){
+            console.log(res.data)
             localStorage.clear()
             localStorage.setItem('userID', res.data._id)
             return true;

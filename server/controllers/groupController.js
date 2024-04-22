@@ -19,7 +19,7 @@ exports.createGroup = async (req, res) => {
         group.save()
 
         res.send(group)
-    }
+    } 
     catch (error) {
         res.status(500).send(error)
     }
