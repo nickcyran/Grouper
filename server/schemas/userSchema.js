@@ -9,6 +9,10 @@ const userSchema = new mongoose.Schema({
     profile: {
         display_name:{
             type: String,
+            default: function(){
+                const _t = this;
+                return  (_t.f_name + " " + _t.l_name);
+            },
             ref: 'name'
         },
         profile_pic:{

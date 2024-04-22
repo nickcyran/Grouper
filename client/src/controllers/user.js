@@ -3,6 +3,7 @@ import axios from 'axios';
 const getUser = async (body) => {
     axios.get('http://localhost:9000/getUser/', body)
     .then(res => {
+        console.log('work');
         if(res.username === body.username && res.password === body.password){
             localStorage.clear()
             console.log(res.data._id)
@@ -19,7 +20,6 @@ const getUser = async (body) => {
 }
 
 const createUser = async (body) => {
-    console.log(body.username)
     const f_name = body.f_name;
     const l_name = body.l_name;
     const username = body.username;
@@ -33,6 +33,17 @@ const createUser = async (body) => {
         alert('Error in Signing Up: ' + err)}
     )
 
+}
+
+const getProfile = async (body) => {
+    const _id = body._id;
+    axios.get('http://localhost:9000/getProfile', {_id})
+    .then((res) => {
+        return res;
+    })
+    .catch((err) => {
+        alert('Error in getting Profile: ' + err)}
+    )
 }
 
 const AddFriend = (body) => {
