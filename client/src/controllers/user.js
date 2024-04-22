@@ -35,13 +35,26 @@ const createUser = async (body) => {
 }
 
 const getProfile = async (body) => {
-    const _id = body._id;
-    axios.get('http://localhost:9000/getProfile', {_id})
+    axios.get('http://localhost:9000/getProfile', {params: {body}})
     .then((res) => {
-        return res;
+        localStorage.setItem('PFP', res.data.profile_pic);
+        localStorage.setItem('displayName', res.data.display_name)
+        localStorage.setItem('bio', res.data.biography);
+        localStorage.setItem('links', res.data.links)
+        return res.data;
     })
     .catch((err) => {
         alert('Error in getting Profile: ' + err)}
+    )
+}
+
+const updateProfile = async (body) => {
+    axios.post('http://localhost:9000/updateProfile', {params: {body}})
+    .then((res) => {
+        return;
+    })
+    .catch((err) => {
+        alert('Error in Updating: ' + err)}
     )
 }
 
@@ -85,4 +98,4 @@ const CreateDirectMessage = async (body) => {
     });
 };
 
-export {getUser, createUser, AddFriend, GetFriends, CreateDirectMessage, GetDirectMessages}
+export {getUser, createUser, getProfile, updateProfile, AddFriend, GetFriends, CreateDirectMessage, GetDirectMessages}

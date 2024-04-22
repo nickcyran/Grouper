@@ -34,11 +34,27 @@ exports.getUser = async (req, res) => {
 };
 
 exports.getProfile = async (req, res) => {
-    const _id = req.query._id
+    const _id = req.query.body
     try{
         const user = await User.findOne({ _id : _id });
-        console.log(user.profile);
         res.send(user.profile);
+    }
+    catch (error ){
+        res.status(500).send(error)
+    }
+};
+
+exports.updateProfile = async (req, res) => {
+    const _id = req.query.body._id
+    try{
+        const profile = {
+            profile_pic: null,
+            biography: req.query.body.biography,
+            links : req.query.body.links,
+            display_name : req.query.body.display_name,
+        }
+
+        User.findByIdAndUpdate(_id, { $set: profile})
     }
     catch (error ){
         res.status(500).send(error)
