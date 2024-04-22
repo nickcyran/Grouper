@@ -71,9 +71,10 @@ const Events = () => {
     const eventName = document.getElementById('eventName').value;
     const eventDescription = document.getElementById('eventDescription').value;
     const startDate = document.getElementById('startDate').value;
-    const endDate = document.getElementById('endDate').value;
+    const endDateString = document.getElementById('endDate').value;
+    const endDate = new Date(endDateString);
     const currentDate = new Date();
-  
+
     // does not allow for past dates to be a start/end date
     if (startDate < currentDate || endDate < currentDate) {
       alert('Cannot create event with a start date in the past.');
@@ -94,21 +95,20 @@ const Events = () => {
     // debug data
     console.log('Event Data:', eventData);
 
-    const newEvent = {
-      _id: Math.random().toString(36).substr(2, 9),
-      event_name: eventName,
-      event_description: eventDescription,
-      event_tags: tags,
-      invited_users: selectedUsers.map(user => user.value),
-      start_date: new Date(startDate),
-      end_date: new Date(endDate),
-      date_created: currentDate,
-    };
-  
-    console.log('New Event Data:', newEvent);
+    axios.post('http://localhost:9000/createEvent', eventData)
+    .then((res) => {
+      console.log('Event created successfully:', res.data);
+      setLocalEvents([...localEvents, res.data]); // adds new event to local list
+      setIsPopupOpen(false); // closes popup
+      setTags([]); // reset tags
+      setSelectedUsers([]);
+    })
+    .catch((error) => console.error('Error creating event:', error));
+
+    console.log('New Event Data:', eventData);
   
     // Update local state with the new event
-    setLocalEvents([...localEvents, newEvent]);
+    setLocalEvents([...localEvents]);
   
     // Reset form fields and state
     setIsPopupOpen(false);
@@ -118,12 +118,14 @@ const Events = () => {
 
   // calculates days until end date
   const daysUntilEndDate = (endDate) => {
-    if (!endDate) {
-      return 0; // returns 0 days if endDate is not defined
+    const endDateObj = new Date(endDate);
+
+    if (!endDateObj || typeof endDateObj !== 'object' || !endDateObj.getTime) {
+      return 0; // Return 0 days if endDate is not a valid Date object
     }
   
     const currentDate = new Date();
-    const differenceInTime = endDate.getTime() - currentDate.getTime();
+    const differenceInTime = endDateObj.getTime() - currentDate.getTime();
     const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
   
     // If the difference is negative, it means the event has already started, so return 0 days
