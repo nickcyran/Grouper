@@ -13,7 +13,7 @@ const handleLogin = (event) => {
         .then((res) => {            
           if(res.data){
             localStorage.clear()
-            localStorage.setItem('loggedInUser', res.data._id)
+            localStorage.setItem('userID', res.data._id)
             navigate("/Main");
           }
           else
