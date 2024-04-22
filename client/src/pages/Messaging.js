@@ -1,5 +1,6 @@
-import axios from 'axios';
 import { useState, useEffect, useRef } from "react";
+import { GetMessagesFromChat, SendMessageToChat } from '../controllers';
+
 import '../styles/chat.css'
 
 const MsgDisplay = ({ chatLog }) => {
@@ -34,16 +35,10 @@ const MessageBar = () => {
         event.preventDefault();
 
         if (!(/^\s*$/.test(message))) {
-            var groupID = localStorage.getItem('currentGroup');
-            var userID = localStorage.getItem('userID');
+            var group_id = localStorage.getItem('currentGroup');
+            var user_id = localStorage.getItem('userID');
 
-            axios.post('http://localhost:9000/sendChat/', { group_id: groupID, user_id: userID, message: message })
-                .then(res => {
-                    console.log("SENT: " + message)
-                })
-                .catch((err) => {
-                    console.error('Error in sending chat:', err);
-                });
+            SendMessageToChat({group_id, user_id, message});
             setMessage('');
         }
     };
@@ -64,16 +59,6 @@ const MessageBar = () => {
     )
 }
 
-const GetMessages = (group, setChat) => {
-    axios.get('http://localhost:9000/getChat/', { params: { id: group } })
-        .then(res => {
-            setChat(res.data);
-        })
-        .catch((err) => {
-            console.error('Error in getting chat:', err);
-        });
-}
-
 const Messaging = ({ group }) => {
     const [chat, setChat] = useState([]);
 
@@ -81,7 +66,7 @@ const Messaging = ({ group }) => {
         const socket = new WebSocket('ws://localhost:9000/change');
 
         socket.onmessage = (event) => {
-            GetMessages(group, setChat)
+            setChat(GetMessagesFromChat(group));
         }
         return () => {
             socket.close();
@@ -89,7 +74,7 @@ const Messaging = ({ group }) => {
     }, [group])
 
     useEffect(() => {
-        GetMessages(group, setChat)
+        setChat(GetMessagesFromChat(group));
     }, [group]);
 
     return (

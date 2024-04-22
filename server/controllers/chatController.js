@@ -2,7 +2,6 @@ const Chat = require('../schemas/chatSchema');
 const User  = require('../schemas/userSchema');
 
 exports.getChat = async (req, res) => {
-
     var knownUserNames = {}
 
     try {

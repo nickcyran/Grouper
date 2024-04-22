@@ -5,13 +5,13 @@ const userSchema = new mongoose.Schema({
     l_name: String,
     username: String,
     password: String,
-    
+
     profile_id: {
         type: mongoose.Schema.Types.ObjectId,
         default: null
     },
 
-    calanders_id: [{type: mongoose.Schema.Types.ObjectId}],
+    calanders_id: [{ type: mongoose.Schema.Types.ObjectId }],
 
     groups: [{
         group_id: {
@@ -24,13 +24,22 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         default: null
     },
-    
-    directMessages: [{type: mongoose.Schema.Types.ObjectId}],
+
+    directMessages: [{
+        members: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user'
+        }],
+        chatroom_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'chat'
+        }
+    }],
 
     friends: [{
         user_id: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'user'  
+            ref: 'user'
         },
     }],
 

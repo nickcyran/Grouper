@@ -1,0 +1,23 @@
+import axios from 'axios';
+
+const GetUserGroups = async (id) => {
+    try {
+        const response = await axios.get('http://localhost:9000/getGroups/', { params: id });
+        return response.data;
+    } catch (err) {
+        console.error('Error in getting Groups:', err);
+        return []; 
+    }
+}; 
+
+const CreateGroup = (body) => {
+    axios.post('http://localhost:9000/createGroup/', body)
+    .then(res => {
+        return res.data;
+    })
+    .catch((err) => {
+        console.error('Error in getting Groups:', err);
+    });
+}
+
+export {GetUserGroups, CreateGroup}
