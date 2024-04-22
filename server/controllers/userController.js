@@ -17,8 +17,15 @@ exports.createUser = async (req, res) => {
 exports.getUser = async (req, res) => {        
     const username = req.query.username;
     const password = req.query.password;
+
     try{
-        const user = await User.findOne({Username: username , Password: password });
+        const user = await User.findOne({username: username, password: password });
+        console.log(user.username)
+
+        if(!user){
+            res.status(500).send(error)
+        }
+
         res.send(user)
     }
     catch (error){

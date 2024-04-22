@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 const getUser = async (body) => {
-    axios.post('http://localhost:9000/getUser/', body)
+    axios.get('http://localhost:9000/getUser/', body)
     .then(res => {
         if(res.username === body.username && res.password === body.password){
-            console.log(res.data)
             localStorage.clear()
+            console.log(res.data._id)
             localStorage.setItem('userID', res.data._id)
             return true;
         }
@@ -14,7 +14,7 @@ const getUser = async (body) => {
         }
     })
     .catch((err) => {
-        console.log("Error in Login: " + err);
+        console.error('Error in Login:', err);
     });
 }
 
