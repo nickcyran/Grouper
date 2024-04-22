@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { createUser } from "../controllers/user"
 import { useState } from "react";
 
 function SignUp(){
@@ -11,12 +12,10 @@ function SignUp(){
 
     const handleSignUp = (event) => {
         event.preventDefault()
-        axios.post('http://localhost:9000/createUser', {f_name, l_name, username, password})
-            .then((res) => {
-                navigate('/')
+        if(createUser({f_name, l_name, username, password})){
+            navigate('/Login')
+        }
 
-            })
-            .catch((err) => alert('Error in Signing Up'))
     }
 
     return(

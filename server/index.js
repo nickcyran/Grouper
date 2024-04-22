@@ -11,7 +11,7 @@ const Event = require("./schemas/eventSchema");
 const app = express();
 
 // database
-const mongoString = "mongodb+srv://ncyran:jVxcRzyBTgfhhRO3@cluster0.diytgzw.mongodb.net/";
+const mongoString = "mongodb+srv://ncyran:jVxcRzyBTgfhhRO3@cluster0.diytgzw.mongodb.net/"; 
 mongoose.connect(mongoString, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('MongoDB connected');
@@ -36,7 +36,7 @@ function startServer() {
 
     // WebSocket connection handling
     wss.on('connection', function connection(ws) {
-
+       
     });
 
     // Change stream setup after the database connection is established
@@ -47,23 +47,13 @@ function startServer() {
     changeStream.on('change', (change) => {
         // Broadcast the change to all WebSocket clients
         wss.clients.forEach(function each(client) {
-
+           
             if (client.readyState === WebSocket.OPEN) {
                 client.send(JSON.stringify(change));
             }
         });
     });
 
-    app.post('/createUser', async (req, res) => {
-        try {
-            const user = new User(req.body);
-            await user.save()
-            res.send(user)
-        }
-        catch (error) {
-            res.status(500).send(error)
-        }
-    })
 
     app.get('/getTags'), async (req, res) => {
         //not being called? 
@@ -80,6 +70,4 @@ function startServer() {
         }
         res.send(tagList)
     }
-
-    
 }
