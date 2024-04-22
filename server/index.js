@@ -5,6 +5,7 @@ const cors = require('cors');
 const WebSocket = require('ws');
 
 const User = require("./schemas/userSchema");
+const Event = require("./schemas/eventSchema");
 
 // app
 const app = express();
@@ -53,4 +54,20 @@ function startServer() {
         });
     });
 
-}    
+
+    app.get('/getTags'), async (req, res) => {
+        //not being called? 
+        console.log('In index... tags\n')
+        //finds all tags for now
+        const events = await Event.find()
+        let tagList = []
+        for (const event of events) {
+            const tags = event.event_tags;
+            for (const tag of tags) {
+                if (!(tagList.includes(tag)))
+                    tagList.push(tag)
+            }
+        }
+        res.send(tagList)
+    }
+}
