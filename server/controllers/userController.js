@@ -13,6 +13,29 @@ exports.createUser = async (req, res) => {
     }
 };
 
+exports.getUser = async (req, res) => {        
+    const username = req.query.username;
+    const password = req.query.password;
+    try{
+        const user = await User.findOne({Username: username , Password: password });
+        res.send(user)
+    }
+    catch (error){
+        res.status(500).send(error)
+    }
+};
+
+exports.getUserByID = async (req, res) => {
+    const _id = req.query.user
+    try{
+        const user = await User.findOne({ _id : _id });
+        res.send(user);
+    }
+    catch (error ){
+        res.status(500).send(error)
+    }
+};
+
 exports.addToGroup = async (req, res) => {
     try {
         const {group_id, user_id} = req.body;

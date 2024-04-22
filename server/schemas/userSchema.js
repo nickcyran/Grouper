@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
     l_name: String,
     username: String,
     password: String,
-
+    
     profile_id: {
         type: mongoose.Schema.Types.ObjectId,
         default: null
