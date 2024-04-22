@@ -9,18 +9,18 @@ const navigate = useNavigate();
 
 const handleLogin = (event) => {
     event.preventDefault()
+
     axios.get('http://localhost:9000/getUser', { params: { username, password } })
         .then((res) => {            
           if(res.data){
             localStorage.clear()
-            localStorage.setItem('loggedInUser', res.data._id)
-            navigate("/Main");
+            localStorage.setItem('userID', res.data._id)
+            navigate("/");
           }
           else
             alert('Wrong Credentials')
           })
       .catch((err) => alert('Error in Login'))
-    
 }
 
 return (
@@ -44,6 +44,7 @@ return (
             </button>
         </form>
         <br/>
+
         <Link className='Signup-link' to="/SignUp"> SignUp</Link>
       </header>
     </div>

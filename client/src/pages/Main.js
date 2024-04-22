@@ -1,53 +1,44 @@
 import { messages_icon } from '../assets'
-import { Friends, Group } from '.'
+import { Home, Group } from '.'
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+
+import { GetUserGroups } from '../controllers'
+
+const HandleSwitchToGroup = (group_id) => {
+    console.log(group_id)
+}
 
 const Main = () => {
     const [groups, setGroups] = useState([]);
-    const [group, setGroup] = useState(localStorage.getItem('currentGroup'));
-    const [onFriendsPage, setOnFriendsPage] = useState(false);
+    const [onFriendsPage, setOnFriendsPage] = useState(true);
 
     useEffect(() => {
-        var user = localStorage.getItem('userID');
-        axios.get('http://localhost:9000/getGroups/', { params: { id: user } })
-        .then(res => {
-            setGroups(res.data);
-        })
-        .catch((err) => {
-            console.error('Error in getting Groups:', err);
-        });
-    }, [])
+        const fetchData = async () => {
+            setGroups(await GetUserGroups({ id: localStorage.getItem('userID') }))
+        };
 
-    function updateLocalStorage(updatedData) {
-        if (group !== updatedData) {
-            localStorage.setItem('currentGroup', updatedData);
-            setGroup(updatedData);
-        }
-    };
+        fetchData();
+    }, [])
 
     return (
         <div className="main">
             <div className="navBar">
-                <div className="dmDir" onClick={() => {                 //MAKE THIS DYNAMIC U FUCKIN BOZO {im talking to myself ive gone crazy}
-                    updateLocalStorage('6620518cd5a9031a80a56964')
-                    setOnFriendsPage(true)
-                }}>
+                <div className="dmDir" onClick={() => setOnFriendsPage(true)}>
                     <img src={messages_icon} alt="direct messages" />
                 </div>
 
+                {/* DISPLAY ALL OF THE USERS GROUPS */}
                 <div className="groupBar">
                     {groups.map((group) => (
                         <div className="square" key={group._id} onClick={() => {
+                            HandleSwitchToGroup(group._id)
                             setOnFriendsPage(false);
-                            updateLocalStorage(group._id)
                         }} />
                     ))}
                 </div>
             </div>
 
-            {/* WETHER FRIEND/DMS or GROUP IS DISPLAYED */}
-            {onFriendsPage ? <Friends group={group} /> : <Group group={group} />}
+            {onFriendsPage ? <Home /> : <></>}
         </div>
     );
 }

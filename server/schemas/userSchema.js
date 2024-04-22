@@ -9,11 +9,10 @@ const userSchema = new mongoose.Schema({
     profile: {
         display_name:{
             type: String,
-            default: f_name + " " + l_name,
             ref: 'name'
         },
         profile_pic:{
-            type: Image,
+            type: String,
             default: null,
             ref: 'pfp'
         },
@@ -28,7 +27,7 @@ const userSchema = new mongoose.Schema({
         }]
     },
 
-    calanders_id: [{type: mongoose.Schema.Types.ObjectId}],
+    calanders_id: [{ type: mongoose.Schema.Types.ObjectId }],
 
     groups: [{
         group_id: {
@@ -41,13 +40,22 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         default: null
     },
-    
-    directMessages: [{type: mongoose.Schema.Types.ObjectId}],
+
+    directMessages: [{
+        members: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user'
+        }],
+        chatroom_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'chat'
+        }
+    }],
 
     friends: [{
         user_id: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'user'  
+            ref: 'user'
         },
     }],
 

@@ -12,7 +12,10 @@ function SignUp(){
     const handleSignUp = (event) => {
         event.preventDefault()
         axios.post('http://localhost:9000/createUser', {f_name, l_name, username, password})
-            .then(navigate('/'))
+            .then((res) => {
+                navigate('/')
+
+            })
             .catch((err) => alert('Error in Signing Up'))
     }
 
@@ -35,7 +38,7 @@ function SignUp(){
                 </label>
                 <br/>
                 <label className="inputs">
-                    Password: <input type = "text" name = "Password" onChange={(e) => setPassword(e.target.value)}/>
+                    Password: <input type = "password" name = "Password" onChange={(e) => setPassword(e.target.value)}/>
                 </label>
                 <br/>
                 <br/>

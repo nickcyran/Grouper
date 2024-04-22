@@ -12,8 +12,12 @@ exports.createGroup = async (req, res) => {
         user.groups.push(group._id)
         await user.save();
 
-        group.textChannels.push({channelName: "general",channelChat: new Chat()})   //create a general channel on start
+        var general = new Chat();
+        await general.save();
+
+        group.textChannels.push({channelName: "general", channelChat: general._id})   //create a general channel on start
         group.save()
+
         res.send(group)
     }
     catch (error) {
