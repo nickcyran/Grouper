@@ -25,6 +25,7 @@ exports.getChat = async (req, res) => {
             } 
             
             messages.push({
+                user_id: usrID,
                 username: knownUserNames[usrID],
                 message: msg.message,
                 _id: msg._id

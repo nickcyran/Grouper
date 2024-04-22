@@ -8,10 +8,14 @@
 }
 
 .msgsgs{
-    margin-top: 4px;
+    margin-top: 8px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 7px;
+}
+
+.msg{
+    margin-left: 3rem;
 }
 
 .pastChats {
@@ -37,10 +41,9 @@
     aspect-ratio: 1; 
 }
 
-.msgBox{
+.chatProfileBox{
     display: flex;
     align-items: center;
-    
 }
 
 /*BOTTOM vvvv*/

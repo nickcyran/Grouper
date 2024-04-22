@@ -17,11 +17,19 @@ const MsgDisplay = ({ chatLog }) => {
     return (
         <div className="msgsgs">
             {chatLog.map((chat, index) => {
+                const prevChat = index > 0 ? (chatLog[index - 1]).user_id : null;
+
                 return (
                     <div key={index} className="msgBox">
-                        <div className="dmPfp" />
+                        {(prevChat !== chat.user_id) &&
+                            <div className="chatProfileBox">
+                                <div className="dmPfp" />
+                                <b style={{fontSize: "18px"}}>{chat.username}</b>
+                            </div>
+                        }
+
                         <div className="msg">
-                            <b>{chat.username}:</b>&nbsp; {chat.message}
+                            {chat.message}
                         </div>
                     </div>
                 );
