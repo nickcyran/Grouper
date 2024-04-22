@@ -4,13 +4,16 @@ import { useState, useEffect } from 'react';
 
 import { GetUserGroups } from '../controllers'
 
-const HandleSwitchToGroup = (group_id) => {
-    console.log(group_id)
-}
+
 
 const Main = () => {
     const [groups, setGroups] = useState([]);
     const [onFriendsPage, setOnFriendsPage] = useState(true);
+    const [selectedGroup, setSelectedGroup] = useState()
+
+    const HandleSwitchToGroup = (group_id) => {
+        setSelectedGroup(group_id)
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -29,8 +32,8 @@ const Main = () => {
 
                 {/* DISPLAY ALL OF THE USERS GROUPS */}
                 <div className="groupBar">
-                    {groups.map((group) => (
-                        <div className="square" key={group._id} onClick={() => {
+                    {groups.map((group, index) => (
+                        <div className="square" key={index} onClick={() => {
                             HandleSwitchToGroup(group._id)
                             setOnFriendsPage(false);
                         }} />
@@ -38,7 +41,7 @@ const Main = () => {
                 </div>
             </div>
 
-            {onFriendsPage ? <Home /> : <></>}
+            {onFriendsPage ? <Home /> : <Group group={selectedGroup}/>}
         </div>
     );
 }

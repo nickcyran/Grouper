@@ -27,9 +27,9 @@ exports.createGroup = async (req, res) => {
 
 exports.getTextChannels = async (req, res) => {
     try {
-        const id = req.query.id
+        const id =  req.query.id
         const group = await Group.findById(id)
-
+        
         res.send(group.textChannels);
     }
     catch (error) {

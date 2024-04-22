@@ -39,7 +39,7 @@ const PageContent = ({Left, Main, Right, group}) => {
     return (
         <div className="page">
             <LeftSideBar content={<Left/>}/>
-            <MainContent content={<Main group={group}/>}/>
+            <MainContent content={<Main />}/>
            
             {showRightSidebar && <RightSideBar content={<Right/>}/>}
         </div>

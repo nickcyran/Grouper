@@ -24,7 +24,7 @@ const MsgDisplay = ({ chatLog }) => {
                         {(prevChat !== chat.user_id) &&
                             <div className="chatProfileBox">
                                 <div className="dmPfp" />
-                                <b style={{fontSize: "18px"}}>{chat.username}</b>
+                                <b style={{ fontSize: "18px" }}>{chat.username}</b>
                             </div>
                         }
 
