@@ -14,11 +14,13 @@ exports.createUser = async (req, res) => {
     }
 };
 
-exports.getUser = async (req, res) => {        
+exports.login = async (req, res) => {        
     const username = req.query.username;
     const password = req.query.password;
+    console.log(username);
     try{
-        const user = await User.findOne({Username: username , Password: password });
+        const user = await User.findOne({ username: username , password: password });
+        console.log(user.username);
         res.send(user)
     }
     catch (error){

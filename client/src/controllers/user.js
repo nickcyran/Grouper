@@ -1,8 +1,12 @@
 import axios from 'axios';
 
-const getUser = async (body) => {
-    axios.post('http://localhost:9000/getUser/', body)
+const login = async (body) => {
+    const username = body.username;
+    const password = body.password;
+    console.log(username)
+    axios.get('http://localhost:9000/login/', {params: { username, password } } )
     .then(res => {
+        console.log('work');
         if(res.username === body.username && res.password === body.password){
             localStorage.clear()
             localStorage.setItem('userID', res.data._id)
@@ -73,4 +77,4 @@ const CreateDirectMessage = async (body) => {
     });
 };
 
-export {getUser, createUser, AddFriend, GetFriends, CreateDirectMessage, GetDirectMessages}
+export {login, createUser, AddFriend, GetFriends, CreateDirectMessage, GetDirectMessages}

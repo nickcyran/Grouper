@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { getUser } from "../controllers/user"
+import { login } from "../controllers/user"
 import { useState } from 'react';
 
 function Login(){
@@ -9,7 +9,7 @@ const navigate = useNavigate();
 
 const handleLogin = (event) => {
     event.preventDefault()
-    if(getUser({ params: { username, password } })){
+    if(login({ username, password })){
       navigate('/')
     }    
 

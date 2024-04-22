@@ -8,7 +8,8 @@ router.get('/getChat', getChat);
 router.post('/sendChat', sendChat);
 
 // [USER ROUTES] ---------------------------------------------------------------
-const { createUser, getUsername, addToGroup, getGroups, addFriend, getFriends, createDirectMessage, getDirectMessages} = require('./controllers/userController');
+const { login, createUser, getUsername, addToGroup, getGroups, addFriend, getFriends, createDirectMessage, getDirectMessages} = require('./controllers/userController');
+router.post('/login', login);
 router.post('/createUser', createUser); 
 router.post('/addToGroup', addToGroup); 
 router.post('/addFriend', addFriend); 
