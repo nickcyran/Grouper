@@ -1,5 +1,22 @@
 import axios from 'axios';
 
+const getUser = async (body) => {
+    axios.post('http://localhost:9000/getUser/', body)
+    .then(res => {
+        if(res.username === body.username && res.password === body.password){
+            localStorage.clear()
+            localStorage.setItem('userID', res.data._id)
+            return true;
+        }
+          else{
+            alert('Wrong Credentials')
+        }
+    })
+    .catch((err) => {
+        console.log("Error in Login");
+    });
+}
+
 const AddFriend = (body) => {
     axios.post('http://localhost:9000/addFriend/', body)
     .then(res => {
@@ -40,4 +57,4 @@ const CreateDirectMessage = async (body) => {
     });
 };
 
-export {AddFriend, GetFriends, CreateDirectMessage, GetDirectMessages}
+export {getUser, AddFriend, GetFriends, CreateDirectMessage, GetDirectMessages}
