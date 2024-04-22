@@ -75,4 +75,4 @@ const CreateDirectMessage = async (body) => {
     });
 };
 
-export {login, createUser, AddFriend, GetFriends, CreateDirectMessage, GetDirectMessages}
+export {getUser, createUser, AddFriend, GetFriends, CreateDirectMessage, GetDirectMessages}

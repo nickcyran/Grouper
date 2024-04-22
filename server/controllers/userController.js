@@ -14,7 +14,7 @@ exports.createUser = async (req, res) => {
     }
 };
 
-exports.login = async (req, res) => {        
+exports.getUser = async (req, res) => {        
     const username = req.query.username;
     const password = req.query.password;
 
