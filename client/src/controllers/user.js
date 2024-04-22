@@ -1,14 +1,12 @@
 import axios from 'axios';
 
-const login = async (body) => {
-    const username = body.username;
-    const password = body.password;
-    console.log(username)
-    axios.get('http://localhost:9000/login/', {params: { username, password } } )
+const getUser = async (body) => {
+    axios.get('http://localhost:9000/getUser/', body)
     .then(res => {
         console.log('work');
         if(res.username === body.username && res.password === body.password){
             localStorage.clear()
+            console.log(res.data._id)
             localStorage.setItem('userID', res.data._id)
             return true;
         }
@@ -17,7 +15,7 @@ const login = async (body) => {
         }
     })
     .catch((err) => {
-        console.log("Error in Login: " + err);
+        console.error('Error in Login:', err);
     });
 }
 
