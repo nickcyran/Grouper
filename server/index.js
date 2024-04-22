@@ -11,7 +11,7 @@ const Event = require("./schemas/eventSchema");
 const app = express();
 
 // database
-const mongoString = "mongodb+srv://ncyran:jVxcRzyBTgfhhRO3@cluster0.diytgzw.mongodb.net/"; 
+const mongoString = "mongodb+srv://ncyran:jVxcRzyBTgfhhRO3@cluster0.diytgzw.mongodb.net/";
 mongoose.connect(mongoString, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('MongoDB connected');
@@ -24,6 +24,7 @@ app.use(cors());
 
 // Routes
 const routes = require('./routes');
+const e = require('express');
 app.use("/", routes);
 
 // Function to start the server
@@ -36,7 +37,7 @@ function startServer() {
 
     // WebSocket connection handling
     wss.on('connection', function connection(ws) {
-       
+
     });
 
     // Change stream setup after the database connection is established
@@ -47,27 +48,55 @@ function startServer() {
     changeStream.on('change', (change) => {
         // Broadcast the change to all WebSocket clients
         wss.clients.forEach(function each(client) {
-           
+
             if (client.readyState === WebSocket.OPEN) {
                 client.send(JSON.stringify(change));
             }
         });
     });
 
-
-    app.get('/getTags'), async (req, res) => {
-        //not being called? 
-        console.log('In index... tags\n')
+    app.get('/getTags', async (req, res) => {
         //finds all tags for now
-        const events = await Event.find()
-        let tagList = []
-        for (const event of events) {
-            const tags = event.event_tags;
-            for (const tag of tags) {
-                if (!(tagList.includes(tag)))
-                    tagList.push(tag)
+        try {
+            const events = await Event.find()
+            let tagList = []
+            for (const event of events) {
+                const tags = event.event_tags;
+                for (const tag of tags) {
+                    if (!(tagList.includes(tag)))
+                        tagList.push(tag)
+                }
             }
+            res.send(tagList)
         }
-        res.send(tagList)
-    }
+        catch (error) {
+            console.log('Server Error while getting tags.')
+            res.status(500).send(error)
+            return null;
+        }
+    })
+
+    app.get('/getCalendars', async (req, res) => {
+        console.log('Begin getting calendars')
+        try {
+            const events = await Event.find()
+            let details = [];
+            for (ev of events) {
+                details.push({
+                    _id: ev._id,
+                    event_name: ev.event_name,
+                    event_tags: ev.event_tags,
+                    invited_users: ev.invited_users,
+                    start_date: ev.start_date,
+                    end_date: ev.end_date
+                })
+            }
+            console.log(details)
+            res.send(details)
+        } catch (error) {
+            console.error('Error fetching events:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    })
 }
+

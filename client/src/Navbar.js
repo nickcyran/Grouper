@@ -14,6 +14,7 @@ export default function Navbar() {
                <Link to="/main">Messaging</Link>&nbsp;
                <Link to="/viewcalendar">Calendar</Link>&nbsp;
                <Link to="/events">Events</Link>&nbsp;
+               <Link to="/serverhome">Servers</Link>&nbsp;
                <Link to="/login">Login</Link>&nbsp;
                <Link to="/signup">Signup</Link>&nbsp;
                <span onClick={() => { testing() }}>TEST</span>
