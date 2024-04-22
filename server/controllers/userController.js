@@ -139,7 +139,7 @@ exports.getGroups = async (req, res) => {
 exports.createDirectMessage = async (req, res) => {
     try {
         const members = req.body.members;
-
+        
         var dm = new Chat();
         await dm.save();
 
