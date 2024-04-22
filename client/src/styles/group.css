@@ -1,0 +1,13 @@
+.group_left{
+    margin-top: 8px;
+    text-align: left;
+}
+
+.channelName {
+    padding-left: 8px;
+    cursor: pointer;
+}
+
+.channelName:hover{
+    background: #313338;
+}

@@ -8,5 +8,6 @@ import CalendarGrid from './CalendarGrid'
 import Events from './Events'
 import Login from './Login'
 import Signup from './Signup'
+import CreateDmPage from './CreateDmPage'
 
-export {Messaging, Main, PageContent, Group, Home, ViewCalendar, CalendarGrid, Events, Login, Signup};
+export {Messaging, Main, PageContent, Group, Home, ViewCalendar, CalendarGrid, Events, Login, Signup, CreateDmPage};

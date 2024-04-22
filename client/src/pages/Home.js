@@ -1,13 +1,9 @@
 import '../styles/friends.css'
 
-import { PageContent, Messaging } from '.'
-import { useState, useEffect } from 'react';
+import { PageContent, Messaging, CreateDmPage } from '.'
+import { useState, useEffect} from 'react';
 
 import { GetFriends, GetDirectMessages } from '../controllers';
-
-const handleDmChange = (id) => {
-    console.log(id)
-}
 
 const Friend_Right = () => {
     return (
@@ -49,79 +45,59 @@ const FriendsDisplay = () => {
     );
 }
 
-const Home_Left = () => {
-    const [dms, setDms] = useState([]);
+const Home = ({ group }) => {
+    const [display, setDisplay] = useState();
+    const [createDmVisible, setCreateDmVisible] = useState(false);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setDms(await GetDirectMessages(localStorage.getItem('userID')));
-        };
+    const Friend_Main = () => {
+        return (
+            <>
+                {!display ? <FriendsDisplay /> : <Messaging group={display} />}
+                {createDmVisible && <CreateDmPage set={setCreateDmVisible}/>}
+            </>
+        )
+    }
 
-        fetchData();
-    }, []);
-
-    return (
-        <div>
-            Messages
-            <div className="l_bar">
-                {dms.length > 0 ? (
-                    dms.map((dm, index) => (
-                        <div key={index} className="dmBox" onClick={() => handleDmChange(dm.directMessage.chatroom_id)}>
-                            <div className="dmIcon" />
-                            <div className="dmName">{dm.usernames.join(', ')}</div>
-                        </div>
-                    ))
-                ) : (
-                    <div>No direct messages </div>
-                )}
-            </div>
-        </div>
-    )
-}
-
-const Friend_Main = () => {
-    const[display, setDisplay] = useState();
+    const handleDmChange = (id) => {
+        setDisplay(id)
+    }
 
     const Home_Left = () => {
-    const [dms, setDms] = useState([]);
+        const [dms, setDms] = useState([]);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setDms(await GetDirectMessages(localStorage.getItem('userID')));
-        };
+        useEffect(() => {
+            const fetchData = async () => {
+                setDms(await GetDirectMessages(localStorage.getItem('userID')));
+            };
 
-        fetchData();
-    }, []);
+            fetchData();
+        }, []);
 
-    return (
-        <div>
-            Messages
-            <div className="l_bar">
-                {dms.length > 0 ? (
-                    dms.map((dm, index) => (
-                        <div key={index} className="dmBox" onClick={() => handleDmChange(dm.directMessage.chatroom_id)}>
-                            <div className="dmIcon" />
-                            <div className="dmName">{dm.usernames.join(', ')}</div>
-                        </div>
-                    ))
-                ) : (
-                    <div>No direct messages </div>
-                )}
+        return (
+            <div>
+                <div className="l_bar_head">
+                    <div className="addDm" onClick={() => {setCreateDmVisible(!createDmVisible)}}>+</div>
+                    <div className="msgTitle">Messages</div>
+
+                </div>
+
+                <div className="l_bar">
+                    {dms.length > 0 ? (
+                        dms.map((dm, index) => (
+                            <div key={index} className="dmBox" onClick={() => handleDmChange(dm.directMessage.chatroom_id)}>
+                                <div className="dmIcon" />
+                                <div className="dmName">{dm.usernames.join(', ')}</div>
+                            </div>
+                        ))
+                    ) : (
+                        <div>No direct messages </div>
+                    )}
+                </div>
             </div>
-        </div>
-    )
-}
+        )
+    }
 
-    return (
-        <div>
-            {!display ?  <FriendsDisplay /> : <></>}
-           
-        </div>
-    )
-}
-
-const Home = ({ group }) => {
-    return <PageContent Left={Home_Left} Main={Friend_Main} Right={Friend_Right} group={group} />
+    return <PageContent Left={Home_Left} Main={Friend_Main} Right={Friend_Right} group={group}/>
 }
 
 export default Home;

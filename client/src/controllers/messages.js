@@ -1,14 +1,15 @@
 import axios from 'axios';
 
-const GetMessagesFromChat = (group) => {
-    axios.get('http://localhost:9000/getChat/', { params: { id: group } })
-        .then(res => {
-            return res.data;
-        })
-        .catch((err) => {
-            console.error('Error in getting chat:', err);
-        });
-}
+const GetMessagesFromChat = async (group) => {
+    try {
+        const response = await axios.get('http://localhost:9000/getChat/', { params: { id: group } });
+        return response.data;
+    } catch (err) {
+        console.error('Error in getting Chats:', err);
+        return []; 
+    }
+}; 
+
 
 const SendMessageToChat = (body) => {
 

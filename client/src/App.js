@@ -1,5 +1,7 @@
 import './styles/App.css';
-import { Main, ViewCalendar, Events, Login, Signup } from './pages'
+import { Main, ViewCalendar, Events, Login, Signup} from './pages'
+import ServerHome from './pages/ServerHome'
+import ServerPage from './pages/ServerPage'
 import {Routes, Route} from "react-router-dom"
 import Navbar from './Navbar.js'
 
@@ -15,6 +17,8 @@ function App() {
         <Route path="/events" element={<Events />} />
         <Route path="/login" element = {<Login/>}/>
         <Route path="/signup" element = {<Signup/>}/>
+        <Route path="/serverhome" element={<ServerHome/>} />
+        <Route path="/server/:id" element={<ServerPage/>} />
       </Routes>
     </div>
   );

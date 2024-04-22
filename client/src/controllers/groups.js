@@ -20,4 +20,14 @@ const CreateGroup = (body) => {
     });
 }
 
-export {GetUserGroups, CreateGroup}
+const GetTextChannels = async (id) => {
+    try {
+        const response = await axios.get('http://localhost:9000/getTextChannels/', { params: id });
+        return response.data;
+    } catch (err) {
+        console.error('Error in getting text Channel:', err);
+        return []; 
+    }
+}; 
+
+export {GetUserGroups, CreateGroup, GetTextChannels}

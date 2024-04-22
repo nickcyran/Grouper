@@ -1,16 +1,8 @@
 import { PageContent, Messaging } from '.'
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { GetTextChannels } from '../controllers'
 
-// okay i kinda made this confusing so uhhh,,,,,,, uhhh,,,, ;-;
-
-const Group_Main = ({ group }) => {
-    return (
-        <>
-            <Messaging group={group} />
-        </>
-    )
-}
+import '../styles/group.css'
 
 const Group_Right = () => {
     return (
@@ -21,38 +13,42 @@ const Group_Right = () => {
 }
 
 const Group = ({ group }) => {
-    const[currentChannel, setCurrentChannel] = useState('');
+    const [currentChannel, setCurrentChannel] = useState('');
 
     const Group_Left = () => {
-        const[channels, setChannels] = useState([]);
-       
+        const [channels, setChannels] = useState([]);
 
         useEffect(() => {
-            axios.get('http://localhost:9000/getTextChannels/', { params: { id: group } })
-                .then(res => {
-                    setChannels(res.data);
-                    setCurrentChannel(res.data[0].channelChat)          //default to general
-                })
-                .catch((err) => {
-                    console.error('Error in getting textChannels:', err);
-                });
+            const fetchData = async () => {
+                setChannels(await GetTextChannels({ id: group }))
+            };
+
+            fetchData();
         }, [])
 
         return (
             <>
                 channels
-                {channels.map((channel) => (
-                        <div className="" key={channel._id} onClick={() => {
-                            setCurrentChannel(channel.channelChat);
-                        }}>
+                <div className="group_left">
+                    {channels.map((channel, index) => (
+                        <div className="channelName" key={index} onClick={() => { setCurrentChannel(channel.channelChat) }}>
                             {channel.channelName}
                         </div>
                     ))}
+                </div>
             </>
         )
     }
 
-    return <PageContent Left={Group_Left} Main={Group_Main} Right={Group_Right} group={currentChannel} />
+    const Group_Main = () => {
+        return (
+            <>
+                <Messaging group={currentChannel} />
+            </>
+        )
+    }
+
+    return <PageContent Left={Group_Left} Main={Group_Main} Right={Group_Right} />
 }
 
 export default Group;
