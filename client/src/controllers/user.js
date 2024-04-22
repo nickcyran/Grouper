@@ -24,6 +24,7 @@ const createUser = async (body) => {
     const l_name = body.l_name;
     const username = body.username;
     const password = body.password
+    
     axios.post('http://localhost:9000/createUser', {f_name, l_name, username, password})
     .then((res) => {
         return true;
