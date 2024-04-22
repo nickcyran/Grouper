@@ -17,6 +17,7 @@ export default function Navbar() {
                <Link to="/serverhome">Servers</Link>&nbsp;
                <Link to="/login">Login</Link>&nbsp;
                <Link to="/signup">Signup</Link>&nbsp;
+               <Link to="/profileSettings">Profile</Link>&nbsp;
                <span onClick={() => { testing() }}>TEST</span>
           </ul>
      </nav>)
