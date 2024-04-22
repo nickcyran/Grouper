@@ -10,7 +10,7 @@ const User = require("./schemas/userSchema");
 const app = express();
 
 // database
-const mongoString = "mongodb+srv://ncyran:jVxcRzyBTgfhhRO3@cluster0.diytgzw.mongodb.net/"; 
+const mongoString = "mongodb+srv://ncyran:jVxcRzyBTgfhhRO3@cluster0.diytgzw.mongodb.net/";
 mongoose.connect(mongoString, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('MongoDB connected');
@@ -35,7 +35,7 @@ function startServer() {
 
     // WebSocket connection handling
     wss.on('connection', function connection(ws) {
-       
+
     });
 
     // Change stream setup after the database connection is established
@@ -46,7 +46,7 @@ function startServer() {
     changeStream.on('change', (change) => {
         // Broadcast the change to all WebSocket clients
         wss.clients.forEach(function each(client) {
-           
+
             if (client.readyState === WebSocket.OPEN) {
                 client.send(JSON.stringify(change));
             }
@@ -62,5 +62,27 @@ function startServer() {
         catch (error) {
             res.status(500).send(error)
         }
+    })
+
+    //get calendars
+    app.get('/getcalenders', async (req, res) => {
+        /* WHEN LOGIN WORKS 
+        const username = req.query.loggedInUser
+        const user = await User.findOne({ username })
+        const calendarsArray = user.calanders_id
+        */
+
+        //find all events for now
+        const eventsList = await Event.find({}, {calendarsArray});
+        
+        res.send(eventsList)
+    })
+
+    //get tags
+    app.get('/gettags', async (req, res) => {
+        //finds all tags for now
+        const tagsArray = await Event.find({}, {event_tags:1})
+
+        res.send(tagsArray)
     })
 }

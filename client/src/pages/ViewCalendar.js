@@ -1,10 +1,40 @@
 import axios from "axios";
 import '../styles/Calendar.css';
 import Select from 'react-select'
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import CalendarGrid from "./CalendarGrid";
 
 function ViewCalendar() {
+     /* MEMBERS */
+     const [calendars, setCalendars] = useState([]);
+     const loggedInUser = localStorage.getItem('loggedInUser');
+     const [tags, setTags] = useState([]);
+
+
+     useEffect(() => {
+          /* WHEN LOGIN WORKS
+          if (loggedInUser != null) {
+               axios.get('http://localhost:9000/getcalendars',  {params : {loggedInUser}}).then((res) => {
+                    setCalendars(res.data);
+                    console.log(calendars);
+               })
+               axios.get('http://localhost:9000/gettags',  {params : {loggedInUser}}).then((res) => {
+                    setTags(res.data);
+                    console.log(tags);
+               })
+          } */
+          axios.get('http://localhost:9000/getcalendars').then((res) => {
+               setCalendars(res.data);
+               console.log(calendars);
+          })
+          axios.get('http://localhost:9000/gettags').then((res) => {
+               setTags(res.data);
+               console.log(tags);
+          })
+
+     })
+
+
      /* VIEW SETTING */
      const [viewSetting, setViewSetting] = useState('Monthly')
      const viewArray = ['Daily', 'Weekly', 'Monthly', 'Yearly']
@@ -19,13 +49,9 @@ function ViewCalendar() {
      }
 
      /* CALENDAR SELECTION */
-     //const [calendars, setCalendars] = useState([]);
-     const calendars = ['Personal Calendar', 'Work Calendar', 'Family Calendar'];
      const [selectedCalendars, setSelectedCalendars] = useState([])
-     //use effect to get calendars from database
 
      /* TAGS */
-     const tags = ['High Priority', 'Medium Priority', 'Low Priority'];
      const [selectedTags, setSelectedTags] = useState([])
 
      return (
@@ -65,7 +91,7 @@ function ViewCalendar() {
                               );
                          })}
                     </form>
-                    <br/>
+                    <br />
                     <label id="sideheader">Tags</label><br />
                     <form>
                          {tags.map((t, index) => {
@@ -82,10 +108,10 @@ function ViewCalendar() {
                     </form>
                </div>
 
-           {<CalendarGrid id="cal"/>} 
+               {<CalendarGrid id="cal" />}
 
           </div>
-          
+
      )
 }
 
