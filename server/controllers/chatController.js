@@ -2,10 +2,11 @@ const Chat = require('../schemas/chatSchema');
 const User  = require('../schemas/userSchema');
 
 exports.getChat = async (req, res) => {
+
     var knownUserNames = {}
 
     try {
-        const id = req.query.groupId
+        const id = req.query.id
         const chat = await Chat.findById(id);
 
         if (!chat) { 

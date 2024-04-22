@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const WebSocket = require('ws');
 
+const User = require("./schemas/userSchema");
+
 // app
 const app = express();
 
@@ -33,7 +35,7 @@ function startServer() {
 
     // WebSocket connection handling
     wss.on('connection', function connection(ws) {
-        console.log('WebSocket client connected');
+       
     });
 
     // Change stream setup after the database connection is established
@@ -50,4 +52,15 @@ function startServer() {
             }
         });
     });
+
+    app.post('/createUser', async (req, res) => {
+        try {
+            const user = new User(req.body);
+            await user.save()
+            res.send(user)
+        }
+        catch (error) {
+            res.status(500).send(error)
+        }
+    })
 }

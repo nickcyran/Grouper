@@ -65,7 +65,7 @@ const MessageBar = () => {
 }
 
 const GetMessages = (group, setChat) => {
-    axios.get('http://localhost:9000/getChat/', { params: { groupId: group } })
+    axios.get('http://localhost:9000/getChat/', { params: { id: group } })
         .then(res => {
             setChat(res.data);
         })
