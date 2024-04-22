@@ -53,7 +53,9 @@ function startServer() {
         });
     });
 
-    app.post('/createUser', async (req, res) => {
+}    
+//signup api
+app.post('/createUser', async (req, res) => {
         try {
             const user = new User(req.body);
             await user.save()
@@ -62,5 +64,30 @@ function startServer() {
         catch (error) {
             res.status(500).send(error)
         }
-    })
-}
+})
+
+//login api
+app.get('/getUser', async (req, res) => {
+    const username = req.query.Username;
+    const password = req.query.Password;
+
+    try {
+        const user = await User.findOne({Username: username , Password: password });
+        res.send(user)
+    }
+    catch (error) {
+        res.status(500).send(error)
+    }
+})
+
+
+app.get('/getUserByID', async (req, res) => {
+    const _id = req.query.loggedInUser
+    try{
+        const user = await User.findOne({ _id : _id });
+        res.send(user);
+    }
+    catch (error ){
+        res.status(500).send(error)
+    }
+})
