@@ -14,8 +14,8 @@ const handleLogin = (event) => {
         .then((res) => {            
           if(res.data){
             localStorage.clear()
-            localStorage.setItem('loggedInUser', res.data._id)
-            navigate("/Main");
+            localStorage.setItem('userID', res.data._id)
+            navigate("/");
           }
           else
             alert('Wrong Credentials')

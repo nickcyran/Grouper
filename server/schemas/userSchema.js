@@ -6,9 +6,25 @@ const userSchema = new mongoose.Schema({
     username: String,
     password: String,
     
-    profile_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        default: null
+    profile: {
+        display_name:{
+            type: String,
+            ref: 'name'
+        },
+        profile_pic:{
+            type: String,
+            default: null,
+            ref: 'pfp'
+        },
+        biography: {
+            type: String,
+            default: "",
+            ref: 'bio'
+        },
+        links:[{
+            type: String,
+            ref: 'link'
+        }]
     },
 
     calanders_id: [{ type: mongoose.Schema.Types.ObjectId }],
