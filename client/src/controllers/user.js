@@ -13,8 +13,24 @@ const getUser = async (body) => {
         }
     })
     .catch((err) => {
-        console.log("Error in Login");
+        console.log("Error in Login: " + err);
     });
+}
+
+const createUser = async (body) => {
+    console.log(body.username)
+    const f_name = body.f_name;
+    const l_name = body.l_name;
+    const username = body.username;
+    const password = body.password
+    axios.post('http://localhost:9000/createUser', {f_name, l_name, username, password})
+    .then((res) => {
+        return true;
+    })
+    .catch((err) => {
+        alert('Error in Signing Up: ' + err)}
+    )
+
 }
 
 const AddFriend = (body) => {
@@ -57,4 +73,4 @@ const CreateDirectMessage = async (body) => {
     });
 };
 
-export {getUser, AddFriend, GetFriends, CreateDirectMessage, GetDirectMessages}
+export {getUser, createUser, AddFriend, GetFriends, CreateDirectMessage, GetDirectMessages}
