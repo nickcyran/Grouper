@@ -65,6 +65,36 @@ exports.getServerMembership = async (req, res) => {
    // }
 }
 
+exports.getServerMembers = async (req, res) => {
+    try {
+        Server.find()
+        .then(serverList => res.json(serverList.member_ID))
+        .catch(err => res.json(err))
+    }
+    catch (error) {
+    res.status(500).send(error)
+    }
+}
+
+exports.getServerAdmins = async (req,res) => {
+    const id = req.query.sID;
+    const curUserID = req.query.admin;
+    console.log("serverID " + id);
+    console.log("current user ID " + curUserID);
+    Server.findOne({_id : id}) //find current server
+        .then(server => {
+            if(server) {
+                //if(server.admin_ID == admin_ID)  {
+                console.log("Current server's admin(s) " + server.admin_ID)
+                if(server.admin_ID.includes(curUserID)) {    
+                    res.json("admin")
+                }
+                else res.json("not_admin")
+            }
+            else res.json("Error: Server not found")
+        })
+}
+
 exports.getServerInvites = async (req, res) => {
     invite_ref = req.body
     const inviteList = Server.find({invite_ID : invite_ref })

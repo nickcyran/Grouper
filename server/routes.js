@@ -30,10 +30,12 @@ router.post('/createEvent', createEvent);
 router.get('/getUsers', getUsers);
 
 // [SERVER ROUTES] --------------------------------------------------------------
-const { createServer, getServers, getServerMembership, getServerInvites} = require('./controllers/serverController');
+const { createServer, getServers, getServerMembership, getServerInvites, getServerMembers, getServerAdmins} = require('./controllers/serverController');
 router.post('/createServer', createServer);
 router.get('/getServers', getServers);
 router.get('/getServerMembership', getServerMembership);
 router.get('/getServerInvites', getServerInvites);
+router.get('/getServerMembers', getServerMembers);
+router.get('/getServerAdmins', getServerAdmins)
 
 module.exports = router; 

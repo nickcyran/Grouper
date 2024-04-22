@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 const ServerHome = () => {
     const [serverName, setServerName] = useState([]) 
     const [allServers, setAllServers] = useState([]) 
+    const [serverMembers, setServerMembers] = useState([]) 
     const [servers, setServers] = useState([]) 
     const [invites, setInvites] = useState([]) 
 
@@ -15,7 +16,7 @@ const ServerHome = () => {
 
 
     //TEMPORARY!! REMOVE ONCE USER IS FIXED/DONE
-    localStorage.setItem('loggedInUser', '661eeadeca5795c82406e572')
+    //localStorage.setItem('loggedInUser', '661eeadeca5795c82406e572')
     const user_ID = localStorage.getItem('loggedInUser') //keep this part -- sets the owner/userID to the current user's ID
 
     //send server creation data to (MongoDB) server
@@ -46,17 +47,27 @@ const ServerHome = () => {
         .catch(err=> console.log(err))
         
         /*
+        //all server members
+        axios.get('http://localhost:9000/getServerMembers')
+        .then((res)=>{
+            //console.log(res.data)
+            setServerMembers(res.data)})
+        .catch(err=> console.log(err))
+        */
+
+        /*
         servers current user is in
         axios.get('http://localhost:9000/getServerMembership', {params: {member_ID : user_ID}})
         .then((res)=> {
             console.log(res.data)
             setServers(res.data)})
         .catch(err=> console.log(err))
-            */
+            
         //servers current user is invited to
         axios.get('http://localhost:9000/getServerInvites', {params: {invite_ID : user_ID}})
         .then((res)=>setInvites(res.data))
         .catch(err=> console.log(err))
+        */
     })
 
     //for toggling visibility of server creation menu
