@@ -10,7 +10,7 @@ function Login() {
   const handleLogin = (event) => {
     event.preventDefault()
 
-    if (getUser({ params: { username, password } })) {
+    if (getUser({ params: { username, password } }) === true) {
       navigate('/')
     }
   }

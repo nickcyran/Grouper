@@ -7,15 +7,19 @@ import { GetFriends, GetDirectMessages } from '../controllers';
 import { getProfile } from '../controllers/user';
 
 const Friend_Right = () => {
+    const initialized = useRef(false);
     const [name, setName] = useState();
     const [bio, setBio] = useState();
     const [link, setLink] = useState();
 
     useEffect(() =>{
-        getProfile(localStorage.getItem('userID'));
-        setName(localStorage.getItem('displayName'));
-        setBio(localStorage.getItem('bio'));
-        setLink(localStorage.getItem('links'));
+        if(!initialized.current){
+            initialized.current = true;
+            getProfile(localStorage.getItem('userID'));
+            setName(localStorage.getItem('displayName'));
+            setBio(localStorage.getItem('bio'));
+            setLink(localStorage.getItem('links'));
+        }
     })
     return (
         <>
