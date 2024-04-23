@@ -46,8 +46,8 @@ const FriendsDisplay = () => {
 
             <div className="yourFriends">
                 {friends.length > 0 ? (
-                    friends.map((friend) => (
-                        <div key={friend._id} className="friendBox">
+                    friends.map((friend, index) => (
+                        <div key={index} className="friendBox">
                             <div className="pfp" />
                             <p> {friend.username}</p>
                         </div>
