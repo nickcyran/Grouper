@@ -1,9 +1,11 @@
 import '../styles/Calendar.css';
 import Select from 'react-select'
 import { React, useState, useEffect } from "react";
-import CalendarGrid from "./CalendarGrid";
-import { GetCalendars, GetTags } from "../controllers/calendars.js";
-import axios from 'axios';
+import { GetTags, GetCalendars } from "../controllers/calendars.js";
+import "react-calendar/dist/Calendar.css";
+import { Calendar, momentLocalizer } from 'react-big-calendar'
+import moment from 'moment'
+import { Link } from 'react-router-dom'
 
 function ViewCalendar() {
      /* MEMBERS */
@@ -11,6 +13,23 @@ function ViewCalendar() {
      localStorage.setItem('loggedInUser', Object('6625904292fb66306cc22be5'))
      const loggedInUser = localStorage.getItem('loggedInUser');
      const [tags, setTags] = useState([]);
+     const localizer = momentLocalizer(moment)
+     const [selectedCalendars, setSelectedCalendars] = useState([])
+     const [selectedTags, setSelectedTags] = useState([])
+     const eventsTemp = [
+          {
+               allDay: false,
+               end: new Date('April 01, 2024 11:31:00'),
+               start: new Date('April 02, 2024 11:13:00'),
+               title: 'Event1',
+          },
+          {
+               allDay: true,
+               end: new Date('April 09, 2023 11:13:00'),
+               start: new Date('April 09, 2023 11:13:00'),
+               title: 'Event2',
+          },
+     ];
 
      /* VIEW SETTING */
      const [viewSetting, setViewSetting] = useState('Monthly')
@@ -25,12 +44,6 @@ function ViewCalendar() {
           setViewSetting(event.label);
      }
 
-     /* CALENDAR SELECTION */
-     const [selectedCalendars, setSelectedCalendars] = useState([])
-
-     /* TAGS */
-     const [selectedTags, setSelectedTags] = useState([])
-
      useEffect(() => {
           GetTags()
                .then(res => {
@@ -40,16 +53,14 @@ function ViewCalendar() {
                     console.log(error)
                })
 
-          GetCalendars()
+          GetCalendars(loggedInUser)
                .then(res => {
-                    console.log('In ViewCalendar')
                     const resp = res.slice(0)
                     setCalendars(resp)
-                    console.log(resp)
                })
                .catch(error => {
                     console.log(error)
-               }) 
+               })
      }, [])
 
      return (
@@ -92,9 +103,9 @@ function ViewCalendar() {
                          }
 
                          {calendars.length === 0 &&
-                              <label>
-                                   You have no calendars.
-                              </label>}
+
+                              <Link to="/createCalendar">Add a calendar</Link>
+                         }
                     </form>
                     <br />
                     <label id="sideheader">Tags</label><br />
@@ -119,7 +130,22 @@ function ViewCalendar() {
                     </form>
                </div>
 
-               {<CalendarGrid id="cal" />}
+               <div>
+                    {loggedInUser == null &&
+                         <p>Please login.</p>}
+
+                    {loggedInUser != null &&
+                         <p> {"Welcome " + loggedInUser + "!"}
+                         </p> &&
+                         <div id="container">
+                              <Calendar id="calendar"
+                                   events={eventsTemp}
+                                   localizer={localizer}
+                              />
+                         </div>
+
+                    }
+               </div>
 
           </div>
 
