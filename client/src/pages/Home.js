@@ -1,15 +1,26 @@
 import '../styles/friends.css'
 
 import { PageContent, Messaging, CreateDmPage } from '.'
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
 import { GetFriends, GetDirectMessages } from '../controllers';
+import { getProfile } from '../controllers/user';
 
 const Friend_Right = () => {
+    const [name, setName] = useState();
+    const [bio, setBio] = useState();
+    const [link, setLink] = useState();
+
+    useEffect(() =>{
+        getProfile(localStorage.getItem('userID'));
+        setName(localStorage.getItem('displayName'));
+        setBio(localStorage.getItem('bio'));
+        setLink(localStorage.getItem('links'));
+    })
     return (
         <>
             User Profile
-            <p>empty - nonfunc requirement rn</p>
+            <p> Display Name: {name} <br/> Biography: {bio} <br/> Added Link: {link} </p>
         </>
     )
 }
