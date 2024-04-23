@@ -36,7 +36,15 @@
      position: fixed;
      align-self: center;
      font-size: 15px;
-     margin-left: 200px;
-     width: 90%;
-     position: fixed;
+     margin-left: 125px; 
+     max-height: 100px;
+}
+
+#container {
+     max-width: 600px;
+  margin: auto;
+  margin-top: 20px;
+  padding: 10px;
+  display: 'inline-block'; 
+  border-radius: 3px;
 }

@@ -6,6 +6,7 @@ const WebSocket = require('ws');
 
 const User = require("./schemas/userSchema");
 const Event = require("./schemas/eventSchema");
+const Calendar = require("./schemas/calendarSchema");
 
 // app
 const app = express();
@@ -77,26 +78,40 @@ function startServer() {
     })
 
     app.get('/getCalendars', async (req, res) => {
-        console.log('Begin getting calendars')
+        const id = req.query._id;
         try {
-            const events = await Event.find()
-            let details = [];
-            for (ev of events) {
-                details.push({
-                    _id: ev._id,
-                    event_name: ev.event_name,
-                    event_tags: ev.event_tags,
-                    invited_users: ev.invited_users,
-                    start_date: ev.start_date,
-                    end_date: ev.end_date
-                })
-            }
-            console.log(details)
-            res.send(details)
-        } catch (error) {
-            console.error('Error fetching events:', error);
-            res.status(500).json({ error: 'Internal server error' });
+            const user = await User.findOne({ _id: id });
+            res.send(user.calendars_id)
+        }
+        catch (error) {
+            res.status(500).send(error)
         }
     })
+    /*
+        app.post('/updateusercalendars'), async (req, res) => {
+            const _id = req.query._id;
+            try {
+                //find user
+                const user = await User.findOne({ _id : _id })
+                user.calanders_id = 
+                //post updated info
+            }
+        }
+    */
+
+    app.post('/createCalendar'), async (req, res) => {
+        console.log('testingg')
+        try {
+            const cal = new Calendar(req.body);
+            console.log(cal)
+            cal.save()
+            res.send(1) //temporary
+        }
+        catch (error) {
+            res.status(500).send(error)
+        }
+    }
+
+
 }
 
