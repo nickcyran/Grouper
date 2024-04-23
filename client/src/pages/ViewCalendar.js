@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom'
 function ViewCalendar() {
      /* MEMBERS */
      const [calendars, setCalendars] = useState([]);
-     const loggedInUser = localStorage.getItem('loggedInUser');
+     const userID = localStorage.getItem('userID');
      const [tags, setTags] = useState([]);
      const localizer = momentLocalizer(moment)
      const [selectedCalendars, setSelectedCalendars] = useState([])
@@ -53,7 +53,7 @@ function ViewCalendar() {
                     console.log(error)
                })
 
-          GetCalendars(loggedInUser)
+          GetCalendars(userID)
                .then(res => {
                     const resp = res.slice(0)
                     setCalendars(resp)
@@ -131,11 +131,11 @@ function ViewCalendar() {
                </div>
 
                <div id="calendar-display">
-                    {loggedInUser == null &&
+                    {userID == null &&
                          <p>Please login.</p>}
 
-                    {loggedInUser != null &&
-                         <p> {"Welcome " + loggedInUser + "!"}
+                    {userID != null &&
+                         <p> {"Welcome " + userID + "!"}
                          </p> &&
                          <Calendar
                               events={eventsTemp}
