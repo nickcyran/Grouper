@@ -17,6 +17,7 @@
         padding: 20px;
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        width: 300px;
     }
   
     .close {
@@ -119,7 +120,7 @@
     }
 
     .popup-content {
-        max-height: 400px; /* Set a maximum height for the popup content */
+        max-height: 800px; /* Set a maximum height for the popup content */
         overflow-y: auto; /* Enable vertical scrolling when content overflows */
         max-width: 12vw; /* Set a maximum width for the popup content */
         overflow-x: auto; /* Enable horizontal scrolling when content overflows */

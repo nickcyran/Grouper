@@ -3,12 +3,61 @@ import { GetMessagesFromChat, SendMessageToChat } from '../controllers';
 
 import '../styles/chat.css'
 
+const Menu = ({ position, onHide, chatUserId, loggedInUserId }) => {
+    const style = {
+        fontSize: "12px",
+        position: 'absolute',
+        top: position.y,
+        left: position.x,
+        backgroundColor: "#1e1f22",
+        boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.3)',
+        borderRadius: '3px',
+        padding: '5px',
+        zIndex: 9999 
+    };
+
+    const handleOptionClick = (option) => {
+        console.log("Option clicked:", option);
+        onHide();
+    };
+
+    const canDelete = loggedInUserId === chatUserId;
+
+    if (!canDelete) {
+        return null;
+    }
+
+    return (
+        <div style={style}>
+            {canDelete && (
+                <div className="delete" onClick={() => handleOptionClick("Option 1")}>Delete</div>
+            )}
+            {/* Add more options as needed */}
+        </div>
+    );
+};
+
 const MsgDisplay = ({ chatLog }) => {
     const messagesEndRef = useRef(null);
+    const [showMenu, setShowMenu] = useState(false);
+    const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
+    const [msgSender, setMsgSender] = useState('');
+    const loggedInUserId = localStorage.getItem('userID');
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
     }, [chatLog]);
+
+    const handleSettingsClick = (e, index, chatUserId) => {
+        const rect = e.target.getBoundingClientRect();
+        setMsgSender(chatUserId)
+        setMenuPosition({ x: rect.left, y: rect.bottom });
+        setShowMenu(true);
+    };
+
+    const hideMenu = () => {
+        setShowMenu(false);
+    };
 
     if (!Array.isArray(chatLog)) {
         return null;
@@ -17,23 +66,34 @@ const MsgDisplay = ({ chatLog }) => {
     return (
         <div className="msgsgs">
             {chatLog.map((chat, index) => {
-                const prevChat = index > 0 ? (chatLog[index - 1]).user_id : null;
+                const prevChat = index > 0 ? chatLog[index - 1].user_id : null;
 
                 return (
                     <div key={index} className="msgBox">
-                        {(prevChat !== chat.user_id) &&
+                        {(prevChat !== chat.user_id) && (
                             <div className="chatProfileBox">
                                 <div className="dmPfp" />
                                 <b style={{ fontSize: "18px" }}>{chat.username}</b>
                             </div>
-                        }
+                        )}
 
                         <div className="msg">
-                            {chat.message}
+                            <div className="messageText">
+                                {chat.message}
+                            </div>
+                            <div className="settings" onClick={(e) => handleSettingsClick(e, index, chat.user_id)}>...</div>
                         </div>
                     </div>
                 );
             })}
+            {showMenu && (
+                <Menu
+                    position={menuPosition}
+                    onHide={hideMenu}
+                    chatUserId={msgSender}
+                    loggedInUserId={loggedInUserId}
+                />
+            )}
             <div ref={messagesEndRef} />
         </div>
     );

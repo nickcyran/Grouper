@@ -1,10 +1,12 @@
 import axios from 'axios';
 
 const getUser = async (body) => {
-    axios.post('http://localhost:9000/getUser/', body)
+    axios.get('http://localhost:9000/getUser/', body)
     .then(res => {
+        console.log('work');
         if(res.username === body.username && res.password === body.password){
             localStorage.clear()
+            console.log(res.data._id)
             localStorage.setItem('userID', res.data._id)
             return true;
         }
@@ -13,16 +15,16 @@ const getUser = async (body) => {
         }
     })
     .catch((err) => {
-        console.log("Error in Login: " + err);
+        console.error('Error in Login:', err);
     });
 }
 
 const createUser = async (body) => {
-    console.log(body.username)
     const f_name = body.f_name;
     const l_name = body.l_name;
     const username = body.username;
     const password = body.password
+    
     axios.post('http://localhost:9000/createUser', {f_name, l_name, username, password})
     .then((res) => {
         return true;
@@ -31,6 +33,30 @@ const createUser = async (body) => {
         alert('Error in Signing Up: ' + err)}
     )
 
+}
+
+const getProfile = async (body) => {
+    axios.get('http://localhost:9000/getProfile', {params: {body}})
+    .then((res) => {
+        localStorage.setItem('PFP', res.data.profile_pic);
+        localStorage.setItem('displayName', res.data.display_name)
+        localStorage.setItem('bio', res.data.biography);
+        localStorage.setItem('links', res.data.links)
+        return res.data;
+    })
+    .catch((err) => {
+        alert('Error in getting Profile: ' + err)}
+    )
+}
+
+const updateProfile = async (body) => {
+    axios.post('http://localhost:9000/updateProfile', {params: {body}})
+    .then((res) => {
+        return;
+    })
+    .catch((err) => {
+        alert('Error in Updating: ' + err)}
+    )
 }
 
 const AddFriend = (body) => {
@@ -73,4 +99,4 @@ const CreateDirectMessage = async (body) => {
     });
 };
 
-export {getUser, createUser, AddFriend, GetFriends, CreateDirectMessage, GetDirectMessages}
+export {getUser, createUser, getProfile, updateProfile, AddFriend, GetFriends, CreateDirectMessage, GetDirectMessages}

@@ -18,16 +18,16 @@ const Events = () => {
       .catch((error) => console.error('Error fetching users:', error));
   }, []);
 
-  // gets all events that user is invited to or is owner of
-  useEffect(() => {
-    axios.get('http://localhost:9000/getEvents')
-      .then(response => {
-        setLocalEvents(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching events:', error);
-      });
-  }, []);
+  // // gets all events that user is invited to or is owner of
+  // useEffect(() => {
+  //   axios.get('http://localhost:9000/getEvents')
+  //     .then(response => {
+  //       setLocalEvents(response.data);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching events:', error);
+  //     });
+  // }, []);
 
   // populates dropdown box of users
   const userOptions = users.map(user => ({
@@ -71,9 +71,10 @@ const Events = () => {
     const eventName = document.getElementById('eventName').value;
     const eventDescription = document.getElementById('eventDescription').value;
     const startDate = document.getElementById('startDate').value;
-    const endDate = document.getElementById('endDate').value;
+    const endDateString = document.getElementById('endDate').value;
+    const endDate = new Date(endDateString);
     const currentDate = new Date();
-  
+
     // does not allow for past dates to be a start/end date
     if (startDate < currentDate || endDate < currentDate) {
       alert('Cannot create event with a start date in the past.');
@@ -94,28 +95,44 @@ const Events = () => {
     // debug data
     console.log('Event Data:', eventData);
 
-    // frontend call to createEvent
     axios.post('http://localhost:9000/createEvent', eventData)
-      .then((res) => {
-        console.log('Event created successfully:', res.data);
-        setLocalEvents([...localEvents, res.data]); // adds new event to local list
-        setIsPopupOpen(false); // closes popup
-        setTags([]); // reset tags
-        setSelectedUsers([]);
-      })
-      .catch((error) => console.error('Error creating event:', error));
+    .then((res) => {
+      console.log('Event created successfully:', res.data);
+      setLocalEvents([...localEvents, res.data]); // adds new event to local list
+      setIsPopupOpen(false); // closes popup
+      setTags([]); // reset tags
+      setSelectedUsers([]);
+    })
+    .catch((error) => console.error('Error creating event:', error));
+
+    console.log('New Event Data:', eventData);
+  
+    // Update local state with the new event
+    setLocalEvents([...localEvents]);
+  
+    // Reset form fields and state
+    setIsPopupOpen(false);
+    setTags([]);
+    setSelectedUsers([]);
   };
 
   // calculates days until end date
   const daysUntilEndDate = (endDate) => {
+    const endDateObj = new Date(endDate);
 
-    if (!endDate) {
-      return 0; // returns 0 days if endDate is not defined
+    if (!endDateObj || typeof endDateObj !== 'object' || !endDateObj.getTime) {
+      return 0; // Return 0 days if endDate is not a valid Date object
     }
   
     const currentDate = new Date();
-    const differenceInTime = endDate.getTime() - currentDate.getTime();
+    const differenceInTime = endDateObj.getTime() - currentDate.getTime();
     const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
+  
+    // If the difference is negative, it means the event has already started, so return 0 days
+    if (differenceInDays < 0) {
+      return 0;
+    }
+  
     return differenceInDays;
   };
   
@@ -127,15 +144,15 @@ const Events = () => {
 
       {/* Event display list */}
       <div className="events-box">
-        <h2>Events:</h2>
-        <ul>
-          {localEvents.map((event) => (
-            <li key={event.id}>
-              {event.name} : {event.startDate >= new Date() ? `Starts in ${daysUntilEndDate(event.startDate)} days` : `Ends in ${daysUntilEndDate(event.endDate)} days`}
-          </li>
-          ))}
-        </ul>
-      </div>
+  <h2>Events:</h2>
+  <ul>
+    {localEvents.map((event) => (
+      <li key={event._id}>
+        {event.event_name} : {event.start_date >= new Date() ? `Starts in ${daysUntilEndDate(event.start_date)} days` : `Ends in ${daysUntilEndDate(event.end_date)} days`}
+      </li>
+    ))}
+  </ul>
+</div>
 
       {/* Popup window */}
       {isPopupOpen && (
