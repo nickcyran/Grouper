@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 const getUser = async (body) => {
+    localStorage.clear()
+    
     axios.get('http://localhost:9000/getUser/', body)
     .then(res => {
-        console.log('work');
         if(res.username === body.username && res.password === body.password){
-            localStorage.clear()
             console.log(res.data._id)
             localStorage.setItem('userID', res.data._id)
             return true;

@@ -41,8 +41,8 @@ router.get('/getServerMembership', getServerMembership);
 router.get('/getServerInvites', getServerInvites);
 router.get('/getServerMembers', getServerMembers);
 router.get('/getServerAdmins', getServerAdmins);
-router.get('/sendServerInvite', sendServerInvite);
-router.get('/getServerChannels', getServerChannels);
-router.get('/createServerChannels', createServerChannels);
+// router.get('/sendServerInvite', sendServerInvite);
+// router.get('/getServerChannels', getServerChannels);
+// router.get('/createServerChannels', createServerChannels);
 
 module.exports = router; 
