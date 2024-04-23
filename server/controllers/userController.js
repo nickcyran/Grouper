@@ -33,13 +33,12 @@ exports.getUser = async (req, res) => {
 };
 
 exports.getProfile = async (req, res) => {
-    const _id = req.query._id
+    const _id = req.query.body
     try{
         const user = await User.findOne({ _id : _id });
-        console.log(user.profile);
         res.send(user.profile);
     }
-    catch (error) {
+    catch (error ){
         res.status(500).send(error)
     }
 };
