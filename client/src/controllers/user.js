@@ -45,7 +45,8 @@ const getProfile = async (body) => {
         return res.data;
     })
     .catch((err) => {
-        alert('Error in getting Profile: ' + err)}
+        console.log(err)
+    }
     )
 }
 
