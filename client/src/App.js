@@ -20,7 +20,7 @@ function App() {
         <Route path="/signup" element = {<Signup/>}/>
         <Route path="/serverhome" element={<ServerHome/>} />
         <Route path="/server/:id" element={<ServerPage/>} />
-        <Route path="/createCalendar" element={<NewCalendar/>} />
+        <Route path="/newCalendar" element={<NewCalendar/>} />
         <Route path="/profileSettings" element={<ProfileSettings/>} />
       </Routes>
     </div>

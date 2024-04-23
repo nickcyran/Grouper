@@ -14,7 +14,7 @@ const GetTags = async (loggedInUser) => {
 const UpdateUserCal = async (loggedInUser, newCal, desc) => {
      //make new calendar first
      let cal_id;
-     axios.post('http://localhost:9000/createCalendar',{ params: { cal_name: newCal, owner: loggedInUser } } )
+     axios.post('http://localhost:9000/createCalendar', { params: { cal_name: newCal, owner: loggedInUser } } )
           .then((res) => {
                cal_id = (res.data) //get calendar ID
                console.log(cal_id)
