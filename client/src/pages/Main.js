@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react';
 import { GetUserGroups } from '../controllers'
 
 
-
 const Main = () => {
     const [groups, setGroups] = useState([]);
     const [onFriendsPage, setOnFriendsPage] = useState(true);
