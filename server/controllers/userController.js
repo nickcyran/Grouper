@@ -44,16 +44,17 @@ exports.getProfile = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-    const _id = req.query.body._id
-    try{
+    try{    
+        const editUser = await User.findById(req.body._id)
         const profile = {
             profile_pic: null,
-            biography: req.query.body.biography,
-            links : req.query.body.links,
-            display_name : req.query.body.display_name,
+            biography: req.body.biography,
+            links : req.body.links,
+            display_name : req.body.display_name,
         }
-
-        User.findByIdAndUpdate(_id, { $set: profile})
+        editUser.profile = profile;
+        editUser.save();
+        res.send(editUser);
     }
     catch (error ){
         res.status(500).send(error)

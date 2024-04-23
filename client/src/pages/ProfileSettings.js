@@ -1,25 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { getProfile } from "../controllers/user";
+import { getProfile, updateProfile } from "../controllers/user";
 
 function ProfileSettings(){
-    const [profile_pic, setProfile_Pic] = useState('');
-    const [display_name, setDisplay_Name] = useState('');
-    const [biography, setBiography] = useState('');
-    const [links, setLinks] = useState('');
+    const initialized = useRef(false);
+    const [pic, setProfile_Pic] = useState('');
+    const [name, setDisplay_Name] = useState('');
+    const [bio, setBiography] = useState('');
+    const [link, setLinks] = useState('');
+    const _id = localStorage.getItem('userID');
 
     useEffect(() =>{
-        var _id = localStorage.getItem('userID');
-        getProfile(_id)
-        setProfile_Pic(localStorage.getItem('PFP'));
-        setDisplay_Name(localStorage.getItem('displayName'));
-        setBiography(localStorage.getItem('bio'));
-        setLinks(localStorage.getItem('links'));
+        if(!initialized.current){
+            initialized.current = true;
+            getProfile(_id);
+            setProfile_Pic(localStorage.getItem('PFP'));
+            setDisplay_Name(localStorage.getItem('displayName'));
+            setBiography(localStorage.getItem('bio'));
+            setLinks(localStorage.getItem('links'));
+        }
     })
 
-    const handleEdit = (event) =>{
-        event.preventDefault();
-        
+    const handleEdit = (e, profile_pic, biography, links, display_name) =>{
+        e.preventDefault();
+        updateProfile({ _id: _id, profile_pic, biography, links, display_name })
     }
 
     return(
@@ -27,19 +31,19 @@ function ProfileSettings(){
             <header className="Profile-header">
                 <form>
                     <label> 
-                        Profile Picture: {profile_pic}
+                        Profile Picture: {pic}
                     </label>
                     <label>
-                        Name: <input type="text" defaultValue={display_name} onChange={(e) => setDisplay_Name(e.target.value)}></input>
+                        Name: <input type="text" defaultValue={name} onChange={(e) => setDisplay_Name(e.target.value)}></input>
                     </label>
                     <label>
-                        Biography: <input type="text-box" defaultValue={biography} onChange={(e) => setBiography(e.target.value)}></input>
+                        Biography: <input type="text" defaultValue={bio} onChange={(e) => setBiography(e.target.value)}></input>
                     </label>
                     <label>
-                        Links: <input type="text" defaultValue={links} onChange={(e) => setLinks(e.target.value)}></input>
+                        Links: <input type="text" defaultValue={link} onChange={(e) => setLinks(e.target.value)}></input>
                     </label>
                 </form>
-                <button type="submit" onClick={(e) => handleEdit(e)}>Submit Edit</button>
+                <button type="submit" onClick={(e) => handleEdit(e, pic, bio, link, name)}>Submit Edit</button>
             </header>
         </div>
     )

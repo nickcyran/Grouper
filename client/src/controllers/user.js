@@ -23,7 +23,7 @@ const createUser = async (body) => {
     const f_name = body.f_name;
     const l_name = body.l_name;
     const username = body.username;
-    const password = body.password
+    const password = body.password;
     
     axios.post('http://localhost:9000/createUser', {f_name, l_name, username, password})
     .then((res) => {
@@ -50,9 +50,9 @@ const getProfile = async (body) => {
 }
 
 const updateProfile = async (body) => {
-    axios.post('http://localhost:9000/updateProfile', {params: {body}})
+    axios.post('http://localhost:9000/updateProfile', body)
     .then((res) => {
-        return;
+        return res;
     })
     .catch((err) => {
         alert('Error in Updating: ' + err)}
