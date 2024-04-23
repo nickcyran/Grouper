@@ -25,7 +25,6 @@ app.use(cors());
 
 // Routes
 const routes = require('./routes');
-const e = require('express');
 app.use("/", routes);
 
 // Function to start the server
@@ -37,9 +36,7 @@ function startServer() {
     const wss = new WebSocket.Server({ server });
 
     // WebSocket connection handling
-    wss.on('connection', function connection(ws) {
-
-    });
+    wss.on('connection', function connection(ws){});
 
     // Change stream setup after the database connection is established
     const db = mongoose.connection.db;
@@ -99,7 +96,7 @@ function startServer() {
         }
     */
 
-    app.post('/createCalendar'), async (req, res) => {
+    app.post('/createCalendar', async (req, res) => {
         console.log('testingg')
         try {
             const cal = new Calendar(req.body);
@@ -110,7 +107,7 @@ function startServer() {
         catch (error) {
             res.status(500).send(error)
         }
-    }
+    })
 
 
 }

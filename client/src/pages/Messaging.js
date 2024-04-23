@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
-import { GetMessagesFromChat, SendMessageToChat } from '../controllers';
+import { GetMessagesFromChat, SendMessageToChat, DeleteMessage } from '../controllers';
 
 import '../styles/chat.css'
 
-const Menu = ({ position, onHide, chatUserId, loggedInUserId }) => {
+const Menu = ({ position, onHide, chatUserId, msgId, chatroomId }) => {
     const style = {
         fontSize: "12px",
         position: 'absolute',
@@ -16,12 +16,12 @@ const Menu = ({ position, onHide, chatUserId, loggedInUserId }) => {
         zIndex: 9999 
     };
 
-    const handleOptionClick = (option) => {
-        console.log("Option clicked:", option);
+    const handleDelete = () => {
+        DeleteMessage({chat_id: chatroomId, message_id: msgId})
         onHide();
     };
 
-    const canDelete = loggedInUserId === chatUserId;
+    const canDelete = localStorage.getItem('userID') === chatUserId;
 
     if (!canDelete) {
         return null;
@@ -30,26 +30,29 @@ const Menu = ({ position, onHide, chatUserId, loggedInUserId }) => {
     return (
         <div style={style}>
             {canDelete && (
-                <div className="delete" onClick={() => handleOptionClick("Option 1")}>Delete</div>
+                <div className="delete" onClick={() => handleDelete()}>Delete</div>
             )}
             {/* Add more options as needed */}
         </div>
     );
 };
 
-const MsgDisplay = ({ chatLog }) => {
+const MsgDisplay = ({chatLog, chatroom}) => {
     const messagesEndRef = useRef(null);
+
     const [showMenu, setShowMenu] = useState(false);
     const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
     const [msgSender, setMsgSender] = useState('');
-    const loggedInUserId = localStorage.getItem('userID');
+    const [msgId, setMsgId] = useState('');
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
     }, [chatLog]);
 
-    const handleSettingsClick = (e, index, chatUserId) => {
+    const handleSettingsClick = (e, msgId, chatUserId) => {
         const rect = e.target.getBoundingClientRect();
+
+        setMsgId(msgId)
         setMsgSender(chatUserId)
         setMenuPosition({ x: rect.left, y: rect.bottom });
         setShowMenu(true);
@@ -81,7 +84,7 @@ const MsgDisplay = ({ chatLog }) => {
                             <div className="messageText">
                                 {chat.message}
                             </div>
-                            <div className="settings" onClick={(e) => handleSettingsClick(e, index, chat.user_id)}>...</div>
+                            <div className="settings" onClick={(e) => handleSettingsClick(e, chat._id, chat.user_id)}>...</div>
                         </div>
                     </div>
                 );
@@ -91,7 +94,9 @@ const MsgDisplay = ({ chatLog }) => {
                     position={menuPosition}
                     onHide={hideMenu}
                     chatUserId={msgSender}
-                    loggedInUserId={loggedInUserId}
+                    msgId={msgId}
+                    chatroomId={chatroom}
+
                 />
             )}
             <div ref={messagesEndRef} />
@@ -101,7 +106,7 @@ const MsgDisplay = ({ chatLog }) => {
 
 const Messaging = ({ group }) => {
     const [chat, setChat] = useState([]);
-
+    
     useEffect(() => {
         const fetchData = async () => {
             setChat(await GetMessagesFromChat(group));
@@ -155,7 +160,7 @@ const Messaging = ({ group }) => {
             {group &&
                 <div className="msgContainer">
                     <div className="pastChats">
-                        <MsgDisplay chatLog={chat} />
+                        <MsgDisplay chatLog={chat} chatroom={group}/>
                     </div>
                     <MessageBar />
                 </div>

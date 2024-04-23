@@ -1,6 +1,7 @@
-import { GetMessagesFromChat, SendMessageToChat } from "./messages"
+import { GetMessagesFromChat, SendMessageToChat, DeleteMessage } from "./messages"
 import {GetUserGroups, CreateGroup, GetTextChannels} from './groups' 
 import {AddFriend, GetFriends, CreateDirectMessage, GetDirectMessages, getUser} from './user' 
 
 export {GetMessagesFromChat, SendMessageToChat, GetUserGroups, AddFriend, 
-        GetFriends, CreateGroup, CreateDirectMessage, GetDirectMessages, GetTextChannels, getUser}
+        GetFriends, CreateGroup, CreateDirectMessage, GetDirectMessages, GetTextChannels, getUser,
+        DeleteMessage}

@@ -69,3 +69,29 @@ exports.createChat = async (req, res) => {
         res.status(500).send(error)
     }
 };
+
+exports.deleteMessage = async (req, res) => {
+    try {
+        const { chat_id, message_id } = req.body;
+        
+        const chat = await Chat.findById(chat_id);
+        
+        if (!chat) { 
+            return res.status(404).send("Chat not found");
+        }
+
+        const messageIndex = chat.messages.findIndex(msg => msg._id.toString() === message_id);
+        
+        if (messageIndex === -1) {
+            return res.status(404).send("Message not found in this chat");
+        }
+
+        chat.messages.splice(messageIndex, 1);
+        await chat.save();
+
+        res.send("Message deleted successfully");
+    }
+    catch (error) {
+        res.status(500).send(error)
+    }
+};
