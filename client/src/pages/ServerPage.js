@@ -22,11 +22,11 @@ const handleMemberInvitation = (event) => {
     axios.get('http://localhost:9000/sendServerInvite', {params: {sID: id, invUser : inviteMemberID}})
         .then(result => {
             //console.log(result)
-            if(result === "Sent")
+            if(result.data === "Sent")
                 alert("Successfully sent invite to user.");
-            else if(result === "Pre-Existing")
+            else if(result.data === "Pre-Existing")
                 alert("Cannot invite user, they have already been sent an invite.");
-            else if(result === "Existing")
+            else if(result.data === "Existing")
                 alert("Cannot invite user, they are already in the server.");
             else
                 alert("Error inviting user to server.");
