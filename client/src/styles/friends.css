@@ -8,6 +8,10 @@
     display: flex;
 }
 
+.friendBox:hover{
+    background-color: #2b2d31;
+}
+
 .pfp{
     width: 3rem;
     height: 3rem;
