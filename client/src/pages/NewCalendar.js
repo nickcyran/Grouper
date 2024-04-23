@@ -6,12 +6,12 @@ function NewCalendar() {
      const [name, setName] = useState("")
      const [desc, setDesc] = useState("")
      const [users, setUsers] = useState([])
-     const loggedInUser = localStorage.getItem('loggedInUser');
+     const userID = localStorage.getItem('userID');
      
      const handleSubmit = (event) => {
           try {
                event.preventDefault()
-               UpdateUserCal(loggedInUser, name, desc)
+               UpdateUserCal(userID, name, desc)
           }
           catch (error) {
                console.log(error)
@@ -20,7 +20,7 @@ function NewCalendar() {
 
      return (
           <div>
-               {loggedInUser != null && 
+               {userID != null && 
                     <form>
                     <label>Calendar Name<br />
                          <input type="text" onChange={(e) => setName(e.target.value)} />
@@ -33,7 +33,7 @@ function NewCalendar() {
                </form>
                }
 
-               {loggedInUser == null && 
+               {userID == null && 
                     <p>Please <Link to="/login">login</Link> to add a Calendar.</p>
                }
 
