@@ -25,10 +25,11 @@ const userSchema = new mongoose.Schema({
             default: "",
             ref: 'bio'
         },
-        links:[{
+        links:{
             type: String,
+            default: "",
             ref: 'link'
-        }]
+        }
     },
 
     calanders_id: [{ type: mongoose.Schema.Types.ObjectId }],
