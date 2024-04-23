@@ -17,7 +17,7 @@ const ServerHome = () => {
 
     //TEMPORARY!! REMOVE ONCE USER IS FIXED/DONE
     //localStorage.setItem('loggedInUser', '661eeadeca5795c82406e572')
-    const user_ID = localStorage.getItem('loggedInUser') //keep this part -- sets the owner/userID to the current user's ID
+    const user_ID = localStorage.getItem('userID') //keep this part -- sets the owner/userID to the current user's ID
 
     //send server creation data to (MongoDB) server
     const handleServerCreation = (event) => {
