@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 // [CHATROOM(messaging) ROUTES] ------------------------------------------------
-const { createChat, getChat, sendChat } = require('./controllers/chatController');
+const { createChat, getChat, sendChat, deleteMessage } = require('./controllers/chatController');
 router.post('/createChat', createChat); 
 router.get('/getChat', getChat);
 router.post('/sendChat', sendChat);
+router.post('/deleteMessage', deleteMessage)
 
 // [USER ROUTES] ---------------------------------------------------------------
 const { createUser, getUsername, addToGroup, getGroups, addFriend, getFriends, createDirectMessage, getDirectMessages, getUser, getProfile, updateProfile} = require('./controllers/userController');

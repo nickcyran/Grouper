@@ -10,9 +10,7 @@ const GetMessagesFromChat = async (group) => {
     }
 }; 
 
-
 const SendMessageToChat = (body) => {
-
     axios.post('http://localhost:9000/sendChat/', body)
     .then(res => {
         console.log("SENT: " + body.message)
@@ -22,5 +20,15 @@ const SendMessageToChat = (body) => {
     });
 }
 
+const DeleteMessage = (body) => {
+    axios.post('http://localhost:9000/deleteMessage/', body)
+    .then(res => {
+        console.log(res)
+    })
+    .catch((err) => {
+        console.error('Error in deleting message:', err);
+    });
+}
 
-export {GetMessagesFromChat, SendMessageToChat}
+
+export {GetMessagesFromChat, SendMessageToChat, DeleteMessage}
