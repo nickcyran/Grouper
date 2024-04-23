@@ -1,30 +1,25 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { getProfile } from "../controllers/user";
 
 function ProfileSettings(){
-    const [profile_pic, setProfile_Pic] = useState(null);
+    const [profile_pic, setProfile_Pic] = useState('');
     const [display_name, setDisplay_Name] = useState('');
     const [biography, setBiography] = useState('');
     const [links, setLinks] = useState('');
 
     useEffect(() =>{
         var _id = localStorage.getItem('userID');
-        console.log(_id);
-        axios.get('http://localhost:9000/getProfile', { params: { _id } })
-        .then((res) =>{
-            setProfile_Pic(res.data.profile_pic);
-            setDisplay_Name(res.data.display_name);
-            setBiography(res.data.biography);
-            setLinks(res.data.links);
-        })
-        .catch((error) => {
-            console.log('Error in getting Profile:', error);
-        })
+        getProfile(_id)
+        setProfile_Pic(localStorage.getItem('PFP'));
+        setDisplay_Name(localStorage.getItem('displayName'));
+        setBiography(localStorage.getItem('bio'));
+        setLinks(localStorage.getItem('links'));
     })
 
     const handleEdit = (event) =>{
         event.preventDefault();
-
+        
     }
 
     return(

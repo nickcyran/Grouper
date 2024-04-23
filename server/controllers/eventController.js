@@ -65,21 +65,3 @@ exports.getUsers = async (req, res) => {
         res.status(500).send(error)
     }
 }
-
-exports.currentUser = (req, res) => {
-  try {
-    // Example current user data
-    const currentUser = {
-      _id: "6625dfd4636cb08f982e2339",
-      f_name: "fname",
-      l_name: "lname",
-      username: "user",
-      password: "test"
-    };
-    console.log('Current user:', currentUser);
-    res.json(currentUser);
-  } catch (error) {
-    console.error('Error fetching current user:', error);
-    res.status(500).json({ error: 'An unexpected error occurred' });
-  }
-};
