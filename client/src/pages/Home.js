@@ -10,16 +10,12 @@ const Friend_Right = () => {
     const [name, setName] = useState();
     const [bio, setBio] = useState();
     const [link, setLink] = useState();
-    const initialized = useRef(false);
 
     useEffect(() =>{
-        if(!initialized.current){
-            initialized.current = true;
-            getProfile(localStorage.getItem('userID'));
-            setName(localStorage.getItem('displayName'));
-            setBio(localStorage.getItem('bio'));
-            setLink(localStorage.getItem('links'));
-        }
+        getProfile(localStorage.getItem('userID'));
+        setName(localStorage.getItem('displayName'));
+        setBio(localStorage.getItem('bio'));
+        setLink(localStorage.getItem('links'));
     })
     return (
         <>
