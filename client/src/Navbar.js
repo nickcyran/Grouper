@@ -1,8 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import './styles/Navbar.css';
 
 export default function Navbar() {
-     return (<nav className="nav">
+     return (<nav className="nav" id="navbar">
           <ul> 
                <Link to="/addFriend">Add friend</Link>&nbsp;
                <Link to="/">Messaging</Link>&nbsp;
