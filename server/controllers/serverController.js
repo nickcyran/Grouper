@@ -27,45 +27,20 @@ exports.getServerMembership = async (req, res) => {
     try {
         Server.find() //get entire list of servers
         .then(serverList => { //trim down to those that have uID as a memvber
-            for(var i=0; i < serverList.size(); i++)
-            {
-                if(serverList[i].member_ID.includes(userID))
-                serverMemberList.push(serverList[i]);
-            }
-            res.json(serverMemberList)
+            res.json(serverList);
         })
+         //   for(var i=0; i < serverList.size(); i++)
+         //   {
+         //       if(serverList[i].member_ID.includes(userID))
+         //       serverMemberList.push(serverList[i]);
+         //   }
+         //   res.json(serverMemberList)
+        //})
         .catch(err => res.json(err))
     }
     catch (error) {
     res.status(500).send(error)
     }
-        
-        /*.then({
-            if(serverList.size() > 0){ //server list not empty
-                res.json(serverList)
-            }
-            if (serverList.size() == 0) { //server list empty
-                res.json("None")
-            }
-        })
-        .catch(err => res.json(err))
-    }
-    catch (error) {
-        res.status(500).send(error)
-        } */
-    // serverList.forEach(
-    //    const foundRef = serverList.Member.includes(member_ref);
-    //    if(foundRef == true) {
-
-    //    }
-   // )
-
-   // if(serverList.size() > 0){ //server list not empty
-   //     res.json(serverList)
-  //  }
-   // if (serverList.size() == 0) { //server list empty
-    //    res.json("None")
-   // }
 }
 
 exports.sendServerInvite = async (req,res) => {
@@ -73,7 +48,7 @@ exports.sendServerInvite = async (req,res) => {
     const invitedUName = req.query.invUser; //user ID -- AS STRING - NEED TO CONVERT TO OBJECTID
     //const invitedID = mongoose.Types.ObjectID(invitedID_crude); --having difficulty getting this to work -- get actual userID/username and find that via user
 
-    Server.findOne({_id : id}) //find current server
+    Server.findOne({ _id : id}) //find current server
         .then(server => {
             if(server) {
                 console.log("selected Server: " + server._id + "(" + server.serverName + ")");
@@ -190,24 +165,6 @@ exports.getServerChannels = async (req,res) => {
                     else
                         res.json(channelList) //.channelName
                 })
-                //get names of channels from channel ID
-                /*
-                let channelNames = [];
-
-                //if no channels exist
-                if(server.channel_ID == null)
-                    res.json("No channels in server.")
-                else {
-                //find channel name and send to server
-                    //for(var i=0; i < server.channel_ID.length(); i++)
-                    server.channel_ID.forEach(
-                    {
-                        if(Channel.findOne({ _id : channel_ID}).channelName)
-                        channelNames.push(Channel.findOne({ _id : channel_ID}).channelName);
-                    })
-                    res.json(channelNames)
-                    }
-                */
                 } 
             else res.json("Error: Server not found")
         })

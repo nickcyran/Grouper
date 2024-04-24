@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 //server home page, view channels by selecting them on side. admin has an option to go to a different page via. div w/ links (determine who has access via. search by userID)
 const ServerPage = () => {
 const {id} = useParams() //get the ref to the server id
-const user_ID = localStorage.getItem('loggedInUser')
+const user_ID = localStorage.getItem('userID')
 const [userStatus, setUserStatus] = useState([]) //whether user is a member or admin
 
 //For admin permissions/controls
@@ -22,11 +22,11 @@ const handleMemberInvitation = (event) => {
     axios.get('http://localhost:9000/sendServerInvite', {params: {sID: id, invUser : inviteMemberID}})
         .then(result => {
             //console.log(result)
-            if(result === "Sent")
+            if(result.data === "Sent")
                 alert("Successfully sent invite to user.");
-            else if(result === "Pre-Existing")
+            else if(result.data === "Pre-Existing")
                 alert("Cannot invite user, they have already been sent an invite.");
-            else if(result === "Existing")
+            else if(result.data === "Existing")
                 alert("Cannot invite user, they are already in the server.");
             else
                 alert("Error inviting user to server.");
@@ -45,8 +45,8 @@ const handleChannelCreation = (event) => {
     axios.get('http://localhost:9000/createServerChannels', {params: {sID: id, cName : newChannelName}})
         .then(result => {
             console.log(result)
-            if(result.data != "Error: Server not found")
-            alert("Channel created!");
+            if(result.data !== "Error: Server not found" && result.data !== "Error: Could not create channel")
+            alert(result.data);
             else
             alert("Error: Server not found. Could not create channel");
         })
@@ -68,7 +68,14 @@ useEffect(() => {
 
     axios.get('http://localhost:9000/getServerChannels', {params: {sID: id}})
         .then(result => {
-            //console.log("channels " + JSON.stringify(result.data))
+           // console.log("channels " + JSON.stringify(result.data))
+            if(result.data === null || result.data === "" || result.data === "No channels in server.") {
+                const tempNoChannels = []
+                tempNoChannels.push( {channelName : "No channels in server."} )
+                //setChannels(tempNoChannels)
+                setChannels([{channelName : "No channels in server."}])
+            }
+            else
             setChannels(result.data)
         })
 })
@@ -79,6 +86,7 @@ useEffect(() => {
         <p>
             Currently in a server
         </p>
+        
         <p> Channels: </p>
         {channels.map((channel)=> {
                 return <p>{channel.channelName}</p>})}
