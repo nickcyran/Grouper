@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 const getUser = async (body) => {
+    localStorage.clear()
+
     axios.get('http://localhost:9000/getUser/', body)
     .then(res => {
-        console.log('work');
         if(res.username === body.username && res.password === body.password){
-            localStorage.clear()
             console.log(res.data._id)
             localStorage.setItem('userID', res.data._id)
             return true;
@@ -38,6 +38,7 @@ const createUser = async (body) => {
 const getProfile = async (body) => {
     axios.get('http://localhost:9000/getProfile', {params: {body}})
     .then((res) => {
+        
         localStorage.setItem('PFP', res.data.profile_pic);
         localStorage.setItem('displayName', res.data.display_name)
         localStorage.setItem('bio', res.data.biography);
@@ -45,7 +46,8 @@ const getProfile = async (body) => {
         return res.data;
     })
     .catch((err) => {
-        alert('Error in getting Profile: ' + err)}
+        console.log(err)
+    }
     )
 }
 

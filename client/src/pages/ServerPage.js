@@ -8,14 +8,14 @@ const {id} = useParams() //get the ref to the server id
 const user_ID = localStorage.getItem('userID')
 const [userStatus, setUserStatus] = useState([]) //whether user is a member or admin
 
-//For admin permissions/controls
-const [memberInvitation, setMemberInvitation] = useState(false)
-const [inviteMemberID, setInviteMemberID] = useState([])
+    //For admin permissions/controls
+    const [memberInvitation, setMemberInvitation] = useState(false)
+    const [inviteMemberID, setInviteMemberID] = useState([])
 
-//for viewing/creating channels
-const [channelCreation, setChannelCreation] = useState(false)
-const [channels, setChannels] = useState([])
-const [newChannelName, setNewChannelName] = useState([])
+    //for viewing/creating channels
+    const [channelCreation, setChannelCreation] = useState(false)
+    const [channels, setChannels] = useState([])
+    const [newChannelName, setNewChannelName] = useState([])
 
 //INVITING USERS TO THE SERVER --------------------------------------------------
 const handleMemberInvitation = (event) => { 
@@ -33,12 +33,12 @@ const handleMemberInvitation = (event) => {
         })
 }
 
-const openMemberInvitation = () => {
-    setMemberInvitation(true)
-}
-const closeMemberInvitation = () => {
-    setMemberInvitation(false)
-}
+    const openMemberInvitation = () => {
+        setMemberInvitation(true)
+    }
+    const closeMemberInvitation = () => {
+        setMemberInvitation(false)
+    }
 
 //CREATING/VIEWING CHANNELS ---------------------------------------------
 const handleChannelCreation = (event) => {
@@ -52,19 +52,19 @@ const handleChannelCreation = (event) => {
         })
 }
 
-const toggleChannelCreation = () => {
-    setChannelCreation(!channelCreation)
-}
+    const toggleChannelCreation = () => {
+        setChannelCreation(!channelCreation)
+    }
 
 
-useEffect(() => {
-    //get whether or not current user is an admin
-    axios.get('http://localhost:9000/getServerAdmins', {params: {sID: id, admin : user_ID}})
-        .then(result => {
-            //console.log("admin " + result)
-            //console.log("current user: " + user_ID)
-            setUserStatus(result.data) //"admin" or "not_admin"
-        })
+    useEffect(() => {
+        //get whether or not current user is an admin
+        axios.get('http://localhost:9000/getServerAdmins', { params: { sID: id, admin: user_ID } })
+            .then(result => {
+                //console.log("admin " + result)
+                //console.log("current user: " + user_ID)
+                setUserStatus(result.data) //"admin" or "not_admin"
+            })
 
     axios.get('http://localhost:9000/getServerChannels', {params: {sID: id}})
         .then(result => {
@@ -92,45 +92,45 @@ useEffect(() => {
                 return <p>{channel.channelName}</p>})}
 
 
-        {(userStatus === "admin") && ((
-            <div> 
-                <h3>Admin permissions: </h3>
-            <p>Removing & Inviting Members</p>
-            {!memberInvitation && (
-            <button type="button" onClick={openMemberInvitation}> Invite a new member </button>)}
+            {(userStatus === "admin") && ((
+                <div>
+                    <h3>Admin permissions: </h3>
+                    <p>Removing & Inviting Members</p>
+                    {!memberInvitation && (
+                        <button type="button" onClick={openMemberInvitation}> Invite a new member </button>)}
 
-            {memberInvitation && (
-                <div className="memberInvitation">
-                <form onSubmit={handleMemberInvitation}>
-                <h3> Invite a new member</h3>
-                <input type="text" placeholder="Enter userID" autoComplete="off" id="inviteMemberName" name="inviteMemberName"  onChange={(event) => setInviteMemberID(event.target.value)}></input>
-                <br></br>
-                <button type="submit">Send invitation</button>
-                <button type="button" onClick={closeMemberInvitation}>Cancel</button>
-                </form>
-                </div> )}
-            <p>Removing Members</p>
-            <p>Adding & Removing Channels</p>
-            {!channelCreation && (
-            <button type="button" onClick={toggleChannelCreation}> Create a new channel </button>)}
+                    {memberInvitation && (
+                        <div className="memberInvitation">
+                            <form onSubmit={handleMemberInvitation}>
+                                <h3> Invite a new member</h3>
+                                <input type="text" placeholder="Enter userID" autoComplete="off" id="inviteMemberName" name="inviteMemberName" onChange={(event) => setInviteMemberID(event.target.value)}></input>
+                                <br></br>
+                                <button type="submit">Send invitation</button>
+                                <button type="button" onClick={closeMemberInvitation}>Cancel</button>
+                            </form>
+                        </div>)}
+                    <p>Removing Members</p>
+                    <p>Adding & Removing Channels</p>
+                    {!channelCreation && (
+                        <button type="button" onClick={toggleChannelCreation}> Create a new channel </button>)}
 
-            {channelCreation && (
-                <div className="channelCreation">
-                <form onSubmit={handleChannelCreation}>
-                <h3> Create a new channel</h3>
-                <input type="text" placeholder="Enter channel name" autoComplete="off" id="newChannelName" name="newChannelName"  onChange={(event) => setNewChannelName(event.target.value)}></input>
-                <br></br>
-                <button type="submit">Create channel</button>
-                <button type="button" onClick={toggleChannelCreation}>Cancel</button>
-                </form> 
+                    {channelCreation && (
+                        <div className="channelCreation">
+                            <form onSubmit={handleChannelCreation}>
+                                <h3> Create a new channel</h3>
+                                <input type="text" placeholder="Enter channel name" autoComplete="off" id="newChannelName" name="newChannelName" onChange={(event) => setNewChannelName(event.target.value)}></input>
+                                <br></br>
+                                <button type="submit">Create channel</button>
+                                <button type="button" onClick={toggleChannelCreation}>Cancel</button>
+                            </form>
+                        </div>
+                    )}
+
+
+                    <p>Adding & Removing Admins</p>
                 </div>
-            )}
-
-
-            <p>Adding & Removing Admins</p>
-            </div>
             ))
-        }
+            }
 
         </div>
     )
