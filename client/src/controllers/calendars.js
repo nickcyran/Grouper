@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useState } from "react";
 
 const GetCalendars = async (userID) => {
-     const response = await axios.get('http://localhost:9000/getCalendars')
+     const response = await axios.get('http://localhost:9000/getCalendars', { params: {userID: userID} } )
      return response.data;
 }
 
@@ -11,28 +11,13 @@ const GetTags = async (userID) => {
      return response;
 }
 
-const UpdateUserCal = async (userID, newCal, desc) => {
-     //make new calendar first
-     let cal_id;
-     axios.post('http://localhost:9000/createCalendar', { params: { cal_name: newCal, owner: userID } } )
-          .then((res) => {
-               cal_id = (res.data) //get calendar ID
-               console.log(cal_id)
-          })
-          .catch((err) => {
-               console.log("Error making new calendar.")
-               console.log(err)
-          })
-
-     /*add to user profile
-     try {
-          const response = await axios.post('http://localhost:9000/updateusercalendars', { userID, cal_id })
-     }
-     catch {
-          console.log('Error updating user\'s calendars')
-     } */
-
-     return 1;
+const UpdateUserCal = async (userID, newCal) => {
+     //create new calendar
+     let cal_id = await axios.post('http://localhost:9000/createCalendar', { cal_name: newCal, owner: userID } )
+     cal_id = cal_id.data
+     
+     let resp = await axios.put('http://localhost:9000/updateUserCalendars', { userID: userID, cal_id: cal_id })
+     
 }
 
 export { GetCalendars, GetTags, UpdateUserCal }

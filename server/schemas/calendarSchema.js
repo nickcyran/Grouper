@@ -2,19 +2,19 @@ const mongoose = require('mongoose');
 
 const calendarSchema = new mongoose.Schema({
      cal_name: {
-          type: String
+          type: String,
+          required: true
      },
      owner: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'user',
+          required: true
      },
      invited_users: {
           type: [mongoose.Schema.Types.ObjectId],
-          ref: 'user',
           default: []
      },
      events: {
-          type: mongoose.Schema.Types.ObjectId,
+          type: [mongoose.Schema.Types.ObjectId],
           default: []
      }
 });

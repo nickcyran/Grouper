@@ -11,7 +11,7 @@ function NewCalendar() {
      const handleSubmit = (event) => {
           try {
                event.preventDefault()
-               UpdateUserCal(userID, name, desc)
+               UpdateUserCal(userID, name)
           }
           catch (error) {
                console.log(error)

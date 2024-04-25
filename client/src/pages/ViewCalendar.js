@@ -52,7 +52,7 @@ function ViewCalendar() {
                .catch(error => {
                     console.log(error)
                })
-
+          
           GetCalendars(userID)
                .then(res => {
                     const resp = res.slice(0)
@@ -89,23 +89,27 @@ function ViewCalendar() {
                     <label id="sideheader">Calendars</label><br />
                     <form>
                          {calendars.length > 0 &&
+                              userID != null &&
                               calendars.map((cal, index) => {
                                    return (
                                         <label key={index}>
                                              <input
-                                                  name={cal[2]}
+                                                  name={cal}
                                                   type="checkbox"
-                                                  value={cal._id}
-                                             />{cal.event_name}<br />
+                                                  value={cal}
+                                             />{cal}<br />
                                         </label>
                                    );
                               })
                          }
 
                          {calendars.length === 0 &&
-
+                              userID != null &&
                               <Link to="/newCalendar">Add a calendar</Link>
                          }
+
+                         {userID == null &&
+                         <p>Please login to view calendars.</p>}
                     </form>
                     <br />
                     <label id="sideheader">Tags</label><br />

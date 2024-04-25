@@ -36,7 +36,7 @@ function startServer() {
     const wss = new WebSocket.Server({ server });
 
     // WebSocket connection handling
-    wss.on('connection', function connection(ws){});
+    wss.on('connection', function connection(ws) { });
 
     // Change stream setup after the database connection is established
     const db = mongoose.connection.db;
@@ -75,34 +75,53 @@ function startServer() {
     })
 
     app.get('/getCalendars', async (req, res) => {
-        const id = req.query._id;
+        console.log('--------------------------------------------------------------------------------------------------------------------------------------------------------------')
+        const _id = req.query.userID
         try {
-            const user = await User.findOne({ _id: id });
-            res.send(user.calendars_id)
+            const user = await User.findById(_id)
+            let calList = []
+            for (const cal of user.calanders_id) {
+                const calendar = await Calendar.findById(cal)
+                let name = calendar.cal_name
+                calList.push(name)
+            }
+            res.send(calList)
         }
         catch (error) {
             res.status(500).send(error)
         }
     })
-    /*
-        app.post('/updateusercalendars'), async (req, res) => {
-            const _id = req.query._id;
-            try {
-                //find user
-                const user = await User.findOne({ _id : _id })
-                user.calanders_id = 
-                //post updated info
-            }
+
+    app.put('/updateUserCalendars', async (req, res) => {
+        console.log('in server')
+        const cal = req.body.cal_id
+        const owner = req.body.userID
+        try {
+            //find user
+            const user = await User.findOne({ _id: owner })
+            user.calanders_id.push(cal)
+            user.save()
+            res.send(user)
         }
-    */
+        catch (error) {
+            res.status(500).send(error)
+        }
+    })
+
 
     app.post('/createCalendar', async (req, res) => {
-        console.log('testingg')
+        const name = req.body.cal_name
+        const own = req.body.owner
         try {
-            const cal = new Calendar(req.body);
-            console.log(cal)
+            const cal = new Calendar(
+                {
+                    cal_name: name,
+                    owner: own,
+                    invited_users: null,
+                    events: null
+                });
             cal.save()
-            res.send(1) //temporary
+            res.send(cal._id)
         }
         catch (error) {
             res.status(500).send(error)
