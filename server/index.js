@@ -149,6 +149,36 @@ function startServer() {
         }
     })
 
+    app.get('/getUserEvents', async (req, res) => {
+        try {
+            const calendar = req.query.calendar
+            let calen
+            let allEvents = []
+            for (i in calendar) {
+                calen = await Calendar.find({ cal_name: calendar[i] })
+                const calEvents = calen[i].events
+                for (j in calEvents) { //go through each event in calendar
+                    const eve = await Event.find({ _id: calEvents[j] })
+                    
+                    const name = eve[0].event_name
+                    const tags = eve[0].event_tags
+                    const start = eve[0].start_date
+                    const end = eve[0].end_date
+
+                    allEvents.push({
+                        event_name: name,
+                        event_tags: tags,
+                        start: start,
+                        end: end
+                    })
+                }
+            }
+            res.send(allEvents) 
+        }
+        catch (error) {
+            console.log(error)
+        }
+    })
 
 }
 

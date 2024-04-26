@@ -1,7 +1,7 @@
 import '../styles/Calendar.css';
 import Select from 'react-select'
 import { React, useState, useEffect } from "react";
-import { GetTags, GetCalendars } from "../controllers/calendars.js";
+import { GetTags, GetCalendars, GetUserEvents } from "../controllers/calendars.js";
 import "react-calendar/dist/Calendar.css";
 import { Calendar, momentLocalizer } from 'react-big-calendar'
 import moment from 'moment'
@@ -15,21 +15,7 @@ function ViewCalendar() {
      const localizer = momentLocalizer(moment)
      const [selectedCalendars, setSelectedCalendars] = useState([])
      const [selectedTags, setSelectedTags] = useState([])
-     //temporary events list
-     const eventsTemp = [
-          {
-               allDay: false,
-               end: new Date('April 01, 2024 11:31:00'),
-               start: new Date('April 02, 2024 11:13:00'),
-               title: 'Event1',
-          },
-          {
-               allDay: true,
-               end: new Date('April 09, 2023 11:13:00'),
-               start: new Date('April 09, 2023 11:13:00'),
-               title: 'Event2',
-          },
-     ];
+     const [allEvents, setAllEvents] = useState([])
 
      /* VIEW SETTING */
      const [viewSetting, setViewSetting] = useState('Monthly')
@@ -39,37 +25,50 @@ function ViewCalendar() {
           return { label: prior, value: prior }
      })
 
+     const eventOptions = allEvents.map((eve) => {
+          const name = String(eve.event_name)
+          return { label: name, value: name }
+     }
+     )
+
      // reset view setting
      const handleViewChange = (event) => {
           setViewSetting(event.label);
      }
 
      useEffect(() => {
-          GetTags()
-               .then(res => {
-                    setTags((res.data).slice(0))
-               })
-               .catch(error => {
-                    console.log(error)
-               })
-          
+          /* GetTags()
+                .then(res => {
+                     setTags((res.data).slice(0))
+                })
+                .catch(error => {
+                     console.log(error)
+                }) */
+
           GetCalendars(userID)
                .then(res => {
-                    if (res.length == 0) {
+                    if (res.length != 0) {
+                         let resp
+                         res.map(i => {
+                              let resp = res.slice(0)
+                              setCalendars(resp)
 
+                              GetUserEvents(resp)
+                                   .then(res => {
+                                        res.map(j => {
+                                             let r = res.slice(0)
+                                             setAllEvents(r)
+                                        }
+                                        )
+                                   }
+                                   )
+                         })
                     }
-                    else {
-                    let resp
-                    res.map(i => {
-                         let resp = res.slice(0)
-                         setCalendars(resp)
-                    })
-                    
-               }
                })
                .catch(error => {
                     console.log(error)
                })
+
      }, [])
 
      return (
@@ -117,7 +116,7 @@ function ViewCalendar() {
                          }
 
                          {userID == null &&
-                         <p>Please login to view calendars.</p>}
+                              <p>Please login to view calendars.</p>}
                     </form>
                     <br />
                     <label id="sideheader">Tags</label><br />
@@ -140,6 +139,26 @@ function ViewCalendar() {
                               <p>You have no tags.</p>}
 
                     </form>
+
+                    <label id="sideheader">Events (for testing)</label><br />
+                    <form>
+                    {allEvents.length > 0 &&
+                              allEvents.map((item, index) => {
+                                   return (
+                                        <label key={index}>
+                                             <li>{item.event_name}</li>
+                                        </label>
+                                   );
+                              })
+                         }
+
+                         {allEvents.length <= 0 &&
+                              <p>You have no events.</p>
+                         }
+
+                    </form>
+
+
                </div>
 
                <div id="calendar-display">
@@ -150,7 +169,7 @@ function ViewCalendar() {
                          <p> {"Welcome " + userID + "!"}
                          </p> &&
                          <Calendar
-                              events={eventsTemp}
+                              events={allEvents}
                               localizer={localizer}
                               defaultView='month'
                          />
