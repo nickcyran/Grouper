@@ -12,6 +12,7 @@ function NewCalendar() {
           try {
                event.preventDefault()
                UpdateUserCal(userID, name)
+               alert(name + ' successfully made')
           }
           catch (error) {
                console.log(error)

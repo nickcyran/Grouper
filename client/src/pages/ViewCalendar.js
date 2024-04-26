@@ -55,8 +55,17 @@ function ViewCalendar() {
           
           GetCalendars(userID)
                .then(res => {
-                    const resp = res.slice(0)
-                    setCalendars(resp)
+                    if (res.length == 0) {
+
+                    }
+                    else {
+                    let resp
+                    res.map(i => {
+                         let resp = res.slice(0)
+                         setCalendars(resp)
+                    })
+                    
+               }
                })
                .catch(error => {
                     console.log(error)
@@ -94,17 +103,16 @@ function ViewCalendar() {
                                    return (
                                         <label key={index}>
                                              <input
-                                                  name={cal}
+                                                  name={cal.cal_name}
                                                   type="checkbox"
-                                                  value={cal}
+                                                  value={cal.cal_name}
                                              />{cal}<br />
                                         </label>
                                    );
                               })
                          }
 
-                         {calendars.length === 0 &&
-                              userID != null &&
+                         {userID != null &&
                               <Link to="/newCalendar">Add a calendar</Link>
                          }
 

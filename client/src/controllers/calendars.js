@@ -20,4 +20,8 @@ const UpdateUserCal = async (userID, newCal) => {
      
 }
 
-export { GetCalendars, GetTags, UpdateUserCal }
+const AddEventToCal = async (event_id, cal_id) => {
+     let resp = await axios.put('http://localhost:9000/addEventToCal', { event_id: event_id, cal_id: cal_id })
+}
+
+export { AddEventToCal, GetCalendars, GetTags, UpdateUserCal }

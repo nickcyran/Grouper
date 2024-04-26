@@ -1,5 +1,5 @@
 -------------RUN IN CLIENT----------
-npm install react-scripts --save react-select react-router-dom --save react-big-calendar moment --save
+npm install react-scripts --save react-select react-router-dom --save react-big-calendar moment --save multiselect-react-dropdown  
 npm i --save axios
 
 ----- make sure to add your page to: -----

@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import '../styles/Event.css';
 import axios from 'axios';
 import Select from 'react-select';
+import { GetCalendars, AddEventToCal } from "../controllers/calendars.js";
+import Multiselect from 'multiselect-react-dropdown';
+
 
 const Events = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -10,12 +13,24 @@ const Events = () => {
   const [localEvents, setLocalEvents] = useState([]);
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [calendars, setCalendars] = useState([]);
+  const [selectedCals, setSelectedCals] = useState([]);
+  const userID = localStorage.getItem('userID');
 
   // get list of users to invite (should be friends with current user at a later date, currently gets all users)
   useEffect(() => {
     axios.get('http://localhost:9000/getUsers')
       .then((res) => setUsers(res.data))
       .catch((error) => console.error('Error fetching users:', error));
+
+    GetCalendars(userID)
+      .then(res => {
+        const resp = res.slice(0)
+        setCalendars(resp)
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }, []);
 
   // // gets all events that user is invited to or is owner of
@@ -65,9 +80,14 @@ const Events = () => {
     setTags(tags.filter((_, index) => index !== indexToRemove));
   };
 
+  //options for calendar
+  const calOptions = calendars.map((cal) => {
+    return { label: cal, value: cal }
+  })
+
   // checks for valid input and creates event
   const handleCreateEvent = () => {
-
+    let event_id
     const eventName = document.getElementById('eventName').value;
     const eventDescription = document.getElementById('eventDescription').value;
     const startDate = document.getElementById('startDate').value;
@@ -96,20 +116,24 @@ const Events = () => {
     console.log('Event Data:', eventData);
 
     axios.post('http://localhost:9000/createEvent', eventData)
-    .then((res) => {
-      console.log('Event created successfully:', res.data);
-      setLocalEvents([...localEvents, res.data]); // adds new event to local list
-      setIsPopupOpen(false); // closes popup
-      setTags([]); // reset tags
-      setSelectedUsers([]);
-    })
-    .catch((error) => console.error('Error creating event:', error));
+      .then((res) => {
+        console.log('Event created successfully:', res.data);
+        setLocalEvents([...localEvents, res.data]); // adds new event to local list
+        setIsPopupOpen(false); // closes popup
+        setTags([]); // reset tags
+        setSelectedUsers([]);
+        AddEventToCal(res.data._id, selectedCals) // Add event to specified calendars
+          .then('Event successfully added')
+          .catch(error => {
+            console.log(error)
+          })
+      })
+      .catch((error) => console.error('Error creating event:', error));
 
     console.log('New Event Data:', eventData);
-  
     // Update local state with the new event
     setLocalEvents([...localEvents]);
-  
+
     // Reset form fields and state
     setIsPopupOpen(false);
     setTags([]);
@@ -123,19 +147,19 @@ const Events = () => {
     if (!endDateObj || typeof endDateObj !== 'object' || !endDateObj.getTime) {
       return 0; // Return 0 days if endDate is not a valid Date object
     }
-  
+
     const currentDate = new Date();
     const differenceInTime = endDateObj.getTime() - currentDate.getTime();
     const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
-  
+
     // If the difference is negative, it means the event has already started, so return 0 days
     if (differenceInDays < 0) {
       return 0;
     }
-  
+
     return differenceInDays;
   };
-  
+
 
   return (
     <div className="events-container">
@@ -144,15 +168,15 @@ const Events = () => {
 
       {/* Event display list */}
       <div className="events-box">
-  <h2>Events:</h2>
-  <ul>
-    {localEvents.map((event) => (
-      <li key={event._id}>
-        {event.event_name} : {event.start_date >= new Date() ? `Starts in ${daysUntilEndDate(event.start_date)} days` : `Ends in ${daysUntilEndDate(event.end_date)} days`}
-      </li>
-    ))}
-  </ul>
-</div>
+        <h2>Events:</h2>
+        <ul>
+          {localEvents.map((event) => (
+            <li key={event._id}>
+              {event.event_name} : {event.start_date >= new Date() ? `Starts in ${daysUntilEndDate(event.start_date)} days` : `Ends in ${daysUntilEndDate(event.end_date)} days`}
+            </li>
+          ))}
+        </ul>
+      </div>
 
       {/* Popup window */}
       {isPopupOpen && (
@@ -169,6 +193,48 @@ const Events = () => {
                 <div className="form-group">
                   <label htmlFor="eventDescription">Event Description:</label>
                   <textarea id="eventDescription" name="eventDescription" rows="4"></textarea>
+                </div>
+                <div className="form-group">
+                  <label>Add to Calendar:</label>
+                  <div>
+                    {userID == null &&
+                      <p>Please login to select a calendar.</p>}
+
+                    {userID != null && calendars.length == 0 &&
+                      <p>You have no calendars!</p>}
+
+                    {userID != null && calendars.length > 0 &&
+                      <Multiselect
+                        options={calOptions}
+                        displayValue="label"
+                        selected={selectedCals}
+                        //add calendars from selected list
+                        onSelect={(sel) => {
+                          for (const i in sel) {
+                            if (!(selectedCals.includes(sel[i].label)))
+                              selectedCals.push(sel[i].label)
+                          }
+                        }}
+                        //remove calendars from selected list
+                        onRemove={(sel) => {
+                          selectedCals.length = 0; //clear list
+                          sel.map((i) => {
+                            let ex = (selectedCals.includes(i.label))
+                            if (ex === false) {
+                              selectedCals.push(i.value)
+                            }
+                          })
+                        }} />
+                    }
+                  </div>
+                  <div className="tags">
+                    {tags.map((tag, index) => (
+                      <span key={index} className="tag">
+                        {tag}
+                        <button type="button" onClick={() => handleRemoveTag(index)}>x</button>
+                      </span>
+                    ))}
+                  </div>
                 </div>
                 <div className="form-group">
                   <label htmlFor="eventTags">Event Tags:</label>
@@ -188,11 +254,11 @@ const Events = () => {
                 <div className="form-group">
                   <label htmlFor="invitedUsers">Invite Users:</label>
                   <Select
-                    isMulti 
+                    isMulti
                     value={selectedUsers}
                     onChange={setSelectedUsers}
                     options={userOptions}
-                    />
+                  />
                 </div>
                 <div className="form-group">
                   <label htmlFor="startDate">Start Date:</label>
