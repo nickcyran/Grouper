@@ -2,20 +2,31 @@ import '../styles/Calendar.css';
 import Select from 'react-select'
 import { React, useState, useEffect } from "react";
 import { GetTags, GetCalendars, GetUserEvents } from "../controllers/calendars.js";
-import "react-calendar/dist/Calendar.css";
-import { Calendar, momentLocalizer } from 'react-big-calendar'
-import moment from 'moment'
 import { Link } from 'react-router-dom'
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import { Calendar, dateFnsLocalizer } from 'react-big-calendar'
+import { format, parse, startOfWeek, getDay, startOfDay } from "date-fns"
+import DatePicker from "react-datepicker"
 
 function ViewCalendar() {
      /* MEMBERS */
-     const [calendars, setCalendars] = useState([]);
      const userID = localStorage.getItem('userID');
+     const [calendars, setCalendars] = useState([]);
      const [tags, setTags] = useState([]);
-     const localizer = momentLocalizer(moment)
-     const [selectedCalendars, setSelectedCalendars] = useState([])
-     const [selectedTags, setSelectedTags] = useState([])
      const [allEvents, setAllEvents] = useState([])
+     let [selectedCalendars, setSelectedCalendars] = useState([])
+     let [selectedTags, setSelectedTags] = useState([])
+     let [selectedEvents, setSelectedEvents] = useState([])
+     const locales = {
+          "en-US": require("date-fns/locale/en-US")
+     }
+     const localizer = dateFnsLocalizer({
+          format,
+          parse,
+          startOfWeek,
+          getDay,
+          locales
+     })
 
      /* VIEW SETTING */
      const [viewSetting, setViewSetting] = useState('Monthly')
@@ -25,11 +36,7 @@ function ViewCalendar() {
           return { label: prior, value: prior }
      })
 
-     const eventOptions = allEvents.map((eve) => {
-          const name = String(eve.event_name)
-          return { label: name, value: name }
-     }
-     )
+
 
      // reset view setting
      const handleViewChange = (event) => {
@@ -142,11 +149,11 @@ function ViewCalendar() {
 
                     <label id="sideheader">Events (for testing)</label><br />
                     <form>
-                    {allEvents.length > 0 &&
+                         {allEvents.length > 0 &&
                               allEvents.map((item, index) => {
                                    return (
                                         <label key={index}>
-                                             <li>{item.event_name}</li>
+                                             <li>{item.title}</li>
                                         </label>
                                    );
                               })
@@ -166,13 +173,16 @@ function ViewCalendar() {
                          <p>Please login.</p>}
 
                     {userID != null &&
-                         <p> {"Welcome " + userID + "!"}
-                         </p> &&
-                         <Calendar
-                              events={allEvents}
-                              localizer={localizer}
-                              defaultView='month'
-                         />
+                         <div id="calendar-display">
+                              <Calendar
+                                   localizer={localizer}
+                                   events={allEvents}
+                                   startAccessor={(event) => { return new Date(event.start) }}
+                                   endAccessor={(event) => { return new Date(event.end) }}
+                                   style={{ height: 700 }}
+                              />
+                         </div>
+
                     }
                </div>
           </div>

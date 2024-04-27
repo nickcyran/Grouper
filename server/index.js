@@ -166,7 +166,7 @@ function startServer() {
                     const end = eve[0].end_date
 
                     allEvents.push({
-                        event_name: name,
+                        title: name,
                         event_tags: tags,
                         start: start,
                         end: end
