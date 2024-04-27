@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 
-// simply setting this up for my sake; obv change whatever
-
 const groupSchema = new mongoose.Schema({
     groupName: String,
     

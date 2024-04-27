@@ -5,7 +5,6 @@ const Chat = require('../schemas/chatSchema');
 exports.createUser = async (req, res) => {
     try {
         const user = new User(req.body);
-        console.log(user)
         user.save()
         res.send(user)
     }
@@ -20,7 +19,7 @@ exports.getUser = async (req, res) => {
 
     try {
         const user = await User.findOne({ username: username, password: password });
-
+        console.log(user)
         if (!user) {
             res.status(500).send(error)
         }

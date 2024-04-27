@@ -11,6 +11,7 @@ function Login() {
     event.preventDefault()
 
     if (getUser({ params: { username, password } })) {
+      console.log()
       navigate('/')
     }
   }
