@@ -47,8 +47,7 @@ function ProfileSettings(){
             formdata.append("file", file);
             formdata.append("_id", _id);
             
-            updatePFP(formdata, _id);
-            setProfile_Pic(file.name);
+            setProfile_Pic(updatePFP(formdata, _id));
         }
     }
 

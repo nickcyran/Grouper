@@ -78,7 +78,7 @@ exports.updatePFP = async (req, res) => {
         const editUser = await User.findById(req.body._id)
         editUser.profile.profile_pic = req.file.filename;
         editUser.save();
-        res.send(editUser)
+        res.send(editUser.profile.profile_pic)
     }
     catch (error){
         res.status(500).send(error)
