@@ -3,6 +3,7 @@ const Group = require('../schemas/groupSchema');
 const Chat = require('../schemas/chatSchema');
 
 
+
 exports.createUser = async (req, res) => {
     try {
         const user = new User(req.body);
@@ -54,8 +55,6 @@ exports.getProfile = async (req, res) => {
 
 exports.updateProfile = async (req, res) => {
     try{    
-        console.log(req.body)
-
         const editUser = await User.findById(req.body._id)
         editUser.f_name = req.body.f_name;
         editUser.l_name = req.body.l_name;
@@ -69,7 +68,19 @@ exports.updateProfile = async (req, res) => {
         editUser.save();
         res.send(editUser);
     }
-    catch (error ){
+    catch (error){
+        res.status(500).send(error)
+    }
+};
+
+exports.updatePFP = async (req, res) => {
+    try{
+        const editUser = await User.findById(req.body._id)
+        editUser.profile.profile_pic = req.file.filename;
+        editUser.save();
+        res.send(editUser)
+    }
+    catch (error){
         res.status(500).send(error)
     }
 };

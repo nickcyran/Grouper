@@ -62,6 +62,16 @@ const updateProfile = async (body) => {
     )
 }
 
+const updatePFP = async (body) => {
+    axios.post('http://localhost:9000/updatePFP', body)
+    .then((res) => {
+        return res;
+    })
+    .catch((err) => {
+        alert('Error in Updating: ' + err)}
+    )
+}
+
 const AddFriend = (body) => {
     axios.post('http://localhost:9000/addFriend/', body)
     .then(res => {
@@ -102,4 +112,4 @@ const CreateDirectMessage = async (body) => {
     });
 };
 
-export {getUser, createUser, getProfile, updateProfile, AddFriend, GetFriends, CreateDirectMessage, GetDirectMessages}
+export {getUser, createUser, getProfile, updateProfile, updatePFP, AddFriend, GetFriends, CreateDirectMessage, GetDirectMessages}

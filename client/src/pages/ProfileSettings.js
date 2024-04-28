@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { getProfile, updateProfile } from "../controllers/user";
+import { getProfile, updateProfile, updatePFP } from "../controllers/user";
 
 function ProfileSettings(){
     const initialized = useRef(false);
     const [f_name, setFirstName] = useState('');
     const [l_name, setLastName] = useState('');
     const [pic, setProfile_Pic] = useState('');
-    const [file, setFile] = useState()
+    const [file, setFile] = useState();
     const [name, setDisplay_Name] = useState('');
     const [bio, setBiography] = useState('');
     const [links, setLinks] = useState([]);
@@ -33,25 +33,32 @@ function ProfileSettings(){
         }
     })
 
-    const handleEdit = (e, f_name, l_name, file, biography, links, display_name) =>{
+    const handleEdit = (e, f_name, l_name, profile_pic, biography, links, display_name) =>{
         e.preventDefault();
-        const formdata = new FormData();
-        formdata.append("file", file);
-        axios.post('http://localhost:9000/updateProfile', { _id: _id, f_name, l_name, formdata, biography, links, display_name })
-        .then((res) =>{
-            console.log(res.data)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
+        updateProfile({ _id: _id, f_name, l_name, profile_pic, biography, links, display_name })
+
+        initialized.current = false;
+    }
+
+    const handleProfilePicUpdate = (e, file) =>{
+        e.preventDefault();
+        if(file){
+            const formdata = new FormData();
+            formdata.append("file", file);
+            formdata.append("_id", _id);
+            
+            updatePFP(formdata, _id);
+            setProfile_Pic(file.name);
+        }
     }
 
     return(
         <div className="Profile">
             <header className="Profile-header">
-                <form encType='multipart/form-data'>
+                <form enctype="multipart/form-data">
                     <label> 
                         Profile Picture: <img src={"http://localhost:9000/Images/" + pic}/> <input type = "file" onChange={(e) => setFile(e.target.files[0])}/>
+                        <button type="submit" onClick={(e) => (handleProfilePicUpdate(e, file))}> Update Profile Picture</button>
                     </label>                    
                     <label>
                         First Name: <input type = "text" defaultValue={f_name} onChange={(e) => setFirstName(e.target.value)}/>

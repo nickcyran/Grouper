@@ -181,6 +181,10 @@ function startServer() {
             console.log(error)
         }
     })
-
-
 }
+
+const upload = require('./multerMiddleware');
+
+app.post('/newImage', upload.single("file"), (req, res) => {
+    console.log(req.files);
+})

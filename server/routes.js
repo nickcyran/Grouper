@@ -10,12 +10,13 @@ router.post('/sendChat', sendChat);
 router.post('/deleteMessage', deleteMessage)
 
 // [USER ROUTES] ---------------------------------------------------------------
-const { createUser, getUsername, addToGroup, getGroups, addFriend, getFriends, createDirectMessage, getDirectMessages, getUser, getProfile, updateProfile} = require('./controllers/userController');
+const { createUser, getUsername, addToGroup, getGroups, addFriend, getFriends, createDirectMessage, getDirectMessages, getUser, getProfile, updateProfile, updatePFP} = require('./controllers/userController');
 router.post('/createUser', createUser); 
 router.post('/addToGroup', addToGroup); 
 router.post('/addFriend', addFriend); 
 router.post('/createDirectMessage', createDirectMessage); 
-router.post('/updateProfile', upload.single("file"), updateProfile);
+router.post('/updateProfile', updateProfile);
+router.post('/updatePFP', upload.single("file"), updatePFP);
 
 router.get('/getProfile', getProfile);
 router.get('/getUser', getUser);
