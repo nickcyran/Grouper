@@ -30,18 +30,10 @@
      text-align: left
 }
 
-#calendar {
+#calendar-display {
      position: fixed;
      align-self: center;
      font-size: 15px;
-     margin-left: 125px;
-     max-height: 100px;
-}
-
-#container {
-     max-width: 600px;
-     position: fixed;
-     margin-left: 4px;
-     display: 'inline-block';
-     border-radius: 3px;
+     margin-left: 100px;
+     width: 1000px
 }
