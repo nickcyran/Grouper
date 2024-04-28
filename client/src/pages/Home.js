@@ -4,27 +4,41 @@ import { PageContent, Messaging, CreateDmPage } from '.'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
 import { GetFriends, GetDirectMessages } from '../controllers';
-import { getProfile } from '../controllers/user';
+import axios from 'axios';
 
 const Friend_Right = () => {
     const initialized = useRef(false);
+    const [pfp, setProfile_Pic] = useState();
     const [name, setName] = useState();
     const [bio, setBio] = useState();
-    const [link, setLink] = useState();
+    const [link, setLinks] = useState();
 
     useEffect(() =>{
-        if(!initialized.current){
-            initialized.current = true;
-            getProfile(localStorage.getItem('userID'));
-            setName(localStorage.getItem('displayName'));
-            setBio(localStorage.getItem('bio'));
-            setLink(localStorage.getItem('links'));
+        const _id = localStorage.getItem('userID')
+        axios.get('http://localhost:9000/getProfile', {params: {_id}})
+        .then((res) => {    
+            setProfile_Pic(res.data.pfp)       
+            setName(res.data.displayName)        
+            setBio(res.data.bio)       
+            setLinks(res.data.links)
+        })
+        .catch((err) => {
+            console.log(err)
         }
+        )
     })
     return (
         <>
             User Profile
-            <p> Display Name: {name} <br/> Biography: {bio} <br/> Added Link: {link} </p>
+            <br/>
+            <img src={'http://localhost:9000/Images/' + pfp}/>
+            <p> 
+                Name: {name} 
+                <br/> 
+                Biography: {bio} 
+                <br/> 
+                Added Link: {link} 
+                </p>
         </>
     )
 }
