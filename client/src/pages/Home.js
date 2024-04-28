@@ -1,4 +1,5 @@
 import '../styles/friends.css'
+import '../styles/page.css'
 
 import { PageContent, Messaging, CreateDmPage } from '.'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
@@ -7,39 +8,41 @@ import { GetFriends, GetDirectMessages } from '../controllers';
 import axios from 'axios';
 
 const Friend_Right = () => {
-    const initialized = useRef(false);
     const [pfp, setProfile_Pic] = useState();
     const [name, setName] = useState();
     const [bio, setBio] = useState();
     const [link, setLinks] = useState();
 
-    useEffect(() =>{
+    useEffect(() => {
         const _id = localStorage.getItem('userID')
-        axios.get('http://localhost:9000/getProfile', {params: {_id}})
-        .then((res) => {    
-            setProfile_Pic(res.data.pfp)       
-            setName(res.data.displayName)        
-            setBio(res.data.bio)       
-            setLinks(res.data.links)
-        })
-        .catch((err) => {
-            console.log(err)
-        }
-        )
+        axios.get('http://localhost:9000/getProfile', { params: { _id } })
+            .then((res) => {
+                setProfile_Pic(res.data.pfp)
+                setName(res.data.displayName)
+                setBio(res.data.bio)
+                setLinks(res.data.links)
+            })
+            .catch((err) => {
+                console.log(err)
+            }
+            )
     })
     return (
-        <>
+        <div className='rightSideBar'>
             User Profile
-            <br/>
-            <img src={'http://localhost:9000/Images/' + pfp}/>
-            <p> 
-                Name: {name} 
-                <br/> 
-                Biography: {bio} 
-                <br/> 
-                Added Link: {link} 
-                </p>
-        </>
+            <br />
+            <div className="profilePic">
+                <img className="pfpInnards" src={'http://localhost:9000/Images/' + pfp} />
+            </div>
+
+            <p>
+                Name: {name}
+                <br />
+                Biography: {bio}
+                <br />
+                Added Link: {link}
+            </p>
+        </div>
     )
 }
 
@@ -74,67 +77,64 @@ const FriendsDisplay = () => {
     );
 }
 
-const Home_Left = ({ setCreateDmVisible, handleDmChange }) => {
-    const [dms, setDms] = useState([]);
+const Friend_Left = ({ setDm }) => {
+    const [existingDms, setExistingDms] = useState([])
+    const [addRender, setAddRender] = useState(false)
 
     useEffect(() => {
-        const fetchData = async () => {
-            const directMessages = await GetDirectMessages(localStorage.getItem('userID'));
-            setDms(directMessages);
-        };
-
-        fetchData();
-    }, []); 
-
-    const toggleCreateDmVisible = useCallback(() => {
-        setCreateDmVisible(prev => !prev);
-    }, [setCreateDmVisible]);
-
-    const memoizedDms = useMemo(() => {
-        return dms;
-    }, [dms]);
+        axios.get('http://localhost:9000/getDirectMessages/', { params: { id: localStorage.getItem('userID') } })
+            .then((res) => {
+                setExistingDms(res.data)
+            })
+            .catch((err) => {
+                console.error("No DirectMessages found", err)
+            })
+    }, [addRender]);
 
     return (
-        <div>
+        <div className="leftSideBar">
             <div className="l_bar_head">
-                <div className="addDm" onClick={toggleCreateDmVisible}>+</div>
+                <div className="addDm" onClick={()=> {console.log("create")}}>+</div>
                 <div className="msgTitle">Messages</div>
             </div>
 
             <div className="l_bar">
-                {memoizedDms.length > 0 ? (
-                    memoizedDms.map((dm, index) => (
-                        <div key={index} className="dmBox" onClick={() => handleDmChange(dm.directMessage.chatroom_id)}>
-                            <div className="dmIcon" />
-                            <div className="dmName">{dm.usernames.join(', ')}</div>
-                        </div>
-                    ))
-                ) : (
+                {existingDms.length > 0 ? existingDms.map((dm, index) => (
+                    <div key={index} className="dmBox" onClick={() => { setDm(dm.directMessage.chatroom_id) }}>
+                        <div className="dmIcon" />
+                        <div className="dmName">{dm.usernames.join(', ')}</div>
+                    </div>
+                ))
+                    :
                     <div>No direct messages </div>
-                )}
+                }
             </div>
         </div>
     );
-};
-
-const Home = ({ group }) => {
-    const [display, setDisplay] = useState();
-    const [createDmVisible, setCreateDmVisible] = useState(false);
-
-    const Friend_Main = () => {
-        const friendMain = useMemo(() => {
-            return (
-                <>
-                    {!display ? <FriendsDisplay /> : <Messaging group={display} />}
-                    {createDmVisible && <CreateDmPage set={setCreateDmVisible} />}
-                </>
-            );
-        }, [display, createDmVisible]);
-
-        return friendMain;
-    }
-
-    return <PageContent Left={() => <Home_Left handleDmChange={setDisplay} setCreateDmVisible={setCreateDmVisible} />} Main={Friend_Main} Right={Friend_Right} group={group} />
 }
+
+const Friend_Main = ({ dm_id }) => {
+    useEffect(() => { console.log(dm_id) }, [dm_id])
+
+    return (
+        <div className='mainContent'>
+            {!dm_id ?
+                <FriendsDisplay />
+                :
+                <Messaging group={dm_id} />}
+        </div>
+    );
+}
+
+const Home = ({ selectedDm, setDm }) => {
+    return (
+        <div className="page">
+            <Friend_Left setDm={setDm} />
+            <Friend_Main dm_id={selectedDm} />
+            <Friend_Right />
+        </div>
+    )
+}
+
 
 export default Home;

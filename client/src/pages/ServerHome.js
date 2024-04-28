@@ -87,7 +87,7 @@ const ServerHome = () => {
         .then((res)=>setInvites(res.data))
         .catch(err=> console.log(err))
         */
-    })
+    },[])
 
     //for toggling visibility of server creation menu
     const openServerCreation = () => {
