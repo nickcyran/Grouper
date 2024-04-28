@@ -20,28 +20,6 @@ exports.getServers = async (req, res) => {
     }
 }
 
-//get list of servers user is in/invited into
-exports.getServerMembership = async (req, res) => {
-    const userID = req.query.uID;
-    var serverMemberList = [];
-    try {
-        Server.find() //get entire list of servers
-        .then(serverList => { //trim down to those that have uID as a memvber
-            res.json(serverList);
-        })
-         //   for(var i=0; i < serverList.size(); i++)
-         //   {
-         //       if(serverList[i].member_ID.includes(userID))
-         //       serverMemberList.push(serverList[i]);
-         //   }
-         //   res.json(serverMemberList)
-        //})
-        .catch(err => res.json(err))
-    }
-    catch (error) {
-    res.status(500).send(error)
-    }
-}
 
 exports.sendServerInvite = async (req,res) => {
     const id = req.query.sID; //server ID
@@ -52,7 +30,7 @@ exports.sendServerInvite = async (req,res) => {
         .then(server => {
             if(server) {
                 console.log("selected Server: " + server._id + "(" + server.serverName + ")");
-                User.findOne({ username : invitedUName}) //ensure that user(ID) exists
+                User.findOne({ username : invitedUName}) //ensure that user(ID) exists -- change to uID?
                 .then(user => {
                     if(user != null) {
                         const invitedID = user._id;
@@ -80,10 +58,86 @@ exports.sendServerInvite = async (req,res) => {
 
 }
 
+//place in member_ID (call decline first)
+exports.acceptServerInvite = async (req, res) => {
+    console.log("In accept server invite")
+    const servID = req.query.sID;
+    const userID = req.query.cUser;
+
+    console.log("Server: " + servID + " User: " + userID)
+    Server.findById(servID)
+    .then(server => {
+        server.member_ID.push(userID)
+        server.save()
+        res.json("Added user to list of members.")
+    })
+    .catch(err => res.json(err))
+}
+
+//delete from invites
+exports.declineServerInvite = async (req, res) => {
+    console.log("In decline server invite")
+    const servID = req.query.sID;
+    const userID = req.query.cUser;
+
+    console.log("Server: " + servID + " User: " + userID)
+    Server.findById(servID)
+    .then(server => {
+        
+        server.invite_ID.remove(userID)
+        server.save()
+        res.json("Removed user from invites")
+    })
+    .catch(err => res.json(err))
+}
+
 exports.getServerMembers = async (req, res) => {
+    const id = req.query.sID;
+        Server.findOne({_id : id}) //find current server
+        .then(server => {
+            User.find({ _id: {$in: server.member_ID}})
+                .then(member => {
+                    //console.log("serv.mem.: " + server.member_ID)
+                    //console.log("members: " + member)
+                    res.json(member) //return user refs for admins
+                })
+                .catch(err => {
+                    console.log(err)
+                    res.json("Error retrieving member user references")})
+        })
+        .catch(err => res.json(err))
+    }
+
+exports.removeServerMembers = async (req,res) => {
+    const servID = req.query.sID;
+    const userID = req.query.sUser;
+
+    console.log("Server: " + servID + " User: " + userID)
+    Server.findById(servID)
+    .then(server => {
+        //if user is also an admin
+        if(server.admin_ID.includes(userID))
+        server.admin_ID.remove(userID)
+
+        server.member_ID.remove(userID)
+        server.save()
+        res.json("Removed user from server")
+    })
+    .catch(err => res.json(err))
+}
+
+//get user ref to owner
+exports.getServerOwner = async (req,res) => {
+    const id = req.query.sID;
     try {
-        Server.find()
-        .then(serverList => res.json(serverList.member_ID))
+        Server.findOne({_id : id}) //find current server
+        .then(server => {
+            User.findOne({ _id : server.owner_ID})
+            .then(owner => {
+                res.json(owner)
+            })
+            .catch(err => res.json(err))
+        })
         .catch(err => res.json(err))
     }
     catch (error) {
@@ -91,7 +145,7 @@ exports.getServerMembers = async (req, res) => {
     }
 }
 
-exports.getServerAdmins = async (req,res) => {
+exports.getServerAdminStatus = async (req,res) => {
     const id = req.query.sID;
     const curUserID = req.query.admin;
     Server.findOne({_id : id}) //find current server
@@ -107,58 +161,116 @@ exports.getServerAdmins = async (req,res) => {
         })
 }
 
-exports.getServerInvites = async (req, res) => {
-    invite_ref = req.body
-    const inviteList = Server.find({invite_ID : invite_ref })
-    if(inviteList > 0){ //server list not empty
-        res.json(inviteList)
-    }
-    else { //server list empty
-        res.json("None")
-    }
+//get admins in server
+exports.getServerAdmins = async (req, res) => {
+    const id = req.query.sID;
+    Server.findOne({_id : id}) //find current server
+        .then(server => {
+            if(server) {
+                //User.findById(server.admin_ID)
+                User.find({ _id: {$in: server.admin_ID}})
+                .then(admin => {
+                    //console.log("server admins: " + server.admin_ID)
+                    //console.log("admins: " + admin._id)
+                    res.json(admin) //return user refs for admins
+                })
+                .catch(err => res.json("Error retrieving admin user references"))
+            }
+            else res.json("Error: Server not found")})
 }
 
+exports.addServerAdmins = async (req, res) => {
+    const id = req.query.sID;
+    const adminID = req.query.aID;
+    Server.findOne({_id : id}) //find current server
+        .then(server => {
+            if(server) {
+                server.admin_ID.push(adminID)
+                server.save()
+                res.json("Added user to list of admins.")
+            }
+            else res.json("Error: Server not found")
+        })
+           
+}
+
+exports.removeServerAdmins = async (req, res) => {
+    const id = req.query.sID;
+    const adminID = req.query.aID;
+    Server.findOne({_id : id}) //find current server
+        .then(server => {
+            if(server) {
+                server.admin_ID.remove(adminID)
+                server.save()
+                res.json("Removed user from list of admins.")
+            }
+            else res.json("Error: Server not found")
+        })
+}
+
+
 exports.createServerChannels = async (req,res) => {
+    Channel.create(req.body)
+        .then(channel => res.json(channel))
+        .catch(err => res.json(err))
+    }
+
+
+exports.addServerChannels = async (req,res) => {
     const id = req.query.sID; //server ID
-    const newChannelName = req.query.cName; //user ID -- AS STRING - NEED TO CONVERT TO OBJECTID
+    const newChannelName = req.query.cName; 
     //const invitedID = mongoose.Types.ObjectID(invitedID_crude); --having difficulty getting this to work -- get actual userID/username and find that via user
+    console.log("In other channel function")
 
     Server.findOne({ _id : id}) //find current server
         .then(server => {
             console.log("Server found: " + server._id)
             if(server) {
-                console.log("selected Server: " + server._id + "(" + server.serverName + ")");
-                console.log("new channel name: " + newChannelName)
                 //eventually, should make sure that no channel in the same server can have the same name.. 
-                const channelObj = {channelName : newChannelName};
-
-                Channel.create(channelObj); //create new Channel
-                Channel.findOne({ channelName : newChannelName }) //find newly created channel (prob easier way to do this but idk)
-                .then(channel => {
-                    if(channel == null) {
-                        res.json("Error: Could not create channel")
-                        console.log("error in creating channel")
-                    }
-
-                    else {
-                        console.log("confirming that new channel obj was created: " + channel)
-                        const newChannelID = channel._id;
-                        server.channel_ID.push(newChannelID);
-                        server.save()
-                        res.json(newChannelID); //returns newly created channel id
-                    }
-                 })
+                //console.log("new channel id: " + newChannelID)
+                console.log("Before channel call in other func")
+                Channel.findOne({ channelName : newChannelName })
+                .then(channel => { 
+                    //console.log("Found channel! Channel ID: " + channel._id)
+                    server.channel_ID.push(channel._id);
+                    server.save()
+                    res.json(channel._id); //returns newly created channel id
+                })
             }
             else res.json("Error: Server not found")
         })
     }
+
+exports.removeServerChannels = async (req,res) => {
+    const id = req.query.sID; //server ID
+    const cID = req.query.cID; 
+    //const invitedID = mongoose.Types.ObjectID(invitedID_crude); --having difficulty getting this to work -- get actual userID/username and find that via user
+
+    //delete channel
+    Channel.findByIdAndDelete(cID)
+    .then(result => {
+        //remove from server
+        Server.findOne({ _id : id}) //find current server
+        .then(server => {
+            console.log("Server found: " + server._id)
+            if(server) {
+                //remove channel from server
+                server.channel_ID.remove(cID);
+                server.save()
+                res.json("Successfully removed channel from server."); //returns newly created channel id
+            }
+            else res.json("Error: Server not found")
+        })
+    })
+    .catch(err => res.json(err))
+}
 
 exports.getServerChannels = async (req,res) => {
     const id = req.query.sID; //server id
     Server.findOne({_id : id}) //find current server
         .then(server => {
             if(server) {  
-                Channel.find({ _id : server.channel_ID})
+                Channel.find({ _id: {$in: server.channel_ID}})
                 .then(channelList =>{
                     if(channelList == null || channelList == "")
                         res.json("No channels in server.")
