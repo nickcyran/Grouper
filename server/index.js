@@ -75,17 +75,19 @@ function startServer() {
     })
 
     app.get('/getCalendars', async (req, res) => {
-        console.log('--------------------------------------------------------------------------------------------------------------------------------------------------------------')
-        const _id = req.query.userID
+        const id = req.query.userID
         try {
-            const user = await User.findById(_id)
+            const usr = await User.findById(id)
             let calList = []
-            for (const cal of user.calanders_id) {
+            for (const cal of usr.calanders_id) {
                 const calendar = await Calendar.findById(cal)
-                let name = calendar.cal_name
-                calList.push(name)
+                if (calendar != null) {
+                    let name = calendar.cal_name
+                    calList.push(name)
+                }
             }
             res.send(calList)
+
         }
         catch (error) {
             res.status(500).send(error)
@@ -93,15 +95,34 @@ function startServer() {
     })
 
     app.put('/updateUserCalendars', async (req, res) => {
-        console.log('in server')
+
         const cal = req.body.cal_id
         const owner = req.body.userID
         try {
             //find user
             const user = await User.findOne({ _id: owner })
+            console.log(user)
             user.calanders_id.push(cal)
             user.save()
             res.send(user)
+        }
+        catch (error) {
+            res.status(500).send(error)
+        }
+    })
+
+    app.put('/addEventToCal', async (req, res) => {
+        const cals = req.body.cal_id
+        const event_id = req.body.event_id
+        console.log('---------------------------------------------------------------')
+        try {
+            //find Calendars
+            for (i in cals) {
+                const calen = cals[i]
+                const cldnr = await Calendar.find({ cal_name: calen })
+                cldnr[0].events.push(event_id) //will implement unique  calendar names later
+                cldnr[0].save()
+            }
         }
         catch (error) {
             res.status(500).send(error)
@@ -117,8 +138,8 @@ function startServer() {
                 {
                     cal_name: name,
                     owner: own,
-                    invited_users: null,
-                    events: null
+                    invited_users: [],
+                    events: []
                 });
             cal.save()
             res.send(cal._id)
@@ -128,6 +149,36 @@ function startServer() {
         }
     })
 
+    app.get('/getUserEvents', async (req, res) => {
+        try {
+            const calendar = req.query.calendar
+            let calen
+            let allEvents = []
+            for (i in calendar) {
+                calen = await Calendar.find({ cal_name: calendar[i] })
+                const calEvents = calen[i].events
+                for (j in calEvents) { //go through each event in calendar
+                    const eve = await Event.find({ _id: calEvents[j] })
+                    
+                    const name = eve[0].event_name
+                    const tags = eve[0].event_tags
+                    const start = eve[0].start_date
+                    const end = eve[0].end_date
+
+                    allEvents.push({
+                        event_name: name,
+                        event_tags: tags,
+                        start: start,
+                        end: end
+                    })
+                }
+            }
+            res.send(allEvents) 
+        }
+        catch (error) {
+            console.log(error)
+        }
+    })
 
 }
 
