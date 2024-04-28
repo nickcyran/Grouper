@@ -38,12 +38,13 @@ const createUser = async (body) => {
 const getProfile = async (body) => {
     axios.get('http://localhost:9000/getProfile', {params: {body}})
     .then((res) => {
-        
-        localStorage.setItem('PFP', res.data.profile_pic);
-        localStorage.setItem('displayName', res.data.display_name)
-        localStorage.setItem('bio', res.data.biography);
-        localStorage.setItem('links', res.data.links)
-        return res.data;
+        localStorage.setItem("f_name", res.data.f_name)        
+        localStorage.setItem("l_name", res.data.l_name)       
+        localStorage.setItem("pfp", res.data.pfp)       
+        localStorage.setItem("displayName", res.data.displayName)        
+        localStorage.setItem("bio", res.data.bio)       
+        localStorage.setItem("links", res.data.links)    
+
     })
     .catch((err) => {
         console.log(err)

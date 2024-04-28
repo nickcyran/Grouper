@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const upload = require('./multerMiddleware');
 
 // [CHATROOM(messaging) ROUTES] ------------------------------------------------
 const { createChat, getChat, sendChat, deleteMessage } = require('./controllers/chatController');
@@ -14,7 +15,7 @@ router.post('/createUser', createUser);
 router.post('/addToGroup', addToGroup); 
 router.post('/addFriend', addFriend); 
 router.post('/createDirectMessage', createDirectMessage); 
-router.post('/updateProfile', updateProfile);
+router.post('/updateProfile', upload.single("file"), updateProfile);
 
 router.get('/getProfile', getProfile);
 router.get('/getUser', getUser);

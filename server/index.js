@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const WebSocket = require('ws');
 
+
 const User = require("./schemas/userSchema");
 const Event = require("./schemas/eventSchema");
 const Calendar = require("./schemas/calendarSchema");
@@ -22,6 +23,7 @@ mongoose.connect(mongoString, { useNewUrlParser: true, useUnifiedTopology: true 
 
 app.use(express.json());
 app.use(cors());
+app.use(express.static('public'));
 
 // Routes
 const routes = require('./routes');
@@ -180,5 +182,5 @@ function startServer() {
         }
     })
 
-}
 
+}
