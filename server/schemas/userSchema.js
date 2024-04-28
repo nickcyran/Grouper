@@ -17,19 +17,17 @@ const userSchema = new mongoose.Schema({
         },
         profile_pic:{
             type: String,
-            default: null,
-            ref: 'pfp'
+            default: "default.png",
         },
         biography: {
             type: String,
             default: "",
             ref: 'bio'
         },
-        links:{
+        links:[{
             type: String,
-            default: "",
             ref: 'link'
-        }
+        }]
     },
 
     calanders_id: [{ type: mongoose.Schema.Types.ObjectId }],

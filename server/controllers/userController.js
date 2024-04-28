@@ -2,6 +2,8 @@ const User = require('../schemas/userSchema');
 const Group = require('../schemas/groupSchema');
 const Chat = require('../schemas/chatSchema');
 
+
+
 exports.createUser = async (req, res) => {
     try {
         const user = new User(req.body);
@@ -32,10 +34,18 @@ exports.getUser = async (req, res) => {
 };
 
 exports.getProfile = async (req, res) => {
-    const _id = req.query.body
+    const _id = req.query._id
     try{
         const user = await User.findOne({ _id : _id });
-        res.send(user.profile);
+        let data = {
+            f_name: user.f_name,
+            l_name: user.l_name,
+            pfp: user.profile.profile_pic,
+            displayName: user.profile.display_name,
+            bio: user.profile.biography,
+            links: user.profile.links
+        }
+        res.send(data);
     }
     catch (error ){
         res.status(500).send(error)
@@ -45,8 +55,10 @@ exports.getProfile = async (req, res) => {
 exports.updateProfile = async (req, res) => {
     try{    
         const editUser = await User.findById(req.body._id)
+        editUser.f_name = req.body.f_name;
+        editUser.l_name = req.body.l_name;
         const profile = {
-            profile_pic: null,
+            profile_pic: req.file.filename,
             biography: req.body.biography,
             links : req.body.links,
             display_name : req.body.display_name,
@@ -55,7 +67,19 @@ exports.updateProfile = async (req, res) => {
         editUser.save();
         res.send(editUser);
     }
-    catch (error ){
+    catch (error){
+        res.status(500).send(error)
+    }
+};
+
+exports.updatePFP = async (req, res) => {
+    try{
+        const editUser = await User.findById(req.body._id)
+        editUser.profile.profile_pic = req.file.filename;
+        editUser.save();
+        res.send(editUser.profile.profile_pic)
+    }
+    catch (error){
         res.status(500).send(error)
     }
 };

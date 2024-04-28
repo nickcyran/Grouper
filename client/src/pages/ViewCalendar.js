@@ -1,100 +1,104 @@
 import '../styles/Calendar.css';
 import Select from 'react-select'
 import { React, useState, useEffect } from "react";
-import { GetTags, GetCalendars, GetUserEvents } from "../controllers/calendars.js";
-import "react-calendar/dist/Calendar.css";
-import { Calendar, momentLocalizer } from 'react-big-calendar'
-import moment from 'moment'
+import { GetCalendars, GetUserEvents } from "../controllers/calendars.js";
 import { Link } from 'react-router-dom'
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import { Calendar, dateFnsLocalizer } from 'react-big-calendar'
+import { format, parse, startOfWeek, getDay, startOfDay } from "date-fns"
+import DatePicker from "react-datepicker"
 
 function ViewCalendar() {
      /* MEMBERS */
-     const [calendars, setCalendars] = useState([]);
      const userID = localStorage.getItem('userID');
-     const [tags, setTags] = useState([]);
-     const localizer = momentLocalizer(moment)
-     const [selectedCalendars, setSelectedCalendars] = useState([])
-     const [selectedTags, setSelectedTags] = useState([])
-     const [allEvents, setAllEvents] = useState([])
-
-     /* VIEW SETTING */
-     const [viewSetting, setViewSetting] = useState('Monthly')
-     const viewArray = ['Daily', 'Weekly', 'Monthly', 'Yearly']
-
-     const viewOptions = viewArray.map((prior) => {
-          return { label: prior, value: prior }
+     const [calendars, setCalendars] = useState([]);
+     const [allTags, setTags] = useState([]);
+     let [allEvents, setAllEvents] = useState([])
+     let [selectedCalendars, setSelectedCalendars] = useState([])
+     let [selectedTags, setSelectedTags] = useState([])
+     let [selectedEvents, setSelectedEvents] = useState([])
+     let [render, rerender] = useState(0)
+     let useEffectCount = 0
+     const locales = {
+          "en-US": require("date-fns/locale/en-US")
+     }
+     const localizer = dateFnsLocalizer({
+          format,
+          parse,
+          startOfWeek,
+          getDay,
+          locales
      })
 
-     const eventOptions = allEvents.map((eve) => {
-          const name = String(eve.event_name)
-          return { label: name, value: name }
+     const updateSelection = async () => {
+          rerender(render + 1)
+          selectedEvents.length = 0 //clear list
+          allEvents.map(eve => {
+               (eve.event_tags).map(eventTag => {
+                    if (selectedTags.includes(eventTag)) {
+                         selectedEvents.push(eve)
+                    } 
+               })
+          })
      }
-     )
 
-     // reset view setting
-     const handleViewChange = (event) => {
-          setViewSetting(event.label);
-     }
 
      useEffect(() => {
-          /* GetTags()
-                .then(res => {
-                     setTags((res.data).slice(0))
-                })
-                .catch(error => {
-                     console.log(error)
-                }) */
-
-          GetCalendars(userID)
-               .then(res => {
-                    if (res.length != 0) {
-                         let resp
-                         res.map(i => {
+          if (useEffectCount == 0) { //useeffect runs twice since app is rendered using strictmode. use a counter variable as a workaround
+               //get user calendars first, then continue to events and tags
+               GetCalendars(userID)
+                    .then(res => {
+                         if (res.length != 0) {
                               let resp = res.slice(0)
                               setCalendars(resp)
+                              setSelectedCalendars(resp)
 
-                              GetUserEvents(resp)
-                                   .then(res => {
-                                        res.map(j => {
-                                             let r = res.slice(0)
-                                             setAllEvents(r)
+                              resp.map(j => { //each calendar
+                                   GetUserEvents(j) //gets events for each calendar
+                                        .then(res => {
+                                             let r = res.slice()
+                                             //go through each event and get tags
+                                             for (const k in r) {
+                                                  if (!(selectedEvents.includes(r[k]))) {
+                                                       selectedEvents.push(r[k])
+                                                  }
+                                                  if (!(allEvents.includes(r[k]))) {
+                                                       allEvents.push(r[k])
+                                                  }
+
+
+                                                  //get tags
+                                                  const tagsList = r[k].event_tags
+
+                                                  for (const l in tagsList) {
+                                                       const t = tagsList[l]
+                                                       if (!(allTags.includes(t))) {
+                                                            allTags.push(t)
+                                                            selectedTags.push(t)
+                                                       }
+                                                  }
+                                             }
                                         }
                                         )
-                                   }
-                                   )
-                         })
-                    }
-               })
-               .catch(error => {
-                    console.log(error)
-               })
+                              })
 
+                         }
+                    })
+                    .catch(error => {
+                         console.log(error)
+                    })
+               useEffectCount = 1
+          }
      }, [])
 
      return (
           <div>
-               <div id="top">
-                    {viewSetting === 'Daily' &&
-                         <p id="view">Daily</p>}
-
-                    {viewSetting === 'Weekly' &&
-                         <p id="view">Weekly</p>}
-
-                    {viewSetting === 'Monthly' &&
-                         <p id="view">Monthly</p>}
-
-                    {viewSetting === 'Yearly' &&
-                         <p id="view">Yearly</p>}
-
-                    <Select id="viewselect"
-                         onChange={handleViewChange}
-                         options={viewOptions}
-                         value={viewSetting}
-                    />
-               </div>
-
                <div id="side">
-                    <label id="sideheader">Calendars</label><br />
+                    <label id="sideheader">Calendars</label>
+                    <div id="side-button">
+                         <button id="refresh-button" onClick={updateSelection}>&#8634;</button>
+                    </div>
+                    <br />
                     <form>
                          {calendars.length > 0 &&
                               userID != null &&
@@ -102,9 +106,33 @@ function ViewCalendar() {
                                    return (
                                         <label key={index}>
                                              <input
-                                                  name={cal.cal_name}
+                                                  defaultChecked={true}
+                                                  onChange={(event) => {
+                                                       if (event.target.checked) {
+                                                            if (!(selectedCalendars.includes(event.target.value)))
+                                                                 selectedCalendars.push(event.target.value)
+                                                       }
+                                                       else {
+                                                            console.log('removing ' + event.target.value)
+                                                            console.log(selectedCalendars)
+                                                            const index = selectedCalendars.indexOf(event.target.value)
+                                                            const array1 = selectedCalendars.splice(0, index)
+                                                            const array2 = selectedCalendars.splice(index, (selectedCalendars.length - 1))
+                                                            setSelectedCalendars = [] //clear list
+                                                            for (const i in array1) {
+                                                                 selectedCalendars.push(array1[i])
+                                                            }
+                                                            for (const i in array2) {
+                                                                 selectedCalendars.push(array2[i])
+                                                            }
+                                                            console.log('done')
+                                                            console.log(selectedCalendars)
+                                                       }
+                                                       updateSelection()
+                                                  }}
+                                                  name={cal}
                                                   type="checkbox"
-                                                  value={cal.cal_name}
+                                                  value={cal}
                                              />{cal}<br />
                                         </label>
                                    );
@@ -121,11 +149,32 @@ function ViewCalendar() {
                     <br />
                     <label id="sideheader">Tags</label><br />
                     <form>
-                         {tags.length > 0 &&
-                              tags.map((t, index) => {
+                         {allTags.length != 0 &&
+                              allTags.map((t, index) => {
                                    return (
                                         <label key={index}>
                                              <input
+                                                  defaultChecked={true}
+                                                  //add tags from selected list
+                                                  onChange={(event) => {
+                                                       if (event.target.checked) {
+                                                            if (!(selectedTags.includes(event.target.name)))
+                                                                 selectedTags.push(event.target.name)
+                                                       }
+                                                       else {
+                                                            const index = selectedTags.indexOf(event.target.name)
+                                                            const array1 = selectedTags.splice(0, index)
+                                                            const array2 = selectedTags.splice(index, (selectedTags.length - 1))
+                                                            selectedTags.length = 0; //clear list
+                                                            for (const i in array1) {
+                                                                 selectedTags.push(array1[i])
+                                                            }
+                                                            for (const i in array2) {
+                                                                 selectedTags.push(array2[i])
+                                                            }
+                                                       }
+                                                       updateSelection()
+                                                  }}
                                                   name={t}
                                                   type="checkbox"
                                                   value={t}
@@ -135,30 +184,9 @@ function ViewCalendar() {
                               })
                          }
 
-                         {tags.length === 0 &&
+                         {allTags.length === 0 &&
                               <p>You have no tags.</p>}
-
                     </form>
-
-                    <label id="sideheader">Events (for testing)</label><br />
-                    <form>
-                    {allEvents.length > 0 &&
-                              allEvents.map((item, index) => {
-                                   return (
-                                        <label key={index}>
-                                             <li>{item.event_name}</li>
-                                        </label>
-                                   );
-                              })
-                         }
-
-                         {allEvents.length <= 0 &&
-                              <p>You have no events.</p>
-                         }
-
-                    </form>
-
-
                </div>
 
                <div id="calendar-display">
@@ -166,13 +194,15 @@ function ViewCalendar() {
                          <p>Please login.</p>}
 
                     {userID != null &&
-                         <p> {"Welcome " + userID + "!"}
-                         </p> &&
-                         <Calendar
-                              events={allEvents}
-                              localizer={localizer}
-                              defaultView='month'
-                         />
+                         <div >
+                              <Calendar
+                                   localizer={localizer}
+                                   events={selectedEvents}
+                                   startAccessor={(event) => { return new Date(event.start) }}
+                                   endAccessor={(event) => { return new Date(event.end) }}
+                                   style={{ height: 700, backgroundColor: 'gray' }}
+                              />
+                         </div>
                     }
                </div>
           </div>
