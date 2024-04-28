@@ -5,11 +5,6 @@ const GetCalendars = async (userID) => {
      return response.data;
 }
 
-const GetTags = async (userID) => {
-     const response = await axios.get('http://localhost:9000/getTags')
-     return response;
-}
-
 const UpdateUserCal = async (userID, newCal) => {
      //create new calendar
      let cal_id = await axios.post('http://localhost:9000/createCalendar', { cal_name: newCal, owner: userID } )
@@ -33,4 +28,4 @@ const GetUserEvents = async (calendar) => {
      }
 }
 
-export { AddEventToCal, GetCalendars, GetTags, UpdateUserCal, GetUserEvents }
+export { AddEventToCal, GetCalendars, UpdateUserCal, GetUserEvents }

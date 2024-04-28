@@ -53,27 +53,6 @@ function startServer() {
         });
     });
 
-    app.get('/getTags', async (req, res) => {
-        //finds all tags for now
-        try {
-            const events = await Event.find()
-            let tagList = []
-            for (const event of events) {
-                const tags = event.event_tags;
-                for (const tag of tags) {
-                    if (!(tagList.includes(tag)))
-                        tagList.push(tag)
-                }
-            }
-            res.send(tagList)
-        }
-        catch (error) {
-            console.log('Server Error while getting tags.')
-            res.status(500).send(error)
-            return null;
-        }
-    })
-
     app.get('/getCalendars', async (req, res) => {
         const id = req.query.userID
         try {
@@ -151,15 +130,42 @@ function startServer() {
 
     app.get('/getUserEvents', async (req, res) => {
         try {
+            console.log(req.query)
+            let allEvents = []
             const calendar = req.query.calendar
             let calen
-            let allEvents = []
-            for (i in calendar) {
-                calen = await Calendar.find({ cal_name: calendar[i] })
-                const calEvents = calen[i].events
-                for (j in calEvents) { //go through each event in calendar
+            if (Array.isArray(calendar)) { //array
+                for (i in calendar) {
+                    calen = await Calendar.find({ cal_name: calendar[i] })
+                    const calEvents = calen[i].events
+
+                    for (const j in calEvents) { //go through each event in calendar
+                        const eve = await Event.find({ _id: calEvents[j] })
+
+                        const name = eve[0].event_name
+                        const tags = eve[0].event_tags
+                        const start = eve[0].start_date
+                        const end = eve[0].end_date
+
+                        allEvents.push({
+                            title: name,
+                            event_tags: tags,
+                            start: start,
+                            end: end
+                        })
+                    }
+                }
+            }
+            else { //string
+                
+                let calen = await Calendar.find({ cal_name: calendar })
+                console.log(calen)
+                const calEvents = calen[0].events
+                console.log(calEvents)
+
+                for (const j in calEvents) { //go through each event in calendar
                     const eve = await Event.find({ _id: calEvents[j] })
-                    
+
                     const name = eve[0].event_name
                     const tags = eve[0].event_tags
                     const start = eve[0].start_date
@@ -173,7 +179,7 @@ function startServer() {
                     })
                 }
             }
-            res.send(allEvents) 
+            res.send(allEvents)
         }
         catch (error) {
             console.log(error)
