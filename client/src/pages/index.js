@@ -10,5 +10,6 @@ import Signup from './Signup'
 import CreateDmPage from './CreateDmPage'
 import NewCalendar from './NewCalendar'
 import AddFriend from './AddFriend'
+import ProfileBar from './ProfileBar'
 
-export {Messaging, Main, PageContent, Group, Home, NewCalendar, ViewCalendar, Events, Login, Signup, CreateDmPage, AddFriend};
+export {Messaging, Main, PageContent, Group, Home, NewCalendar, ViewCalendar, Events, Login, Signup, CreateDmPage, AddFriend, ProfileBar};

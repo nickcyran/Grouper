@@ -7,14 +7,9 @@
 }
 
 .friends_main{
-    height: 93.5vh;
-    overflow-y: scroll;
     padding-bottom: 12px;
 }
 
-.friends_main::-webkit-scrollbar{
-    width: 0;
-}
 
 .friendBox {
     cursor: pointer;

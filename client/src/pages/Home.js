@@ -1,53 +1,43 @@
 import '../styles/friends.css'
 
-import { Messaging, CreateDmPage } from '.'
+import { Messaging, CreateDmPage, ProfileBar } from '.'
 import { useState, useEffect } from 'react';
 import { msg } from '../assets'
 
 import { GetFriends } from '../controllers';
 import axios from 'axios';
 
-const Friend_Right = ({ profile_id }) => {
-    const [pfp, setProfile_Pic] = useState();
-    const [username, setUsername] = useState();
-    const [name, setName] = useState();
-    const [bio, setBio] = useState();
-    const [link, setLinks] = useState();
+const Friend_Right = ({ profile_id, dm }) => {
+    const [members, setMembers] = useState([])
 
     useEffect(() => {
-        axios.get('http://localhost:9000/getProfile', { params: { _id: profile_id } })
-            .then((res) => {
-                setUsername(res.data.username)
-                setProfile_Pic(res.data.pfp)
-                setName(res.data.displayName)
-                setBio(res.data.bio)
-                setLinks(res.data.links)
-            })
-            .catch((err) => {
-                console.log(err)
-            }
-            )
-    }, [profile_id])
+        axios.get('', {params: {id: dm}})
+        .then((res)=>{
+
+        })
+        .catch((err)=>{
+
+        })
+    }, [dm])
 
     return (
-        <div className="rightSideBar">
-            <div className="title shadow" style={{ backgroundColor: "#2b2d31" }}>
-                User Profile
-            </div>
+        <>
+            {!dm ? <ProfileBar profile_id={profile_id} /> :
+                <div className="rightSideBar">
+                    <div className="title shadow" style={{ backgroundColor: "#2b2d31" }}>
+                        Members
+                    </div>
 
-            <div className="scroll profilebar">
-                <div className="username">{username}</div>
-                <div className="profilePic shadow">
-                    <img className="pfpInnards" src={'http://localhost:9000/Images/' + pfp} />
+                    <div className="scroll profilebar">
+                      
+                    </div>
                 </div>
+            }
+        </>
 
-                <div className="profileInfo">
-                    <span><b>Nickname: </b>{name}</span>
-                    <span><b>Biography: </b>{bio}</span>
-                    <span><b>Links: </b>{link}</span>
-                </div>
-            </div>
-        </div>
+        // <div className="rightSideBar">
+
+        // </div>
     )
 }
 
@@ -137,8 +127,6 @@ const Friend_Left = ({ setDm }) => {
 }
 
 const Friend_Main = ({ dm_id, setProfile }) => {
-    useEffect(() => { console.log(dm_id) }, [dm_id])
-
     return (
         <div className='mainContent'>
             {!dm_id ?
@@ -162,7 +150,7 @@ const Home = ({ selectedDm, setDm, homeClick }) => {
         <div className="page">
             <Friend_Left setDm={setDm} />
             <Friend_Main dm_id={selectedDm} setProfile={setSelectedProfile} />
-            <Friend_Right profile_id={selectedProfile} />
+            <Friend_Right profile_id={selectedProfile} dm={selectedDm} />
         </div>
     )
 }
