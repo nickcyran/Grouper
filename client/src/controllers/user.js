@@ -27,7 +27,13 @@ const createUser = async (body) => {
     
     axios.post('http://localhost:9000/createUser', {f_name, l_name, username, password})
     .then((res) => {
-        return true;
+        if(!res.data){
+            alert("Username is taken");
+            return false;
+        }
+        else{
+            return true;
+        }
     })
     .catch((err) => {
         alert('Error in Signing Up: ' + err)}
