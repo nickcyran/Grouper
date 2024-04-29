@@ -4,22 +4,15 @@ const Chat = require('../schemas/chatSchema');
 
 exports.createUser = async (req, res) => {
     try {
+        const existingUser = await User.findOne({ username: req.body.username })
 
-        if( !req.body.username && !req.body.password && !req.body.f_name && !req.body.l_name ){
-
-            const existingUser = await User.findOne({ username: req.body.username })
-
-            if(existingUser){
-                res.send(false);
-            }
-            else{
-                const user = new User(req.body);
-                user.save()
-                res.send(user)
-            }
+        if (existingUser) {
+            res.send(false);
         }
-        else{
-            
+        else {
+            const user = new User(req.body);
+            user.save()
+            res.send(user)
         }
     }
     catch (error) {
@@ -47,8 +40,8 @@ exports.getUser = async (req, res) => {
 
 exports.getProfile = async (req, res) => {
     const _id = req.query._id
-    try{
-        const user = await User.findOne({ _id : _id });
+    try {
+        const user = await User.findOne({ _id: _id });
         let data = {
             username: user.username,
             f_name: user.f_name,
@@ -60,39 +53,39 @@ exports.getProfile = async (req, res) => {
         }
         res.send(data);
     }
-    catch (error ){
+    catch (error) {
         res.status(500).send(error)
     }
 };
 
 exports.updateProfile = async (req, res) => {
-    try{    
+    try {
         const editUser = await User.findById(req.body._id)
         editUser.f_name = req.body.f_name;
         editUser.l_name = req.body.l_name;
         const profile = {
             profile_pic: req.file.filename,
             biography: req.body.biography,
-            links : req.body.links,
-            display_name : req.body.display_name,
+            links: req.body.links,
+            display_name: req.body.display_name,
         }
         editUser.profile = profile;
         editUser.save();
         res.send(editUser);
     }
-    catch (error){
+    catch (error) {
         res.status(500).send(error)
     }
 };
 
 exports.updatePFP = async (req, res) => {
-    try{
+    try {
         const editUser = await User.findById(req.body._id)
         editUser.profile.profile_pic = req.file.filename;
         editUser.save();
         res.send(editUser.profile.profile_pic)
     }
-    catch (error){
+    catch (error) {
         res.status(500).send(error)
     }
 };

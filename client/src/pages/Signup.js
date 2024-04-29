@@ -12,6 +12,7 @@ function SignUp(){
 
     const handleSignUp = (event) => {
         event.preventDefault()
+        
         if(createUser({f_name, l_name, username, password})){
             navigate('/Login')
         }
