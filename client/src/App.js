@@ -1,5 +1,5 @@
 import './styles/App.css';
-import { Main, ViewCalendar, Events, Login, Signup, NewCalendar, AddFriend} from './pages'
+import { Main, ViewCalendar, Events, Login, Signup, NewCalendar} from './pages'
 import ProfileSettings from './pages/ProfileSettings.js';
 import ServerHome from './pages/ServerHome'
 import ServerPage from './pages/ServerPage'
@@ -21,7 +21,6 @@ function App() {
         <Route path="/server/:id" element={<ServerPage/>} />
         <Route path="/newCalendar" element={<NewCalendar/>} />
         <Route path="/profileSettings" element={<ProfileSettings/>} />
-        <Route path="/addFriend" element={<AddFriend/>} />
       </Routes>
     </div>
   );

@@ -120,9 +120,9 @@ exports.getFriends = async (req, res) => {
         const id = req.query.id
         const user = await User.findById(id)
 
-        const friendIds = user.friends.map(friend => friend._id);
+        const friendIds = user.friends.map(friend => friend.user_id);
         const populatedFriends = await User.find({ _id: { $in: friendIds } });
-
+       
         res.send(populatedFriends);
     }
     catch (error) {
@@ -220,31 +220,30 @@ exports.getDirectMessages = async (req, res) => {
 
 exports.sendFriendRequest = async (req, res) => {
     try {
-        const { id, username } = req.body
+        const { id, username } = req.body;
         const existingUser = await User.findOne({ username });
 
         if (existingUser) {
             if (existingUser._id.toString() === id) {
-                res.status(400).send("You cannot friend yourself... sad")
-            }
-            else {
+                res.status(400).send("You cannot friend yourself... sad");
+            } else {
                 if (existingUser.friendRequests.includes(id)) {
                     res.status(400).send("Friend request already sent.");
+                } else if (existingUser.friends.some(friend => friend.user_id.toString() === id)) {
+                    res.status(400).send("You are already friends with this user.");
                 } else {
                     existingUser.friendRequests.push(id);
                     await existingUser.save();
                     res.status(200).send("Friend request sent successfully.");
                 }
             }
+        } else {
+            res.status(400).send("Could not find user by that name");
         }
-        else {
-            res.status(400).send("Could not find user by that name")
-        }
+    } catch (error) {
+        res.status(500).send(error);
     }
-    catch (error) {
-        res.status(500).send(error)
-    }
-}
+};
 
 exports.getFriendRequests = async (req, res) => {
     try {
@@ -260,3 +259,23 @@ exports.getFriendRequests = async (req, res) => {
         res.status(500).send(error)
     }
 }
+
+exports.handleFriendRequest = async (req, res) => {
+    try {
+        const { id, theirId, accepted } = req.body;
+
+        await User.findByIdAndUpdate(id, { $pull: { friendRequests: theirId } });
+
+        if (accepted) {
+            await User.findByIdAndUpdate(id, { $push: { friends: { user_id: theirId } } });
+            await User.findByIdAndUpdate(theirId, { $push: { friends: { user_id: id } } });
+
+            res.send("Friend request accepted");
+        } else {
+            res.send("Friend request denied");
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+};

@@ -51,6 +51,52 @@
 }
 
 .inviteCard{
-    border: 1px solid red;
-    height: 30%;
+    padding: 3px 0;
+    display: flex;
+    height: 35%;
 }
+
+.inviteCard:hover{
+    background-color: #414349;
+}
+
+.FriendPFP{
+    flex-basis: 15%;
+
+}
+
+.FriendName {
+    display: flex;
+    align-items: center;
+    font-size: 40px;
+    text-align: left;
+    flex-basis: 62%;
+
+    overflow: hidden; 
+    white-space: nowrap; 
+    text-overflow: ellipsis; 
+}
+
+.InviteOptions{
+    display: flex;
+    flex-basis: 23%;
+}
+
+.FriendOption{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-basis: 50%;
+}
+
+.FriendOption img{
+    filter: brightness(80%);
+    height: 70%;
+
+}
+
+.FriendOption img:hover{
+    cursor: pointer;
+    filter: brightness(60%);
+}
+

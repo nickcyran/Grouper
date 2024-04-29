@@ -9,8 +9,6 @@ const hand = () => {
 
 export default function Navbar() {
      return (<nav className="nav" id="navbar">
-
-          <Link to="/addFriend">Add friend</Link>&nbsp;
           <Link to="/">Messaging</Link>&nbsp;
           <Link to="/viewcalendar">Calendar</Link>&nbsp;
           <Link to="/events">Events</Link>&nbsp;
@@ -18,6 +16,6 @@ export default function Navbar() {
           <Link to="/login">Login</Link>&nbsp;
           <Link to="/signup">Signup</Link>&nbsp;
           <Link to="/profileSettings">Profile</Link>&nbsp;
-          <div onClick={() => hand()}>test</div>
+          {/* <div onClick={() => hand()}>test</div> */}
      </nav>)
 }

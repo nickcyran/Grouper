@@ -1,11 +1,44 @@
 import '../styles/friendHub.css'
 import { useState, useEffect } from 'react';
+import {accept, decline} from '../assets'
 import axios from 'axios';
 
-const InviteCard = (user, key) => {
+const InviteCard = ({user, toggle}) => {
+
+    const handleRequest = (bool) => {
+        axios.post('http://localhost:9000/handleFriendRequest/', {id: localStorage.getItem('userID'), theirId: user._id, accepted: bool})
+        .then((res) => {
+            alert(res.data)
+            toggle();
+        })
+        .catch((err) => {
+            console.error("no friend invites")
+        });
+    }
+
     return (
-        <div key={key} className="inviteCard">
-            d
+        <div  className="inviteCard">
+            <div className="FriendPFP">
+                <div className="pfp">
+                    <img className="pfpInnards" src={'http://localhost:9000/Images/' + user.profile.profile_pic} alt='pfp' />
+                </div>
+            </div>
+
+            <div className="FriendName">
+                {user.username}
+            </div>
+
+            <div className="InviteOptions">
+                <div className="FriendOption">
+                    <img src={accept} alt='accept invite' onClick={() => handleRequest(true)}/>
+                </div>
+
+                <div className="FriendOption">
+                    <img src={decline} alt='decline invite' onClick={() => handleRequest(false)}/>
+                </div>
+                
+            </div>
+           
         </div>
     )
 }
@@ -13,6 +46,7 @@ const InviteCard = (user, key) => {
 const FriendHub = ({ set }) => {
     const [username, setUsername] = useState('')
     const [invites, setInvites] = useState([])
+    const [trigger, setTrigger] = useState(false)
 
     useEffect(() => {
         axios.get('http://localhost:9000/getFriendRequests/', { params: { id: localStorage.getItem('userID') } })
@@ -22,7 +56,11 @@ const FriendHub = ({ set }) => {
             .catch((err) => {
                 console.error("no friend invites")
             });
-    }, [])
+    }, [trigger])
+
+    const toggle = () => {
+        setTrigger(!trigger);
+    }
 
     const handleSubmit = () => {
         if (!(/^\s*$/.test(username))) {
@@ -69,7 +107,7 @@ const FriendHub = ({ set }) => {
                     <div className="formtitle">Pending Invites:</div>
                     <div className="friendInvites">
                         {invites.map((user, key) => (
-                            <InviteCard user={user} key={key} />
+                            <InviteCard user={user} key={key} toggle={toggle}/>
                             
                         ))}
                     </div>

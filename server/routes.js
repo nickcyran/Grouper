@@ -12,7 +12,7 @@ router.post('/deleteMessage', deleteMessage)
 
 // [USER ROUTES] ---------------------------------------------------------------
 const { createUser, getUsername, addToGroup, getGroups, addFriend, getFriends, createDirectMessage, 
-        getDirectMessages, getUser, getProfile, updateProfile, updatePFP, sendFriendRequest, getFriendRequests} = require('./controllers/userController');
+        getDirectMessages, getUser, getProfile, updateProfile, updatePFP, sendFriendRequest, getFriendRequests, handleFriendRequest} = require('./controllers/userController');
 router.post('/createUser', createUser); 
 router.post('/addToGroup', addToGroup); 
 router.post('/addFriend', addFriend); 
@@ -20,6 +20,7 @@ router.post('/createDirectMessage', createDirectMessage);
 router.post('/updateProfile', updateProfile);
 router.post('/updatePFP', upload.single("file"), updatePFP);
 router.post('/sendFriendRequest', sendFriendRequest)
+router.post('/handleFriendRequest', handleFriendRequest)
 
 router.get('/getFriendRequests', getFriendRequests);
 router.get('/getProfile', getProfile);
