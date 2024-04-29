@@ -17,3 +17,15 @@ body, html, #root {
   background-color: #1e1f22;
 }
 
+.shadow{
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.scroll{
+  overflow-y: scroll;
+}
+
+.scroll::-webkit-scrollbar {
+  width: 0;
+}
+

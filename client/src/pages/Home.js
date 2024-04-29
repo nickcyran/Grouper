@@ -29,19 +29,21 @@ const Friend_Right = ({ profile_id }) => {
 
     return (
         <div className="rightSideBar">
-            User Profile
-            <br />
-            <div className="profilePic">
-                <img className="pfpInnards" src={'http://localhost:9000/Images/' + pfp} />
+            <div className="title shadow" style={{ backgroundColor: "#2b2d31" }}>
+                User Profile
             </div>
 
-            <p>
-                Name: {name}
-                <br />
-                Biography: {bio}
-                <br />
-                Added Link: {link}
-            </p>
+            <div className="scroll profilebar">
+                <div className="profilePic shadow">
+                    <img className="pfpInnards" src={'http://localhost:9000/Images/' + pfp} />
+                </div>
+
+                <div className="profileInfo">
+                    <span><b>Nickname: </b>{name}</span>
+                    <span><b>Biography: </b>{bio}</span>
+                    <span><b>Links: </b>{link}</span>
+                </div>
+            </div>
         </div>
     )
 }
@@ -59,9 +61,12 @@ const FriendsDisplay = ({ setProfile }) => {
 
     return (
         <div className="friends_main">
-            Friends
+            <div className="title shadow">
+                Friends
+            </div>
 
-            <div className="yourFriends">
+
+            <div className="yourFriends ">
                 {friends.length > 0 ?
                     <>
                         {friends.map((friend, index) => (
@@ -106,7 +111,7 @@ const Friend_Left = ({ setDm }) => {
 
         <>
             <div className="leftSideBar">
-                <div className="l_bar_head">
+                <div className="l_bar_head shadow">
                     <div className="addDm" onClick={() => { setCreatePageVisible(!createPageVisible) }}>+</div>
                     <div className="msgTitle">Messages</div>
                 </div>
@@ -114,8 +119,8 @@ const Friend_Left = ({ setDm }) => {
                 <div className="l_bar">
                     {existingDms.length > 0 ? existingDms.map((dm, index) => (
                         <div key={index} className="dmBox" onClick={() => { setDm(dm.directMessage.chatroom_id) }}>
-                                <div className="dmName">{dm.usernames.join(', ')}</div>
-                                <img className="dmImg" src={msg} alt='dm'/>
+                            <div className="dmName">{dm.usernames.join(', ')}</div>
+                            <img className="dmImg" src={msg} alt='dm' />
                         </div>
                     ))
                         :

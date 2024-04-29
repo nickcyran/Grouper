@@ -2,12 +2,15 @@
     text-align: left;
     display: flex;
     flex-direction: column;
+    padding-top: 12px;
+    gap: 12px;
 }
 
 .friendBox {
     cursor: pointer;
     align-items: center;
-    height: 60px;
+    height: 80px;
+    font-size: 1.8rem;
     display: flex;
 }
 
@@ -20,7 +23,7 @@
     justify-content: center;
     align-items: center;
 
-    height: 80%;
+    height: 100%;
 
     border-radius: 100%;
     /* This makes the image circular */
@@ -68,7 +71,8 @@
 }
 
 .l_bar_head {
-    font-size: 30px;
+    font-weight: 600;
+    font-size: 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -114,7 +118,6 @@
     color: black;
 }
 
-
 .profilePic {
     margin: 0 auto;
     display: flex;
@@ -129,4 +132,25 @@
 
 .pfpInnards {
     width: 100%;
+}
+
+.title{
+    background-color: #313338;
+    width: 100%;
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+.profileInfo{
+    margin: 12px 12px;
+    font-size: 1.2rem;
+    text-align: left;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.profilebar{
+    height: 85vh;
+    padding-top: 12px;
 }
