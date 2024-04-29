@@ -1,9 +1,10 @@
 import '../styles/friends.css'
 
-import { PageContent, Messaging, CreateDmPage } from '.'
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { Messaging, CreateDmPage } from '.'
+import { useState, useEffect } from 'react';
+import { msg } from '../assets'
 
-import { GetFriends} from '../controllers';
+import { GetFriends } from '../controllers';
 import axios from 'axios';
 
 const Friend_Right = ({ profile_id }) => {
@@ -31,9 +32,9 @@ const Friend_Right = ({ profile_id }) => {
             User Profile
             <br />
             <div className="profilePic">
-                <img  className="pfpInnards" src={'http://localhost:9000/Images/' + pfp} />
+                <img className="pfpInnards" src={'http://localhost:9000/Images/' + pfp} />
             </div>
-           
+
             <p>
                 Name: {name}
                 <br />
@@ -113,8 +114,8 @@ const Friend_Left = ({ setDm }) => {
                 <div className="l_bar">
                     {existingDms.length > 0 ? existingDms.map((dm, index) => (
                         <div key={index} className="dmBox" onClick={() => { setDm(dm.directMessage.chatroom_id) }}>
-                            <div className="dmIcon" />
-                            <div className="dmName">{dm.usernames.join(', ')}</div>
+                                <div className="dmName">{dm.usernames.join(', ')}</div>
+                                <img className="dmImg" src={msg} alt='dm'/>
                         </div>
                     ))
                         :
@@ -122,8 +123,7 @@ const Friend_Left = ({ setDm }) => {
                     }
                 </div>
             </div>
-            {createPageVisible && <CreateDmPage set={setCreatePageVisible} toggleRender={toggleRender} />
-            }
+            {createPageVisible && <CreateDmPage set={setCreatePageVisible} toggleRender={toggleRender} />}
         </>
     );
 }

@@ -76,7 +76,7 @@ const MsgDisplay = ({chatLog, chatroom}) => {
                         {(prevChat !== chat.user_id) && (
                             <div className="chatProfileBox">
                                 <div className="dmPfp" />
-                                <b style={{ fontSize: "18px" }}>{chat.username}</b>
+                                <b>{chat.username}</b>
                             </div>
                         )}
 
