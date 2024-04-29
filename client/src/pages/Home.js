@@ -29,20 +29,20 @@ const Friend_Right = ({ profile_id }) => {
     return (
         <>
             User Profile
-            <br/>
-            <img src={'http://localhost:9000/Images/' + pfp}/>
-            <p> 
-                Name: {name} 
-                <br/> 
-                Biography: {bio} 
-                <br/> 
-                Added Link: {link} 
-                </p>
+            <br />
+            <img src={'http://localhost:9000/Images/' + pfp} />
+            <p>
+                Name: {name}
+                <br />
+                Biography: {bio}
+                <br />
+                Added Link: {link}
+            </p>
         </>
     )
 }
 
-const FriendsDisplay = ({setProfile}) => {
+const FriendsDisplay = ({ setProfile }) => {
     const [friends, setFriends] = useState([]);
 
     useEffect(() => {
@@ -78,47 +78,49 @@ const FriendsDisplay = ({setProfile}) => {
     );
 }
 
-const Home_Left = ({ setCreateDmVisible, handleDmChange }) => {
-    const [dms, setDms] = useState([]);
+const Friend_Left = ({ setDm }) => {
+    const [existingDms, setExistingDms] = useState([])
+    const [createPageVisible, setCreatePageVisible] = useState(false)
+    const [addRender, setAddRender] = useState(false)
 
     useEffect(() => {
-        const fetchData = async () => {
-            const directMessages = await GetDirectMessages(localStorage.getItem('userID'));
-            setDms(directMessages);
-        };
-
-        fetchData();
-    }, []); 
-
-    const toggleCreateDmVisible = useCallback(() => {
-        setCreateDmVisible(prev => !prev);
-    }, [setCreateDmVisible]);
+        axios.get('http://localhost:9000/getDirectMessages/', { params: { id: localStorage.getItem('userID') } })
+            .then((res) => {
+                console.log(res.data)
+                setExistingDms(res.data)
+            })
+            .catch((err) => {
+                console.error("No DirectMessages found", err)
+            })
+    }, [addRender]);
 
     const toggleRender = () => {
         setAddRender(!addRender)
     }
 
     return (
-        <div>
-            <div className="l_bar_head">
-                <div className="addDm" onClick={toggleCreateDmVisible}>+</div>
-                <div className="msgTitle">Messages</div>
-            </div>
 
-            <div className="l_bar">
-                {memoizedDms.length > 0 ? (
-                    memoizedDms.map((dm, index) => (
-                        <div key={index} className="dmBox" onClick={() => handleDmChange(dm.directMessage.chatroom_id)}>
+        <>
+            <div className="leftSideBar">
+                <div className="l_bar_head">
+                    <div className="addDm" onClick={() => { setCreatePageVisible(!createPageVisible) }}>+</div>
+                    <div className="msgTitle">Messages</div>
+                </div>
+
+                <div className="l_bar">
+                    {existingDms.length > 0 ? existingDms.map((dm, index) => (
+                        <div key={index} className="dmBox" onClick={() => { setDm(dm.directMessage.chatroom_id) }}>
                             <div className="dmIcon" />
                             <div className="dmName">{dm.usernames.join(', ')}</div>
                         </div>
                     ))
-                ) : (
-                    <div>No direct messages </div>
-                )}
+                        :
+                        <div>No direct messages </div>
+                    }
+                </div>
             </div>
-
-            {createPageVisible && <CreateDmPage set={setCreatePageVisible} toggleRender={toggleRender} />}
+            {createPageVisible && <CreateDmPage set={setCreatePageVisible} toggleRender={toggleRender} />
+            }
         </>
     );
 }
