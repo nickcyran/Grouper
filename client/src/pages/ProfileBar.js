@@ -11,7 +11,8 @@ const ProfileBar = ({ profile_id }) => {
     const [link, setLinks] = useState();
 
     useEffect(() => {
-        axios.get('http://localhost:9000/getProfile', { params: { _id: profile_id } })
+        if(profile_id){
+            axios.get('http://localhost:9000/getProfile', { params: { _id: profile_id } })
             .then((res) => {
                 setUsername(res.data.username)
                 setProfile_Pic(res.data.pfp)
@@ -22,6 +23,7 @@ const ProfileBar = ({ profile_id }) => {
             .catch((err) => {
                 console.log(err)
             })
+        }
     }, [profile_id])
 
     return (

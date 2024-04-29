@@ -7,17 +7,19 @@ import { msg } from '../assets'
 import { GetFriends } from '../controllers';
 import axios from 'axios';
 
-const Friend_Right = ({ profile_id, dm }) => {
-    const [members, setMembers] = useState([])
+const Friend_Right = ({ profile_id, dm, members }) => {
+    const [membersData, setMembersData] = useState([])
 
     useEffect(() => {
-        axios.get('', {params: {id: dm}})
-        .then((res)=>{
-
-        })
-        .catch((err)=>{
-
-        })
+        if (members) {
+            axios.get('http://localhost:9000/getMembers/', { params: { members: members } })
+                .then((res) => {
+                    setMembersData(res.data)
+                })
+                .catch((err) => {
+                    console.error(err)
+                })
+        }
     }, [dm])
 
     return (
@@ -29,15 +31,20 @@ const Friend_Right = ({ profile_id, dm }) => {
                     </div>
 
                     <div className="scroll profilebar">
-                      
+                        {membersData.map((member, index) => (
+                            <div key={index} className="memberBox">
+                                <div className="memberpfp">
+                                    <img className="pfpInnards" src={'http://localhost:9000/Images/' + member.profile.profile_pic} alt='pfp' />
+                                </div>
+
+                                <div className="memberName">{member.username} </div>
+                                
+                            </div>
+                        ))}
                     </div>
                 </div>
             }
         </>
-
-        // <div className="rightSideBar">
-
-        // </div>
     )
 }
 
@@ -80,7 +87,7 @@ const FriendsDisplay = ({ setProfile }) => {
     );
 }
 
-const Friend_Left = ({ setDm }) => {
+const Friend_Left = ({ setDm, setMembers }) => {
     const [existingDms, setExistingDms] = useState([])
     const [createPageVisible, setCreatePageVisible] = useState(false)
     const [addRender, setAddRender] = useState(false)
@@ -104,13 +111,18 @@ const Friend_Left = ({ setDm }) => {
         <>
             <div className="leftSideBar">
                 <div className="l_bar_head shadow">
-                    <div className="addDm" onClick={() => {setCreatePageVisible(!createPageVisible)}}>+</div>
+                    <div className="addDm" onClick={() => { setCreatePageVisible(!createPageVisible) }}>+</div>
                     <div className="msgTitle">Messages</div>
                 </div>
 
                 <div className="l_bar">
                     {existingDms.length > 0 ? existingDms.map((dm, index) => (
-                        <div key={index} className="dmBox" onClick={() => {setDm(dm.chatroom_id)}}>
+                        <div key={index} className="dmBox"
+                            onClick={() => {
+                                setDm(dm.chatroom_id);
+                                setMembers(dm.members)
+                            }}>
+
                             <div className="dmName">{dm.title}</div>
                             <img className="dmImg" src={msg} alt='dm' />
                         </div>
@@ -138,18 +150,20 @@ const Friend_Main = ({ dm_id, setProfile }) => {
 
 const Home = ({ selectedDm, setDm, homeClick }) => {
     const [selectedProfile, setSelectedProfile] = useState()
+    const [members, setMembers] = useState()
 
     useEffect(() => {
         if (!selectedDm) {
             setSelectedProfile(localStorage.getItem('userID'))
+            setMembers()
         }
     }, [selectedDm, homeClick])
 
     return (
         <div className="page">
-            <Friend_Left setDm={setDm} />
+            <Friend_Left setDm={setDm} setMembers={setMembers} />
             <Friend_Main dm_id={selectedDm} setProfile={setSelectedProfile} />
-            <Friend_Right profile_id={selectedProfile} dm={selectedDm} />
+            <Friend_Right profile_id={selectedProfile} dm={selectedDm} members={members} />
         </div>
     )
 }

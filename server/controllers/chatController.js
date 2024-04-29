@@ -96,3 +96,15 @@ exports.deleteMessage = async (req, res) => {
         res.status(500).send(error)
     }
 };
+
+exports.getMembers = async (req, res) => {
+    try {
+        const members = req.query.members
+        const users = await User.find({ _id: { $in: members } }).select('username profile');
+
+        res.send(users)
+    }
+    catch (error) {
+        res.status(500).send(error)
+    }
+}
