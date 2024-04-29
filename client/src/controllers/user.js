@@ -1,8 +1,6 @@
 import axios from 'axios';
 
 const getUser = async (body) => {
-    localStorage.clear()
-
     axios.get('http://localhost:9000/getUser/', body)
     .then(res => {
         if(res.username === body.username && res.password === body.password){

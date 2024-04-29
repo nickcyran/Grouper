@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { getUser } from "../controllers"
 import { useState } from 'react';
+import axios from 'axios';
 
 function Login() {
   const [username, setUserName] = useState('');
@@ -10,10 +10,21 @@ function Login() {
   const handleLogin = (event) => {
     event.preventDefault()
 
-    if (getUser({ params: { username, password } })) {
-      console.log()
-      navigate('/')
-    }
+    const body = { params: { username, password } }
+
+    axios.get('http://localhost:9000/getUser/', body)
+      .then(res => {
+        if (res.username === body.username && res.password === body.password) {
+          localStorage.setItem('userID', res.data._id)
+          navigate('/')
+        }
+        else {
+          alert('Wrong Credentials')
+        }
+      })
+      .catch((err) => {
+        console.error('Error in Login:', err);
+      });
   }
 
   return (
