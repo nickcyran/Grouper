@@ -7,6 +7,9 @@ const ServerPage = () => {
 const {id} = useParams() //get the ref to the server id
 const user_ID = localStorage.getItem('userID')
 const [userStatus, setUserStatus] = useState([]) //whether user is a member or admin
+const [thisServer, setThisServer] = useState([]) //get a reference to current server (for server name display)
+const [editingSN, setEditingSN] = useState(false)
+const [newServerName, setNSN] = useState([])
 
     //For admin permissions/controls ----------------------------------------
     //channels
@@ -26,7 +29,7 @@ const [userStatus, setUserStatus] = useState([]) //whether user is a member or a
     //for viewing/creating/removing channels
     const [channels, setChannels] = useState([]) //get channels
     const [newChannelName, setNewChannelName] = useState()
-    const [newChannelID, setNewChannelID] = useState()
+    const [newChannelID, setNewChannelID] = useState() //not used atm since channel ref by ID is buggy
     const [selectedC, setSelectedC] = useState([]) //selected channel (for channel removals)
 
     //for adding/removing admins and members
@@ -129,6 +132,17 @@ const handleMemberInvitation = (event) => {
         setChannelRemoval(false)
     }
 
+    const toggleServerNameEdit = () => {
+        setEditingSN(!editingSN)
+
+        //set others to false
+        setMemberInvitation(false)
+        setChannelCreation(false)
+        setAdminAddition(false)
+        setChannelRemoval(false)
+        setMemberRemoval(false)
+    }
+
 //CREATING/VIEWING CHANNELS ---------------------------------------------
 const handleChannelCreation = (event) => {
     event.preventDefault()
@@ -159,6 +173,21 @@ function handleChannelAddition() {
         })
         
    // }
+}
+
+
+const handleServerNameEdit = (event) => {
+    console.log("new server name: " + newServerName)
+    if(newServerName === null || newServerName === "")
+    alert("Cannot have a server with no name.");
+    else{
+        axios.get('http://localhost:9000/changeServerName', {params: { sID: id, nSN : newServerName}})
+        .then(result => {
+            alert(result.data)
+            window.location.reload();
+        })
+        .catch(err => {console.log(err)})
+    }
 }
 
 const handleChannelRemoval = (event) => {
@@ -235,6 +264,15 @@ const handleAdminAddition = (event) => {
                 //console.log("current user: " + user_ID)
                 setUserStatus(result.data) //"admin" or "not_admin"
             })
+            .catch(err => console.log(err))
+
+        //get reference to current server
+        axios.get('http://localhost:9000/getCurrentServer', {params: { sID: id}})
+        .then(result => {
+            setThisServer(result.data)
+        })
+        .catch(err => console.log(err))
+
 
     axios.get('http://localhost:9000/getServerChannels', {params: {sID: id}})
         .then(result => {
@@ -311,7 +349,7 @@ const handleAdminAddition = (event) => {
 
     return (
         <div>
-        <h1> ServerID: {id} </h1>
+        <h1> Admin Page for {thisServer.serverName} </h1>
         <p>
             Currently in a server
         </p>
@@ -414,6 +452,10 @@ const handleAdminAddition = (event) => {
                     )}
 
 
+                    {(user_ID === owner._id) && (
+                        <h3>Owner permissions: </h3>
+                    )}
+
                     {(!adminAddition && (user_ID === owner._id)) && (
                         <div>
                         <p>Adding & Removing Admins</p>
@@ -468,6 +510,21 @@ const handleAdminAddition = (event) => {
                             <p> No members in server that can have their admin status revoked by the current user. </p>
                             )}
 
+                        </div>
+                    )}
+                    <p></p>
+
+                    {(!editingSN && (user_ID === owner._id)) && (
+                        <button type="button" onClick={(toggleServerNameEdit)}> Edit server name </button>
+                    )}
+
+                    {(editingSN && (user_ID === owner._id)) && (
+                        <div>
+                        <input type="text" defaultValue={thisServer.serverName} autoComplete="off" id="newServerName" name="newServerName" onChange={(event) => setNSN(event.target.value)}></input>
+                                <br></br>
+
+                                <button type="button" onClick={closeMemberInvitation}>Cancel</button>
+                                <button type="button" onClick={(handleServerNameEdit)}> Change server name </button>
                         </div>
                     )}
 

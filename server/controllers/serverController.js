@@ -20,6 +20,30 @@ exports.getServers = async (req, res) => {
     }
 }
 
+exports.getCurrentServer = async (req, res) => {
+    const id = req.query.sID; //server ID
+    Server.findOne({ _id : id}) //find current server
+        .then(server => {
+            if(server) {
+                res.json(server)
+            }
+            else res.json("Error: Server not found")})
+}
+
+exports.changeServerName = async (req, res) => {
+    const id = req.query.sID; //server ID
+    const newServerName = req.query.nSN
+
+    Server.findOne({ _id : id}) //find current server
+        .then(server => {
+            if(server) {
+                server.serverName = newServerName
+                server.save()
+                res.json("Successfully changed server name.")
+            }
+            else res.json("Error: Server not found")})
+}
+
 
 exports.sendServerInvite = async (req,res) => {
     const id = req.query.sID; //server ID
