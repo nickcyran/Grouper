@@ -3,68 +3,23 @@ import { GetMessagesFromChat, SendMessageToChat, DeleteMessage } from '../contro
 
 import '../styles/chat.css'
 
-const Menu = ({ position, onHide, chatUserId, msgId, chatroomId }) => {
-    const style = {
-        fontSize: "12px",
-        position: 'absolute',
-        top: position.y,
-        left: position.x,
-        backgroundColor: "#1e1f22",
-        boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.3)',
-        borderRadius: '3px',
-        padding: '5px',
-        zIndex: 9999 
-    };
-
-    const handleDelete = () => {
-        DeleteMessage({chat_id: chatroomId, message_id: msgId})
-        onHide();
-    };
-
-    const canDelete = localStorage.getItem('userID') === chatUserId;
-
-    if (!canDelete) {
-        return null;
-    }
-
-    return (
-        <div style={style}>
-            {canDelete && (
-                <div className="delete" onClick={() => handleDelete()}>Delete</div>
-            )}
-            {/* Add more options as needed */}
-        </div>
-    );
-};
-
-const MsgDisplay = ({chatLog, chatroom}) => {
+const MsgDisplay = ({ chatLog, chatroom }) => {
     const messagesEndRef = useRef(null);
-
-    const [showMenu, setShowMenu] = useState(false);
-    const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
-    const [msgSender, setMsgSender] = useState('');
-    const [msgId, setMsgId] = useState('');
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
     }, [chatLog]);
 
-    const handleSettingsClick = (e, msgId, chatUserId) => {
-        const rect = e.target.getBoundingClientRect();
-
-        setMsgId(msgId)
-        setMsgSender(chatUserId)
-        setMenuPosition({ x: rect.left, y: rect.bottom });
-        setShowMenu(true);
-    };
-
-    const hideMenu = () => {
-        setShowMenu(false);
-    };
-
+  
     if (!Array.isArray(chatLog)) {
         return null;
     }
+
+    const handleDelete = (chatroomId, msgId) => {
+        console.log()
+        DeleteMessage({ chat_id: chatroomId, message_id: msgId })
+    };
+
 
     return (
         <div className="msgsgs">
@@ -75,8 +30,8 @@ const MsgDisplay = ({chatLog, chatroom}) => {
                     <div key={index} className="msgBox">
                         {(prevChat !== chat.user_id) && (
                             <div className="chatProfileBox">
-                                <div className="pfp" style={{width: "60px"}}>
-                                    <img className="pfpInnards" src={'http://localhost:9000/Images/' + chat.pfp} alt='pfp'/>
+                                <div className="pfp" style={{ width: "60px" }}>
+                                    <img className="pfpInnards" src={'http://localhost:9000/Images/' + chat.pfp} alt='pfp' />
                                 </div>
                                 <b>{chat.username}</b>
                             </div>
@@ -86,21 +41,15 @@ const MsgDisplay = ({chatLog, chatroom}) => {
                             <div className="messageText">
                                 {chat.message}
                             </div>
-                            <div className="settings" onClick={(e) => handleSettingsClick(e, chat._id, chat.user_id)}>...</div>
+
+                            {/* Conditionally render the settings icon */}
+                            {localStorage.getItem('userID') === chat.user_id && (
+                                <div className="Delete" onClick={() => handleDelete(chatroom, chat._id)}>delete</div>
+                            )}
                         </div>
                     </div>
                 );
             })}
-            {showMenu && (
-                <Menu
-                    position={menuPosition}
-                    onHide={hideMenu}
-                    chatUserId={msgSender}
-                    msgId={msgId}
-                    chatroomId={chatroom}
-
-                />
-            )}
             <div ref={messagesEndRef} />
         </div>
     );
@@ -108,7 +57,7 @@ const MsgDisplay = ({chatLog, chatroom}) => {
 
 const Messaging = ({ group }) => {
     const [chat, setChat] = useState([]);
-    
+
     useEffect(() => {
         const fetchData = async () => {
             setChat(await GetMessagesFromChat(group));
@@ -162,7 +111,7 @@ const Messaging = ({ group }) => {
             {group &&
                 <div className="msgContainer">
                     <div className="pastChats">
-                        <MsgDisplay chatLog={chat} chatroom={group}/>
+                        <MsgDisplay chatLog={chat} chatroom={group} />
                     </div>
                     <MessageBar />
                 </div>
