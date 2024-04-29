@@ -63,6 +63,10 @@ const userSchema = new mongoose.Schema({
             ref: 'event'
         },
     }],
+    notePage: {
+        type: String,
+        default: ''
+    }
 });
 
 const User = mongoose.model("user", userSchema);

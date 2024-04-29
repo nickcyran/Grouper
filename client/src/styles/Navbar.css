@@ -23,7 +23,23 @@ a:visited {
 }
 
 .links{
-    flex-basis: 95%;
+ 
+    flex-basis: 93%;
+}
+
+.notesBox{
+    display: flex;
+    flex-basis: 2%;
+
+}
+
+.notesBox img{
+    cursor: pointer;
+    width: 80%;
+}
+
+.notesBox img:hover{
+    filter: brightness(60%);
 }
 
 .signoutBox{

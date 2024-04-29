@@ -12,5 +12,6 @@ import NewCalendar from './NewCalendar'
 
 import ProfileBar from './ProfileBar'
 import FriendHub from './FriendHub';
+import NotesPage from './NotesPage'
 
-export {Messaging, Main, PageContent, Group, Home, NewCalendar, ViewCalendar, Events, Login, Signup, CreateDmPage, ProfileBar, FriendHub};
+export {Messaging, Main, PageContent, Group, Home, NewCalendar, ViewCalendar, Events, Login, Signup, CreateDmPage, ProfileBar, FriendHub, NotesPage};

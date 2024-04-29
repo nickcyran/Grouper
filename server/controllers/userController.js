@@ -122,7 +122,7 @@ exports.getFriends = async (req, res) => {
 
         const friendIds = user.friends.map(friend => friend.user_id);
         const populatedFriends = await User.find({ _id: { $in: friendIds } });
-       
+
         res.send(populatedFriends);
     }
     catch (error) {
@@ -282,7 +282,7 @@ exports.handleFriendRequest = async (req, res) => {
 
 exports.updateUserProfile = async (req, res) => {
     try {
-        const {_id, profile} = req.body
+        const { _id, profile } = req.body
 
         const user = await User.findById(_id);
 
@@ -311,3 +311,26 @@ exports.updateUserProfile = async (req, res) => {
         res.status(500).send(error);
     }
 };
+
+exports.getNotes = async (req, res) => {
+    try {
+        const user = await User.findById(req.query.id);
+        res.send(user.notePage)
+    } catch (error) {
+    }
+};
+
+
+exports.setNotes = async (req, res) => {
+    try {
+        console.log(req.body)
+        const user = await User.findById(req.body.id);
+        user.notePage = req.body.notes
+        
+        await user.save()
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+};
+

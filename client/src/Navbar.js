@@ -1,10 +1,14 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import './styles/Navbar.css';
+import {notes} from './assets'
 
-import { useNavigate } from 'react-router-dom';
+import {NotesPage} from './pages'
+
+import { useState } from 'react'
+import { useNavigate, Link} from 'react-router-dom';
 
 export default function Navbar() {
+     const [showNotes, setShowNotes] = useState(false);
      const navigate = useNavigate();
 
      const signOut = () => {
@@ -21,11 +25,15 @@ export default function Navbar() {
                     <Link to="/serverhome">Servers</Link>&nbsp;
                </div>
 
+               <div className="notesBox">
+                    <img src={notes} alt='notes' onClick={() => setShowNotes(!showNotes)}/>
+               </div>
+
                <div className="signoutBox">
                     <div className="signoutButton" onClick={() => signOut()}>sign out</div>
                </div>
           </div>
 
-
+          {showNotes && <NotesPage state={showNotes} setState={setShowNotes}/>}
      </nav>)
 }
