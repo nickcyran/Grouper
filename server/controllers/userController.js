@@ -190,6 +190,7 @@ exports.createDirectMessage = async (req, res) => {
 
         await Promise.all(members.map(async (memberId) => {
             const user = await User.findById(memberId);
+
             if (!user) {
                 throw new Error(`User with id ${memberId} not found`);
             }
@@ -208,9 +209,52 @@ exports.createDirectMessage = async (req, res) => {
 exports.getDirectMessages = async (req, res) => {
     try {
         const id = req.query.id
-        
+
         const user = await User.findById(id).populate('directMessages');
         res.send(user.directMessages)
+    }
+    catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+exports.sendFriendRequest = async (req, res) => {
+    try {
+        const { id, username } = req.body
+        const existingUser = await User.findOne({ username });
+
+        if (existingUser) {
+            if (existingUser._id.toString() === id) {
+                res.status(400).send("You cannot friend yourself... sad")
+            }
+            else {
+                if (existingUser.friendRequests.includes(id)) {
+                    res.status(400).send("Friend request already sent.");
+                } else {
+                    existingUser.friendRequests.push(id);
+                    await existingUser.save();
+                    res.status(200).send("Friend request sent successfully.");
+                }
+            }
+        }
+        else {
+            res.status(400).send("Could not find user by that name")
+        }
+    }
+    catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+exports.getFriendRequests = async (req, res) => {
+    try {
+        const id = req.query.id
+        const user = await User.findById(id).populate({
+            path: 'friendRequests',
+            select: 'username profile'
+        }).exec();
+
+        res.send(user.friendRequests)
     }
     catch (error) {
         res.status(500).send(error)

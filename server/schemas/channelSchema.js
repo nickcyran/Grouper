@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 
 const channelSchema = new mongoose.Schema({
-    title: String, //set upon creation
+    channelName: String, //set upon creation
     message_ID: [{type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],
 })
 

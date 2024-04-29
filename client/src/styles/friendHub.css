@@ -1,0 +1,56 @@
+/* Updated CSS */
+.FriendHub {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50rem;
+    height: fit-content;
+    background-color: #1e1f22;
+    z-index: 10;
+    box-shadow: 2px 6px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    padding-bottom: 20px;
+}
+
+.innerForm {
+    position: relative; /* Ensure absolute positioning within this container */
+}
+
+.SendInvite {
+    position: absolute;
+    right: 10px; /* Position at the far right */
+    top: 14%; /* Align with the top of the input field */
+
+    background-color: #2b2d31;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    width: 8%;
+    padding: 4px 0;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.SendInvite:hover {
+    background-color: #414349;
+}
+
+.friendInvites {
+    overflow-y: scroll;
+    background-color: #2b2d31;
+    border-radius: 10px;
+    width: 100%;
+    height: 16rem;
+    box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.5); /* Inner box shadow */
+}
+
+.friendInvites::-webkit-scrollbar{
+    width: 0;
+}
+
+.inviteCard{
+    border: 1px solid red;
+    height: 30%;
+}

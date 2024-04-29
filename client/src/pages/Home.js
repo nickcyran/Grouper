@@ -1,8 +1,8 @@
 import '../styles/friends.css'
 
-import { Messaging, CreateDmPage, ProfileBar } from '.'
+import { Messaging, CreateDmPage, ProfileBar, FriendHub } from '.'
 import { useState, useEffect } from 'react';
-import { msg } from '../assets'
+import { msg, friend} from '../assets'
 
 import { GetFriends } from '../controllers';
 import axios from 'axios';
@@ -87,25 +87,25 @@ const FriendsDisplay = ({ setProfile }) => {
     );
 }
 
-const Friend_Left = ({ setDm, setMembers }) => {
-    const [existingDms, setExistingDms] = useState([])
-    const [createPageVisible, setCreatePageVisible] = useState(false)
-    const [addRender, setAddRender] = useState(false)
+const Friend_Left = ({ setDm, setMembers, selectedDm, setSelectedDm }) => {
+    const [existingDms, setExistingDms] = useState([]);
+    const [createPageVisible, setCreatePageVisible] = useState(false);
+    const [friendHubVisible, setfriendHubVisible] = useState(false);
+    const [addRender, setAddRender] = useState(false);
 
     useEffect(() => {
         axios.get('http://localhost:9000/getDirectMessages/', { params: { id: localStorage.getItem('userID') } })
             .then((res) => {
-                setExistingDms(res.data)
+                setExistingDms(res.data);
             })
             .catch((err) => {
-                console.error("No DirectMessages found", err)
-            })
+                console.error("No DirectMessages found", err);
+            });
     }, [addRender]);
 
     const toggleRender = () => {
-        console.log("yo")
-        setAddRender(!addRender)
-    }
+        setAddRender(!addRender);
+    };
 
     return (
         <>
@@ -113,18 +113,22 @@ const Friend_Left = ({ setDm, setMembers }) => {
                 <div className="l_bar_head shadow">
                     <div className="addDm" onClick={() => { setCreatePageVisible(!createPageVisible) }}>+</div>
                     <div className="msgTitle">Messages</div>
+                    <div className="addFriend">
+                        <img src={friend} alt='add friend' onClick={()=> setfriendHubVisible(!friendHubVisible)}/>
+                    </div>
                 </div>
 
                 <div className="l_bar">
                     {existingDms.length > 0 ? existingDms.map((dm, index) => (
-                        <div key={index} className="dmBox"
+                        <div key={index} className={selectedDm === dm.chatroom_id ? "dmBox selected" : "dmBox"}
                             onClick={() => {
                                 setDm(dm.chatroom_id);
-                                setMembers(dm.members)
+                                setMembers(dm.members);
+                                setSelectedDm(dm.chatroom_id); 
                             }}>
 
                             <div className="dmName">{dm.title}</div>
-                            <img className="dmImg" src={msg} alt='dm' />
+                            <img className="dmImg" src={msg} alt='dm'/>
                         </div>
                     ))
                         :
@@ -132,6 +136,8 @@ const Friend_Left = ({ setDm, setMembers }) => {
                     }
                 </div>
             </div>
+
+            {friendHubVisible && <FriendHub set={setfriendHubVisible}/>}
             {createPageVisible && <CreateDmPage set={setCreatePageVisible} toggleRender={toggleRender} />}
         </>
     );
@@ -151,17 +157,19 @@ const Friend_Main = ({ dm_id, setProfile }) => {
 const Home = ({ selectedDm, setDm, homeClick }) => {
     const [selectedProfile, setSelectedProfile] = useState()
     const [members, setMembers] = useState()
+    const [dmHover, setSelectedDm] = useState();
 
     useEffect(() => {
         if (!selectedDm) {
             setSelectedProfile(localStorage.getItem('userID'))
+            setSelectedDm()
             setMembers()
         }
     }, [selectedDm, homeClick])
 
     return (
         <div className="page">
-            <Friend_Left setDm={setDm} setMembers={setMembers} />
+            <Friend_Left setDm={setDm} setMembers={setMembers} selectedDm={dmHover} setSelectedDm={setSelectedDm}/>
             <Friend_Main dm_id={selectedDm} setProfile={setSelectedProfile} />
             <Friend_Right profile_id={selectedProfile} dm={selectedDm} members={members} />
         </div>

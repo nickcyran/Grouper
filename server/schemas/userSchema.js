@@ -53,6 +53,10 @@ const userSchema = new mongoose.Schema({
             ref: 'User'
         },
     }],
+    friendRequests: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+    }],
     events: [{
         event_id: {
             type: mongoose.Schema.Types.ObjectId,

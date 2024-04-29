@@ -56,8 +56,9 @@
 }
 
 .dmName {
+    color: rgb(138, 138, 138);
     padding-left: 3px;
-    font-size: 20px;
+    font-size: 26px;
     text-align: left;
     flex-basis: 90%;
 
@@ -67,6 +68,7 @@
 }
 
 .dmImg {
+    display: none;
     padding-right: 3px;
     flex-basis: 8%;
     width: 1%;
@@ -79,18 +81,25 @@
 }
 
 .l_bar_head {
+    height: 3rem;
     font-weight: 600;
-    font-size: 2rem;
+    font-size: 100%;
     display: flex;
+
     justify-content: space-between;
     align-items: center;
 }
 
 .addDm {
+    padding-left: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    flex-basis: 10%;
     text-align: left;
     font-weight: 600;
-    font-size: 20px;
-    margin-left: 8px;
+
     user-select: none;
     cursor: pointer;
 }
@@ -100,9 +109,29 @@
 }
 
 .msgTitle {
+    font-size: 200%;
     flex-grow: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+    white-space: nowrap;
 }
 
+.addFriend{
+    padding-right: 4px;
+    display: flex;
+    flex-basis: 10%;
+}
+
+.addFriend img{
+    cursor: pointer;
+    width: 1.4rem;
+    flex-basis: 10%;
+}
+
+.addFriend img:hover {
+    filter: brightness(70%); 
+}
 
 .profilePic {
     margin: 0 auto;
@@ -113,7 +142,6 @@
     aspect-ratio: 1;
     border-radius: 100%;
     overflow: hidden;
-    /* This ensures the image stays within the circular boundary */
 }
 
 .pfpInnards {
@@ -172,4 +200,16 @@
     text-overflow: ellipsis;
     font-size: 36px;
 
+}
+
+.dmBox.selected {
+    
+}
+
+.dmBox.selected .dmImg {
+    display: block;
+}
+
+.dmBox.selected .dmName {
+    color: white; /* Change text color of the name when selected */
 }
