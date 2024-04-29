@@ -122,3 +122,12 @@
 .linksField::-webkit-scrollbar{
     width: 0;
 }
+
+
+.profileInfo a{
+    color: #297bff;
+}
+
+.profileInfo a:hover{
+    color: #90a5d1;
+}

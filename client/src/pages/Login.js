@@ -18,12 +18,9 @@ function Login() {
           localStorage.setItem('userID', res.data._id)
           navigate('/')
         }
-        else {
-          alert('Wrong Credentials')
-        }
       })
       .catch((err) => {
-        console.error('Error in Login:', err);
+        alert('Wrong Credentials')
       });
   }
 
@@ -39,7 +36,7 @@ function Login() {
           <br />
 
           <label className='inputs'>
-            Password: <br /><input type="text" name="Password" onChange={(e) => setPassword(e.target.value)} />
+            Password: <br /><input type="password" name="Password" onChange={(e) => setPassword(e.target.value)} />
           </label>
           <br />
           <br />
