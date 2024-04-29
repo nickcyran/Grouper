@@ -160,7 +160,7 @@
     margin: 12px 12px;
     font-size: 1.2rem;
     text-align: left;
-
+    gap: 20px;
     display: flex;
     flex-direction: column;
 }

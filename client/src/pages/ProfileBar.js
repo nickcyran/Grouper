@@ -44,7 +44,7 @@ const ProfileBar = ({ profile_id }) => {
             </div>
 
             <div className="scroll profilebar">
-                {ownProfile && <ProfileOptions profile={{ username, pfp, name, bio, links }} toggle={toggle}/>}
+                {ownProfile && <ProfileOptions profile={{ username, pfp, name, bio, links }} toggle={toggle} />}
 
                 <div className="username">{username}</div>
                 <div className="profilePic shadow">
@@ -54,14 +54,18 @@ const ProfileBar = ({ profile_id }) => {
                 <div className="profileInfo">
                     <span><b>Nickname: </b>{name}</span>
                     <span><b>Biography: </b>{bio}</span>
-                    <span><b>Links: </b>{links.map((link, index) => <a key={index} href={link}>{link}</a>)}</span>
+                    <span><b>Links: </b> <br />
+                        {links.map((link, index) => (
+                            <><a key={index} href={`https://${link}`} target="_blank" rel="noopener noreferrer">{link}</a> <br /></>
+                        ))}
+                    </span>
                 </div>
             </div>
         </div>
     );
 };
 
-const ProfileOptions = ({toggle}) => {
+const ProfileOptions = ({ toggle }) => {
     const [shown, setShown] = useState(false);
     const [username, setUsername] = useState('');
     const [nickname, setNickname] = useState('');
@@ -86,7 +90,7 @@ const ProfileOptions = ({toggle}) => {
     }, []);
 
     const addLink = () => {
-        setLinks([...links, '']); 
+        setLinks([...links, '']);
     };
 
     const handleLinkChange = (index, value) => {
@@ -114,20 +118,20 @@ const ProfileOptions = ({toggle}) => {
     const handleSubmit = () => {
         const _id = localStorage.getItem('userID');
         handleProfilePicUpdate(_id);
-        
+
         const profile = {
             display_name: nickname,
             biography: bio,
             links: links
         }
 
-        axios.post('http://localhost:9000/updateUserProfile', {_id, profile}).then((res) => {
+        axios.post('http://localhost:9000/updateUserProfile', { _id, profile }).then((res) => {
             toggle();
             setShown(false)
         })
-        .catch((err) => {
-            alert("could not update user profile", err)
-        })
+            .catch((err) => {
+                alert("could not update user profile", err)
+            })
     }
 
     return (
@@ -189,7 +193,7 @@ const ProfileOptions = ({toggle}) => {
                         </div>
 
                         <div className="submit shadow" onClick={() => handleSubmit()}>
-                                submit
+                            submit
                         </div>
 
                     </div>
