@@ -6,11 +6,34 @@ a:visited {
     color: white;
 }
 
+.wrap{
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    display: flex;
+    margin: 1vw;
+}
+
 .nav{
     display: flex;
     justify-content: center;
     align-items: center;
     height: 6vh;
     font-size: 2vh;
+}
 
+.links{
+    flex-basis: 95%;
+}
+
+.signoutBox{
+    cursor: pointer;
+    background-color: #313338;
+    border-radius: .5vh;
+    flex-basis: 5%;
+    padding: .2vh;
+}
+
+.signoutBox:hover{
+    background-color: #4b4d52;
 }
