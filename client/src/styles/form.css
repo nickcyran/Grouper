@@ -40,8 +40,8 @@
     font-size: 2rem;
     font-weight: 600;
     position: absolute;
-    right:  18px;
-    top: 2px;
+    right:  0;
+    top: 0;
     cursor: pointer;
 }
 
