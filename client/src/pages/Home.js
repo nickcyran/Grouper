@@ -79,11 +79,13 @@ const FriendsDisplay = () => {
 
 const Friend_Left = ({ setDm }) => {
     const [existingDms, setExistingDms] = useState([])
+    const [createPageVisible, setCreatePageVisible] = useState(false)
     const [addRender, setAddRender] = useState(false)
 
     useEffect(() => {
         axios.get('http://localhost:9000/getDirectMessages/', { params: { id: localStorage.getItem('userID') } })
             .then((res) => {
+                console.log(res.data)
                 setExistingDms(res.data)
             })
             .catch((err) => {
@@ -91,25 +93,33 @@ const Friend_Left = ({ setDm }) => {
             })
     }, [addRender]);
 
+    const toggleRender = () =>{
+        setAddRender(!addRender)
+    }
+
     return (
-        <div className="leftSideBar">
-            <div className="l_bar_head">
-                <div className="addDm" onClick={()=> {console.log("create")}}>+</div>
-                <div className="msgTitle">Messages</div>
+        <>
+            <div className="leftSideBar">
+                <div className="l_bar_head">
+                    <div className="addDm" onClick={() => { setCreatePageVisible(!createPageVisible) }}>+</div>
+                    <div className="msgTitle">Messages</div>
+                </div>
+
+                <div className="l_bar">
+                    {existingDms.length > 0 ? existingDms.map((dm, index) => (
+                        <div key={index} className="dmBox" onClick={() => { setDm(dm.directMessage.chatroom_id) }}>
+                            <div className="dmIcon" />
+                            <div className="dmName">{dm.usernames.join(', ')}</div>
+                        </div>
+                    ))
+                        :
+                        <div>No direct messages </div>
+                    }
+                </div>
             </div>
 
-            <div className="l_bar">
-                {existingDms.length > 0 ? existingDms.map((dm, index) => (
-                    <div key={index} className="dmBox" onClick={() => { setDm(dm.directMessage.chatroom_id) }}>
-                        <div className="dmIcon" />
-                        <div className="dmName">{dm.usernames.join(', ')}</div>
-                    </div>
-                ))
-                    :
-                    <div>No direct messages </div>
-                }
-            </div>
-        </div>
+            {createPageVisible && <CreateDmPage set={setCreatePageVisible} toggleRender={toggleRender}/>}
+        </>
     );
 }
 

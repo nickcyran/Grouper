@@ -5,16 +5,18 @@
     background-color: #313338;
     text-align: left;
     gap: 8px;
+  
 }
 
 .msgsgs{
     margin-top: 8px;
     display: flex;
     flex-direction: column;
-    gap: 7px;
+ 
 }
 
 .msg {
+    
     margin-left: 3rem;
     padding: 3px;
     border-radius: 3px;
@@ -78,6 +80,8 @@
 }
 
 .chatProfileBox{
+    margin-top: 4px;
+    margin-bottom: -4px;
     display: flex;
     align-items: center;
 }
