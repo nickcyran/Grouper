@@ -43,7 +43,7 @@ const InviteCard = ({user, toggle}) => {
     )
 }
 
-const FriendHub = ({ set }) => {
+const FriendHub = ({ set, toggleFriend }) => {
     const [username, setUsername] = useState('')
     const [invites, setInvites] = useState([])
     const [trigger, setTrigger] = useState(false)
@@ -59,6 +59,7 @@ const FriendHub = ({ set }) => {
     }, [trigger])
 
     const toggle = () => {
+        toggleFriend();
         setTrigger(!trigger);
     }
 

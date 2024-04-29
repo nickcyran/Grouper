@@ -48,8 +48,9 @@ const Friend_Right = ({ profile_id, dm, members }) => {
     )
 }
 
-const FriendsDisplay = ({ setProfile }) => {
+const FriendsDisplay = ({ setProfile, triggerFriends }) => {
     const [friends, setFriends] = useState([]);
+   
 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,7 +58,7 @@ const FriendsDisplay = ({ setProfile }) => {
         };
 
         fetchData();
-    }, []);
+    }, [triggerFriends]);
 
     return (
         <div className="friends_main">
@@ -87,7 +88,7 @@ const FriendsDisplay = ({ setProfile }) => {
     );
 }
 
-const Friend_Left = ({ setDm, setMembers, selectedDm, setSelectedDm }) => {
+const Friend_Left = ({ setDm, setMembers, selectedDm, setSelectedDm, toggle }) => {
     const [existingDms, setExistingDms] = useState([]);
     const [createPageVisible, setCreatePageVisible] = useState(false);
     const [friendHubVisible, setfriendHubVisible] = useState(false);
@@ -137,17 +138,17 @@ const Friend_Left = ({ setDm, setMembers, selectedDm, setSelectedDm }) => {
                 </div>
             </div>
 
-            {friendHubVisible && <FriendHub set={setfriendHubVisible}/>}
+            {friendHubVisible && <FriendHub set={setfriendHubVisible} toggleFriend={toggle}/>}
             {createPageVisible && <CreateDmPage set={setCreatePageVisible} toggleRender={toggleRender} />}
         </>
     );
 }
 
-const Friend_Main = ({ dm_id, setProfile }) => {
+const Friend_Main = ({ dm_id, setProfile, triggerFriends }) => {
     return (
         <div className='mainContent'>
             {!dm_id ?
-                <FriendsDisplay setProfile={setProfile} />
+                <FriendsDisplay setProfile={setProfile} triggerFriends={triggerFriends} />
                 :
                 <Messaging group={dm_id} />}
         </div>
@@ -158,6 +159,11 @@ const Home = ({ selectedDm, setDm, homeClick }) => {
     const [selectedProfile, setSelectedProfile] = useState()
     const [members, setMembers] = useState()
     const [dmHover, setSelectedDm] = useState();
+    const [triggerFriends, setTriggerFriends] = useState(false);
+
+    const toggleFriends = () => {
+        setTriggerFriends(!triggerFriends)
+    }
 
     useEffect(() => {
         if (!selectedDm) {
@@ -169,8 +175,8 @@ const Home = ({ selectedDm, setDm, homeClick }) => {
 
     return (
         <div className="page">
-            <Friend_Left setDm={setDm} setMembers={setMembers} selectedDm={dmHover} setSelectedDm={setSelectedDm}/>
-            <Friend_Main dm_id={selectedDm} setProfile={setSelectedProfile} />
+            <Friend_Left setDm={setDm} setMembers={setMembers} selectedDm={dmHover} setSelectedDm={setSelectedDm} toggle={toggleFriends}/>
+            <Friend_Main dm_id={selectedDm} setProfile={setSelectedProfile} triggerFriends={triggerFriends}/>
             <Friend_Right profile_id={selectedProfile} dm={selectedDm} members={members} />
         </div>
     )
