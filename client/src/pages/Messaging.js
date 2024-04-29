@@ -75,7 +75,9 @@ const MsgDisplay = ({chatLog, chatroom}) => {
                     <div key={index} className="msgBox">
                         {(prevChat !== chat.user_id) && (
                             <div className="chatProfileBox">
-                                <div className="dmPfp" />
+                                <div className="pfp" style={{width: "60px"}}>
+                                    <img className="pfpInnards" src={'http://localhost:9000/Images/' + chat.pfp} alt='pfp'/>
+                                </div>
                                 <b>{chat.username}</b>
                             </div>
                         )}

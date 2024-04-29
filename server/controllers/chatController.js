@@ -21,12 +21,13 @@ exports.getChat = async (req, res) => {
                 continue;
             }
             else if (!(usrID in knownUserNames)) {
-                knownUserNames[usrID] = (await User.findById(usrID)).username;
+                knownUserNames[usrID] = (await User.findById(usrID))
             } 
             
             messages.push({
                 user_id: usrID,
-                username: knownUserNames[usrID],
+                pfp: knownUserNames[usrID].profile.profile_pic,
+                username: knownUserNames[usrID].username,
                 message: msg.message,
                 _id: msg._id
             });

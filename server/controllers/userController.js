@@ -112,7 +112,6 @@ exports.getFriends = async (req, res) => {
         const user = await User.findById(id)
 
         const friendIds = user.friends.map(friend => friend._id);
-
         const populatedFriends = await User.find({ _id: { $in: friendIds } });
 
         res.send(populatedFriends);
