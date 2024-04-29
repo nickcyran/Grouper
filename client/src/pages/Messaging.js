@@ -91,7 +91,7 @@ const Messaging = ({ group }) => {
         };
 
         return (
-            <form onSubmit={handleSubmit}>
+            <form className="msgBarFlex" onSubmit={handleSubmit}>
                 <input
                     className="msgBar"
                     autoComplete="off"
@@ -101,7 +101,7 @@ const Messaging = ({ group }) => {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                 />
-                <button className="submit" type="submit">Send</button>
+                <button className="submitMsg shadow" type="submit">Send</button>
             </form>
         )
     }

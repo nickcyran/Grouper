@@ -3,12 +3,12 @@ const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema({
     f_name: String,
     l_name: String,
+
     username: {
         type: String, 
         unique: true
     },
     password: String,
-    
     profile: {
         display_name:{
             type: String,
@@ -32,39 +32,27 @@ const userSchema = new mongoose.Schema({
             ref: 'link'
         }]
     },
-
     calanders_id: [{ type: mongoose.Schema.Types.ObjectId }],
-
     groups: [{
         group_id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'group'
         },
     }],
-
     availibility: {
         type: mongoose.Schema.Types.ObjectId,
         default: null
     },
-
     directMessages: [{
-        members: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'user'
-        }],
-        chatroom_id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'chat'
-        }
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'directMessage'
     }],
-
     friends: [{
         user_id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
         },
     }],
-
     events: [{
         event_id: {
             type: mongoose.Schema.Types.ObjectId,

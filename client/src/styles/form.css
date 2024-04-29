@@ -1,0 +1,68 @@
+/*FORM STUFF*/
+.fform {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30rem;
+    height: fit-content;
+    background-color: #1e1f22;
+    z-index: 10;
+    box-shadow: 2px 6px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+}
+
+.innerForm {
+    margin: 20px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.selectForm {
+    color: black;
+}
+
+.formtitle{
+    text-align: left;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.input{
+    width: 98%;
+    border-radius: 6px;
+    padding: 3px;
+    font-size: 20px;
+}
+
+.x{
+    font-size: 2rem;
+    font-weight: 600;
+    position: absolute;
+    right:  18px;
+    top: 2px;
+    cursor: pointer;
+}
+
+.x:hover{
+    color:rgb(255, 82, 82);
+}
+
+.submit {
+    background-color: #2b2d31;
+    cursor: pointer;
+    margin: 16px auto;
+    border-radius: 8px;
+    border: none; 
+    width: 25%;
+    padding: 4px 0;
+
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.submit:hover{
+    background-color: #414349;
+}

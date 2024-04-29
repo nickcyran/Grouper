@@ -1,6 +1,7 @@
 const User = require('../schemas/userSchema');
 const Group = require('../schemas/groupSchema');
 const Chat = require('../schemas/chatSchema');
+const DirectMessage = require('../schemas/directMessageSchema');
 
 exports.createUser = async (req, res) => {
     try {
@@ -180,58 +181,38 @@ exports.getGroups = async (req, res) => {
 
 exports.createDirectMessage = async (req, res) => {
     try {
-        const members = req.body.members;
-
-        var dm = new Chat();
+        const { title, members } = req.body;
+        const dm = new Chat();
         await dm.save();
 
-        for (i in members) {
-            const user = await User.findById(members[i]);
+        const directMessage = new DirectMessage({ title, members, chatroom_id: dm._id });
+        await directMessage.save();
 
-            var x = {
-                members: members,
-                chatroom_id: dm._id
+        await Promise.all(members.map(async (memberId) => {
+            const user = await User.findById(memberId);
+            if (!user) {
+                throw new Error(`User with id ${memberId} not found`);
             }
 
-            user.directMessages.push(x);
+            user.directMessages.push(directMessage);
             await user.save();
-        }
-    }
-    catch (error) {
-        res.status(500).send(error)
+        }));
+
+        res.send(directMessage);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
     }
 }
 
 exports.getDirectMessages = async (req, res) => {
     try {
         const id = req.query.id
-        const user = await User.findById(id);
-
-        if (!user) {
-            return res.status(404).send("User not found");
-        }
-
-
-        var dms = user.directMessages;
-        var f = []
-
-        for (var i in dms) {
-            var usernames = []
-            var members = dms[i].members
-
-            for (var j in members) {
-                usernames.push(await idToUsername(members[j]))
-            }
-            f.push({ usernames, directMessage: dms[i] })
-        }
-
-        res.send(f);
+        
+        const user = await User.findById(id).populate('directMessages');
+        res.send(user.directMessages)
     }
     catch (error) {
         res.status(500).send(error)
     }
-}
-
-async function idToUsername(id) {
-    return (await User.findById(id)).username
 }

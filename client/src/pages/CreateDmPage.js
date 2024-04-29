@@ -1,23 +1,29 @@
 import { useState, useEffect } from 'react';
 import Select from 'react-select';
-import { GetFriends, CreateDirectMessage } from '../controllers';
+import { GetFriends} from '../controllers';
+import axios from 'axios';
 
-const CreateDmPage = ({ set }) => {
+import '../styles/form.css'
+
+const CreateDmPage = ({ set, toggleRender}) => {
     const [friends, setFriends] = useState([]);
     const [selectedFriends, setSelectedFriends] = useState([])
+    const [title, setTitle] = useState('')
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        var members = []
-        members.push(localStorage.getItem('userID'))
+        var members = [localStorage.getItem('userID')]
+        members = members.concat(selectedFriends.map(friend => friend.value));
 
-        for(var i in selectedFriends){
-            members.push(selectedFriends[i].value)
-        }
-        
-        CreateDirectMessage({members: members})
-        set(false)
+        axios.post('http://localhost:9000/createDirectMessage/', {title: title, members: members })
+        .then(res => {
+            toggleRender()
+            set(false)
+        })
+        .catch((err) => {
+            console.error('Error in creating DM:', err);
+        });
     }
 
     const userOptions = friends.map((user) => {
@@ -35,21 +41,42 @@ const CreateDmPage = ({ set }) => {
     return (
         <form className="fform" onSubmit={(e) => handleSubmit(e)}>
             <div className="innerForm">
+                <div className="x" onClick={() => set(false)}>
+                    x
+                </div>
                 <h2>Create new Direct Message</h2>
 
-                <Select
-                    className="selectForm"
-                    isMulti
-                    value={selectedFriends}
-                    onChange={setSelectedFriends}
-                    options={userOptions}
-                    required
-                />
+                
+                <div>
+                    <div className="formtitle">Title:</div>
+                    <input
+                        className="input"
+                        type="text"
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        placeholder="Enter title"
+                        required
+                    />
+                </div>
 
-                <button className="submit" type="submit">Send</button>
+                <div>
+                    <div className="formtitle">Add friends:</div>
+                    <Select
+                        className="selectForm"
+                        isMulti
+                        value={selectedFriends}
+                        onChange={setSelectedFriends}
+                        options={userOptions}
+                        required
+                    />
+                </div>
+
+                <button className="submit shadow" type="submit">
+                    Send
+                </button>
             </div>
         </form>
-    )
-}
+    );
+};
 
 export default CreateDmPage;

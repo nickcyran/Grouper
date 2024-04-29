@@ -88,7 +88,6 @@ const Friend_Left = ({ setDm }) => {
     useEffect(() => {
         axios.get('http://localhost:9000/getDirectMessages/', { params: { id: localStorage.getItem('userID') } })
             .then((res) => {
-                console.log(res.data)
                 setExistingDms(res.data)
             })
             .catch((err) => {
@@ -97,22 +96,22 @@ const Friend_Left = ({ setDm }) => {
     }, [addRender]);
 
     const toggleRender = () => {
+        console.log("yo")
         setAddRender(!addRender)
     }
 
     return (
-
         <>
             <div className="leftSideBar">
                 <div className="l_bar_head shadow">
-                    <div className="addDm" onClick={() => { setCreatePageVisible(!createPageVisible) }}>+</div>
+                    <div className="addDm" onClick={() => {setCreatePageVisible(!createPageVisible)}}>+</div>
                     <div className="msgTitle">Messages</div>
                 </div>
 
                 <div className="l_bar">
                     {existingDms.length > 0 ? existingDms.map((dm, index) => (
-                        <div key={index} className="dmBox" onClick={() => { setDm(dm.directMessage.chatroom_id) }}>
-                            <div className="dmName">{dm.usernames.join(', ')}</div>
+                        <div key={index} className="dmBox" onClick={() => {setDm(dm.chatroom_id)}}>
+                            <div className="dmName">{dm.title}</div>
                             <img className="dmImg" src={msg} alt='dm' />
                         </div>
                     ))
