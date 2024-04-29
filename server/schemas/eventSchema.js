@@ -30,7 +30,7 @@ const eventSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user',
-    }
+    },
 });
 
 const Event = mongoose.model('event', eventSchema);
