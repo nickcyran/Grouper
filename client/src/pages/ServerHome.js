@@ -126,8 +126,8 @@ const ServerHome = () => {
           <div>
             {(userServers.length > 0) && (    
             <p>
-                {userServers.map((server)=> {
-                return <Link to={`/Server/${server._id}`}>{server.serverName}</Link>})}
+                {userServers.map((server, index)=> {
+                return <Link key={index} to={`/Server/${server._id}`}>{server.serverName}</Link>})}
             </p>
             )}
           
@@ -141,8 +141,8 @@ const ServerHome = () => {
             {((invites.length > 0)) && (
                 <div>
                     <h3> Currently invited to: </h3>
-                    {invites.map((invite)=> {
-                        return <li> {invite.serverName} <button type="button" onClick={(event) => handleServerInvite(event, invite._id, "d")}> Decline </button> <button type="button" onClick={(event) => handleServerInvite(event, invite._id, "a")}> Accept </button></li> })}
+                    {invites.map((invite, index)=> {
+                        return <li key={index}> {invite.serverName} <button type="button" onClick={(event) => handleServerInvite(event, invite._id, "d")}> Decline </button> <button type="button" onClick={(event) => handleServerInvite(event, invite._id, "a")}> Accept </button></li> })}
                 </div>
             )}
                 
