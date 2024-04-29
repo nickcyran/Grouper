@@ -121,7 +121,6 @@
     width: 160px;
     aspect-ratio: 1;
     border-radius: 100%;
-    /* This makes the image circular */
     overflow: hidden;
     /* This ensures the image stays within the circular boundary */
 }

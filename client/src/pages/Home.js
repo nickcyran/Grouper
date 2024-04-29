@@ -3,7 +3,7 @@ import '../styles/friends.css'
 import { PageContent, Messaging, CreateDmPage } from '.'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
-import { GetFriends, GetDirectMessages } from '../controllers';
+import { GetFriends} from '../controllers';
 import axios from 'axios';
 
 const Friend_Right = ({ profile_id }) => {
@@ -27,10 +27,13 @@ const Friend_Right = ({ profile_id }) => {
     }, [profile_id])
 
     return (
-        <>
+        <div className="rightSideBar">
             User Profile
             <br />
-            <img src={'http://localhost:9000/Images/' + pfp} />
+            <div className="profilePic">
+                <img  className="pfpInnards" src={'http://localhost:9000/Images/' + pfp} />
+            </div>
+           
             <p>
                 Name: {name}
                 <br />
@@ -38,7 +41,7 @@ const Friend_Right = ({ profile_id }) => {
                 <br />
                 Added Link: {link}
             </p>
-        </>
+        </div>
     )
 }
 

@@ -5,3 +5,12 @@ a:link {
 a:visited {
     color: white;
 }
+
+.nav{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 6vh;
+    font-size: 2vh;
+
+}
