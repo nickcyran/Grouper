@@ -1,5 +1,4 @@
 import '../styles/friends.css'
-import '../styles/page.css'
 
 import { PageContent, Messaging, CreateDmPage } from '.'
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
@@ -28,21 +27,18 @@ const Friend_Right = ({ profile_id }) => {
     }, [profile_id])
 
     return (
-        <div className='rightSideBar'>
+        <>
             User Profile
-            <br />
-            <div className="profilePic">
-                <img className="pfpInnards" src={'http://localhost:9000/Images/' + pfp} />
-            </div>
-
-            <p>
-                Name: {name}
-                <br />
-                Biography: {bio}
-                <br />
-                Added Link: {link}
-            </p>
-        </div>
+            <br/>
+            <img src={'http://localhost:9000/Images/' + pfp}/>
+            <p> 
+                Name: {name} 
+                <br/> 
+                Biography: {bio} 
+                <br/> 
+                Added Link: {link} 
+                </p>
+        </>
     )
 }
 
@@ -82,45 +78,44 @@ const FriendsDisplay = ({setProfile}) => {
     );
 }
 
-const Friend_Left = ({ setDm }) => {
-    const [existingDms, setExistingDms] = useState([])
-    const [createPageVisible, setCreatePageVisible] = useState(false)
-    const [addRender, setAddRender] = useState(false)
+const Home_Left = ({ setCreateDmVisible, handleDmChange }) => {
+    const [dms, setDms] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:9000/getDirectMessages/', { params: { id: localStorage.getItem('userID') } })
-            .then((res) => {
-                console.log(res.data)
-                setExistingDms(res.data)
-            })
-            .catch((err) => {
-                console.error("No DirectMessages found", err)
-            })
-    }, [addRender]);
+        const fetchData = async () => {
+            const directMessages = await GetDirectMessages(localStorage.getItem('userID'));
+            setDms(directMessages);
+        };
+
+        fetchData();
+    }, []); 
+
+    const toggleCreateDmVisible = useCallback(() => {
+        setCreateDmVisible(prev => !prev);
+    }, [setCreateDmVisible]);
 
     const toggleRender = () => {
         setAddRender(!addRender)
     }
 
     return (
-        <>
-            <div className="leftSideBar">
-                <div className="l_bar_head">
-                    <div className="addDm" onClick={() => { setCreatePageVisible(!createPageVisible) }}>+</div>
-                    <div className="msgTitle">Messages</div>
-                </div>
+        <div>
+            <div className="l_bar_head">
+                <div className="addDm" onClick={toggleCreateDmVisible}>+</div>
+                <div className="msgTitle">Messages</div>
+            </div>
 
-                <div className="l_bar">
-                    {existingDms.length > 0 ? existingDms.map((dm, index) => (
-                        <div key={index} className="dmBox" onClick={() => { setDm(dm.directMessage.chatroom_id) }}>
+            <div className="l_bar">
+                {memoizedDms.length > 0 ? (
+                    memoizedDms.map((dm, index) => (
+                        <div key={index} className="dmBox" onClick={() => handleDmChange(dm.directMessage.chatroom_id)}>
                             <div className="dmIcon" />
                             <div className="dmName">{dm.usernames.join(', ')}</div>
                         </div>
                     ))
-                        :
-                        <div>No direct messages </div>
-                    }
-                </div>
+                ) : (
+                    <div>No direct messages </div>
+                )}
             </div>
 
             {createPageVisible && <CreateDmPage set={setCreatePageVisible} toggleRender={toggleRender} />}

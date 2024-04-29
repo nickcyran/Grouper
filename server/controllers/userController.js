@@ -189,7 +189,6 @@ exports.createDirectMessage = async (req, res) => {
             user.directMessages.push(x);
             await user.save();
         }
-        res.send(true)
     }
     catch (error) {
         res.status(500).send(error)

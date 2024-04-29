@@ -1,7 +1,9 @@
 import { messages_icon } from '../assets'
 import { Home, Group } from '.'
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+
+import { GetUserGroups } from '../controllers'
+
 
 const Main = () => {
     const [groups, setGroups] = useState([]);
@@ -9,14 +11,16 @@ const Main = () => {
     const [selectedGroup, setSelectedGroup] = useState()
     const [homeButton, setHomeButton] = useState(false)
 
+    const HandleSwitchToGroup = (group_id) => {
+        setSelectedGroup(group_id)
+    }
+
     useEffect(() => {
-        axios.get('http://localhost:9000/getGroups/', { params: { id: localStorage.getItem('userID') }})
-        .then((res) => {
-            setGroups(res.data);
-        })
-        .catch((err) => {
-            console.error("COULDNT FIND ANY GROUPS THE USER BELONGS TO")
-        });
+        const fetchData = async () => {
+            setGroups(await GetUserGroups({ id: localStorage.getItem('userID') }))
+        };
+
+        fetchData();
     }, [])
 
     return (
@@ -30,12 +34,13 @@ const Main = () => {
                 <div className="groupBar">
                     {groups.map((group, index) => (
                         <div className="square" key={index} onClick={() => {
-                            setSelectedGroup(group._id)
+                            HandleSwitchToGroup(group._id)
                             setOnFriendsPage(false);
                         }} />
-                    ))}
+                    ))} 
                 </div>
             </div>
+            <></>
 
             {onFriendsPage ? <Home  selectedDm={selectedGroup} setDm={setSelectedGroup} homeClick={homeButton}/> : <Group group={selectedGroup}/>}
         </div>

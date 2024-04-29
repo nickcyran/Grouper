@@ -9,7 +9,7 @@ const RightSideBar = ({content}) => {
     )
 }
 
-const PageContent = ({Left, Main, Right}) => {
+const PageContent = ({Left, Main, Right, group}) => {
     const [showRightSidebar, setShowRightSidebar] = useState(true);
 
     const LeftSideBar = ({content}) => { return (

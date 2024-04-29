@@ -8,6 +8,7 @@ const ServerHome = () => {
     const [allServers, setAllServers] = useState([]) 
     const [userServers, setUserServers] = useState([])
     const tempUserServers = []
+    const tempInvServers = []
     //const [serverMembers, setServerMembers] = useState([]) 
     //const [servers, setServers] = useState([]) 
     const [invites, setInvites] = useState([]) 
@@ -15,11 +16,46 @@ const ServerHome = () => {
     //Toggle visibility of html
     const [serverCreation, setServerCreation] = useState(false); //toggle visibility of server creation
     //Set to false by default, changed in use effect if not false.
-
-
-    //TEMPORARY!! REMOVE ONCE USER IS FIXED/DONE
-    //localStorage.setItem('loggedInUser', '661eeadeca5795c82406e572')
+    
     const user_ID = localStorage.getItem('userID') //keep this part -- sets the owner/userID to the current user's ID
+
+
+    //SERVER INVITATION ACCEPTION/DELETION ---------------------------------------------
+    //call on button press --> resp = which button was pressed (['a']"accept" or ['d']"decline"). sID is just serverID
+    const handleServerInvite = (event, sID, resp) => {
+        //event.preventDefault()
+        //update on server end (remove invite)
+        axios.get('http://localhost:9000/declineServerInvite', {params: {sID : sID, cUser : user_ID}})
+        .then(result => {
+            if(resp !== "a")
+            alert("Declined server invitation.")
+            //not sure what to do here/if doing anything here is needed tbh
+        })
+        .catch(err => {
+            console.log(err)
+            alert("Issue when updating invited server status.")
+        })
+        
+        
+        if(resp === "a") { //if user accepts invite, they'd be added to members (don't need invite anymore, easier to call decline for all)
+        //update on server end (move invite entry to member)
+        axios.get('http://localhost:9000/acceptServerInvite', {params: {sID : sID, cUser : user_ID}})
+        .then(result => {
+            //alert(result)
+            alert("Joined server!")
+            window.location.reload();
+        })
+        .catch(err => {
+            console.log(err)
+            alert("Issue when updating invited server status.")
+        })
+
+        }
+        else //refresh page (declined invite)
+        window.location.reload();   
+    }
+
+
 
     //send server creation data to (MongoDB) server
     const handleServerCreation = (event) => {
@@ -52,42 +88,19 @@ const ServerHome = () => {
             for (var i =0; i<allServers.length; i++){
                 if(allServers[i].member_ID.includes(user_ID))
                 tempUserServers.push(allServers[i])
+
+                //trim to those user is invited to
+                if(allServers[i].invite_ID.includes(user_ID))
+                tempInvServers.push(allServers[i])
             }
-            if(tempUserServers.length === 0)
-            tempUserServers.push([{serverName : "Not in any servers."}])
-            
+            //set servers      
             setUserServers(tempUserServers)
-            console.log(userServers)
+
+            //set invites
+            setInvites(tempInvServers)
         })
         .catch(err=> console.log(err))
-        
-        /*
-        //all server members
-        axios.get('http://localhost:9000/getServerMembers')
-        .then((res)=>{
-            //console.log(res.data)
-            setServerMembers(res.data)})
-        .catch(err=> console.log(err))
-        */
-
-        
-        //servers current user is in
-        /*
-        axios.get('http://localhost:9000/getServerMembership', {params: {uID : user_ID}})
-        .then((res)=> {
-            //console.log(res.data)
-            if(res.data === null || res.data === "") //empty/none
-                setServers([{serverName : "Not in any servers."}])
-            else
-                setServers(res.data)})
-        .catch(err=> console.log(err))
-        
-        //servers current user is invited to
-        axios.get('http://localhost:9000/getServerInvites', {params: {invite_ID : user_ID}})
-        .then((res)=>setInvites(res.data))
-        .catch(err=> console.log(err))
-        */
-    },[])
+    })
 
     //for toggling visibility of server creation menu
     const openServerCreation = () => {
@@ -111,14 +124,28 @@ const ServerHome = () => {
         <>
           <h1> SERVERS </h1>
           <div>
-          <p>
+            {(userServers.length > 0) && (    
+            <p>
                 {userServers.map((server)=> {
                 return <Link to={`/Server/${server._id}`}>{server.serverName}</Link>})}
-          </p>
-            
-            {(invites != "None") && ( 
-                <p> Currently invited to ...</p>
+            </p>
             )}
+          
+          {(userServers.length === 0) && (    
+            <p>
+                Not in any servers.
+            </p>
+            )}
+
+                
+            {((invites.length > 0)) && (
+                <div>
+                    <h3> Currently invited to: </h3>
+                    {invites.map((invite)=> {
+                        return <li> {invite.serverName} <button type="button" onClick={(event) => handleServerInvite(event, invite._id, "d")}> Decline </button> <button type="button" onClick={(event) => handleServerInvite(event, invite._id, "a")}> Accept </button></li> })}
+                </div>
+            )}
+                
           </div>
 
          {!serverCreation && (

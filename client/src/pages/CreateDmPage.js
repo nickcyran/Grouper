@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import Select from 'react-select';
-import { GetFriends} from '../controllers';
-import axios from 'axios';
+import { GetFriends, CreateDirectMessage } from '../controllers';
 
-
-const CreateDmPage = ({ set, toggleRender }) => {
+const CreateDmPage = ({ set }) => {
     const [friends, setFriends] = useState([]);
     const [selectedFriends, setSelectedFriends] = useState([])
 
@@ -14,18 +12,12 @@ const CreateDmPage = ({ set, toggleRender }) => {
         var members = []
         members.push(localStorage.getItem('userID'))
 
-        for (var i in selectedFriends) {
+        for(var i in selectedFriends){
             members.push(selectedFriends[i].value)
         }
-
-        axios.post('http://localhost:9000/createDirectMessage/', { members: members })
-            .then((res) => {
-                toggleRender()
-                set(false)
-            })
-            .catch((err) => {
-                console.error('Error in creating DM:', err);
-            });        
+        
+        CreateDirectMessage({members: members})
+        set(false)
     }
 
     const userOptions = friends.map((user) => {
