@@ -279,3 +279,35 @@ exports.handleFriendRequest = async (req, res) => {
         res.status(500).send(error);
     }
 };
+
+exports.updateUserProfile = async (req, res) => {
+    try {
+        const {_id, profile} = req.body
+
+        const user = await User.findById(_id);
+
+        if (!user) {
+            return res.status(404).send("User not found");
+        }
+
+        if (profile) {
+            if (profile.display_name) {
+                user.profile.display_name = profile.display_name;
+            }
+
+            if (profile.biography) {
+                user.profile.biography = profile.biography;
+            }
+
+            if (profile.links) {
+                user.profile.links = profile.links;
+            }
+        }
+
+        await user.save();
+        res.send("success")
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+};

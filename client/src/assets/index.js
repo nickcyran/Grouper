@@ -3,5 +3,6 @@ import msg from './msg.png'
 import friend from './friend.png'
 import accept from './accept.png'
 import decline from './decline.png'
+import settings from './settings.png'
 
-export {messages_icon,msg, friend, accept, decline};
+export {messages_icon,msg, friend, accept, decline, settings};

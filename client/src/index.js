@@ -6,7 +6,6 @@ import { useEffect } from 'react';
 import { createBrowserRouter, RouterProvider, Outlet, useNavigate } from 'react-router-dom';
 
 import Navbar from './Navbar.js'
-import ProfileSettings from './pages/ProfileSettings.js';
 import ServerHome from './pages/ServerHome'
 import ServerPage from './pages/ServerPage'
 import { Main, ViewCalendar, Events, Login, Signup, NewCalendar } from './pages'
@@ -42,7 +41,6 @@ const router = createBrowserRouter([
       { path: "/serverhome", element: <ServerHome /> },
       { path: "/server/:id", element: <ServerPage /> },
       { path: "/newCalendar", element: <NewCalendar /> },
-      { path: "/profileSettings", element: <ProfileSettings /> },
       { path: "/events", element: <Events /> },
     ]
   },

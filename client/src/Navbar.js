@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import './styles/Navbar.css';
 
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 export default function Navbar() {
      const navigate = useNavigate();
@@ -20,7 +19,6 @@ export default function Navbar() {
                     <Link to="/viewcalendar">Calendar</Link>&nbsp;
                     <Link to="/events">Events</Link>&nbsp;
                     <Link to="/serverhome">Servers</Link>&nbsp;
-                    <Link to="/profileSettings">Profile</Link>&nbsp;
                </div>
 
                <div className="signoutBox">

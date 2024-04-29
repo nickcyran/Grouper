@@ -1,0 +1,124 @@
+.settings{
+    position: absolute;
+    right: 10px;
+    width: 36px;
+}
+
+.settings img{
+    cursor: pointer;
+    width: 100%;
+}
+
+.xSettings{
+    font-size: 2rem;
+    font-weight: 600;
+    position: absolute;
+    right: 18px;
+    top: 0;
+    cursor: pointer;
+}
+
+.xSettings:hover{
+    color:rgb(255, 82, 82);
+}
+
+.settings img:hover{
+    filter: brightness(60%);
+}
+
+.settingsMenu{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40rem;
+    height: fit-content;
+    background-color: #1e1f22;
+    z-index: 10;
+    box-shadow: 2px 6px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+}
+
+.settingsBox{
+    height: 100%;
+    margin: 20px;
+    margin-top: -10px;
+}
+
+.topWrung{
+    display: flex;
+    align-items: flex-start;
+}
+
+.pfpBasis{
+    flex-basis: 30%;
+}
+
+.profilePicSetting {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 160px;
+    aspect-ratio: 1;
+    border-radius: 100%;
+    overflow: hidden;
+}
+
+.userNames{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 28px;
+
+    flex-basis: 70%;
+    text-align: left;
+}
+
+.usernameField{
+    width: 100%;
+    overflow-wrap: break-word;
+}
+
+.field{
+    display: flex;
+    flex-direction: column;
+}
+
+.fieldTitle{
+    font-weight: 600;
+}
+
+.inputSettings{
+    width: 100%;
+    border-radius: 6px;
+    font-size: 26px;
+}
+
+
+.bio{
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.bioField{
+    text-align: left;
+}
+
+.bioField textarea {
+    resize: vertical; /* Allow resizing only in the vertical direction */
+    width: 100%;
+    border-radius: 6px;
+    font-size: 20px;
+}
+
+
+
+.linksField {
+    padding: 12px 0;
+    max-height: 200px; /* Set a maximum height */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.linksField::-webkit-scrollbar{
+    width: 0;
+}
