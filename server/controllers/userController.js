@@ -36,6 +36,7 @@ exports.getProfile = async (req, res) => {
     try{
         const user = await User.findOne({ _id : _id });
         let data = {
+            username: user.username,
             f_name: user.f_name,
             l_name: user.l_name,
             pfp: user.profile.profile_pic,

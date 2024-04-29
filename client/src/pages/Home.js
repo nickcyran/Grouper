@@ -9,6 +9,7 @@ import axios from 'axios';
 
 const Friend_Right = ({ profile_id }) => {
     const [pfp, setProfile_Pic] = useState();
+    const [username, setUsername] = useState();
     const [name, setName] = useState();
     const [bio, setBio] = useState();
     const [link, setLinks] = useState();
@@ -16,6 +17,7 @@ const Friend_Right = ({ profile_id }) => {
     useEffect(() => {
         axios.get('http://localhost:9000/getProfile', { params: { _id: profile_id } })
             .then((res) => {
+                setUsername(res.data.username)
                 setProfile_Pic(res.data.pfp)
                 setName(res.data.displayName)
                 setBio(res.data.bio)
@@ -34,6 +36,7 @@ const Friend_Right = ({ profile_id }) => {
             </div>
 
             <div className="scroll profilebar">
+                <div className="username">{username}</div>
                 <div className="profilePic shadow">
                     <img className="pfpInnards" src={'http://localhost:9000/Images/' + pfp} />
                 </div>
@@ -66,7 +69,7 @@ const FriendsDisplay = ({ setProfile }) => {
             </div>
 
 
-            <div className="yourFriends ">
+            <div className="yourFriends">
                 {friends.length > 0 ?
                     <>
                         {friends.map((friend, index) => (
