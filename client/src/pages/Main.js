@@ -7,6 +7,7 @@ const Main = () => {
     const [groups, setGroups] = useState([]);
     const [onFriendsPage, setOnFriendsPage] = useState(true);
     const [selectedGroup, setSelectedGroup] = useState()
+    const [homeButton, setHomeButton] = useState(false)
 
     useEffect(() => {
         axios.get('http://localhost:9000/getGroups/', { params: { id: localStorage.getItem('userID') }})
@@ -22,7 +23,7 @@ const Main = () => {
         <div className="main">
             <div className="navBar">
                 <div className="dmDir" onClick={() => setOnFriendsPage(true)}>
-                    <img src={messages_icon} alt="direct messages" onClick={()=> setSelectedGroup()}/>
+                    <img src={messages_icon} alt="direct messages" onClick={()=> {setHomeButton(!homeButton); setSelectedGroup()}}/>
                 </div>
 
                 {/* DISPLAY ALL OF THE USERS GROUPS */}
@@ -36,7 +37,7 @@ const Main = () => {
                 </div>
             </div>
 
-            {onFriendsPage ? <Home  selectedDm={selectedGroup} setDm={setSelectedGroup}/> : <Group group={selectedGroup}/>}
+            {onFriendsPage ? <Home  selectedDm={selectedGroup} setDm={setSelectedGroup} homeClick={homeButton}/> : <Group group={selectedGroup}/>}
         </div>
     );
 }

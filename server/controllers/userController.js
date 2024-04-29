@@ -109,22 +109,13 @@ exports.addToGroup = async (req, res) => {
 exports.getFriends = async (req, res) => {
     try {
         const id = req.query.id
-        const user = await User.findById(id);
+        const user = await User.findById(id)
 
-        if (!user) {
-            return res.status(404).send("User not found");
-        }
-        
-        var friendarr = []
+        const friendIds = user.friends.map(friend => friend._id);
 
-        for (var i in user.friends) {
-            var f_id = user.friends[i]._id
-            var f_name = (await User.findById(f_id)).username
+        const populatedFriends = await User.find({ _id: { $in: friendIds } });
 
-            friendarr.push({ _id: f_id, username: f_name })
-        }
-
-        res.send(friendarr);
+        res.send(populatedFriends);
     }
     catch (error) {
         res.status(500).send(error)

@@ -36,7 +36,7 @@
     width: 0;
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 900px) {
 
     .rightSideBar {
         display: none;

@@ -7,15 +7,14 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { GetFriends, GetDirectMessages } from '../controllers';
 import axios from 'axios';
 
-const Friend_Right = () => {
+const Friend_Right = ({ profile_id }) => {
     const [pfp, setProfile_Pic] = useState();
     const [name, setName] = useState();
     const [bio, setBio] = useState();
     const [link, setLinks] = useState();
 
     useEffect(() => {
-        const _id = localStorage.getItem('userID')
-        axios.get('http://localhost:9000/getProfile', { params: { _id } })
+        axios.get('http://localhost:9000/getProfile', { params: { _id: profile_id } })
             .then((res) => {
                 setProfile_Pic(res.data.pfp)
                 setName(res.data.displayName)
@@ -26,7 +25,8 @@ const Friend_Right = () => {
                 console.log(err)
             }
             )
-    })
+    }, [profile_id])
+
     return (
         <div className='rightSideBar'>
             User Profile
@@ -46,7 +46,7 @@ const Friend_Right = () => {
     )
 }
 
-const FriendsDisplay = () => {
+const FriendsDisplay = ({setProfile}) => {
     const [friends, setFriends] = useState([]);
 
     useEffect(() => {
@@ -62,16 +62,21 @@ const FriendsDisplay = () => {
             Friends
 
             <div className="yourFriends">
-                {friends.length > 0 ? (
-                    friends.map((friend, index) => (
-                        <div key={index} className="friendBox">
-                            <div className="pfp" />
-                            <p> {friend.username}</p>
-                        </div>
-                    ))
-                ) : (
-                    <div>No friends to display</div>
-                )}
+                {friends.length > 0 ?
+                    <>
+                        {friends.map((friend, index) => (
+                            <div key={index} className="friendBox" onClick={() => setProfile(friend._id)}>
+                                <div className="pfp">
+                                    <img className="pfpInnards" src={'http://localhost:9000/Images/' + friend.profile.profile_pic} alt='pfp' />
+                                </div>
+
+                                <p> {friend.username}</p>
+                            </div>
+                        ))}
+                    </>
+                    : (
+                        <div>No friends to display</div>
+                    )}
             </div >
         </div>
     );
@@ -93,7 +98,7 @@ const Friend_Left = ({ setDm }) => {
             })
     }, [addRender]);
 
-    const toggleRender = () =>{
+    const toggleRender = () => {
         setAddRender(!addRender)
     }
 
@@ -118,30 +123,38 @@ const Friend_Left = ({ setDm }) => {
                 </div>
             </div>
 
-            {createPageVisible && <CreateDmPage set={setCreatePageVisible} toggleRender={toggleRender}/>}
+            {createPageVisible && <CreateDmPage set={setCreatePageVisible} toggleRender={toggleRender} />}
         </>
     );
 }
 
-const Friend_Main = ({ dm_id }) => {
+const Friend_Main = ({ dm_id, setProfile }) => {
     useEffect(() => { console.log(dm_id) }, [dm_id])
 
     return (
         <div className='mainContent'>
             {!dm_id ?
-                <FriendsDisplay />
+                <FriendsDisplay setProfile={setProfile} />
                 :
                 <Messaging group={dm_id} />}
         </div>
     );
 }
 
-const Home = ({ selectedDm, setDm }) => {
+const Home = ({ selectedDm, setDm, homeClick }) => {
+    const [selectedProfile, setSelectedProfile] = useState()
+
+    useEffect(() => {
+        if (!selectedDm) {
+            setSelectedProfile(localStorage.getItem('userID'))
+        }
+    }, [selectedDm, homeClick])
+
     return (
         <div className="page">
             <Friend_Left setDm={setDm} />
-            <Friend_Main dm_id={selectedDm} />
-            <Friend_Right />
+            <Friend_Main dm_id={selectedDm} setProfile={setSelectedProfile} />
+            <Friend_Right profile_id={selectedProfile} />
         </div>
     )
 }
