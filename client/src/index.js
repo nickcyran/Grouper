@@ -8,7 +8,7 @@ import { createBrowserRouter, RouterProvider, Outlet, useNavigate } from 'react-
 import Navbar from './Navbar.js'
 import ServerHome from './pages/ServerHome'
 import ServerPage from './pages/ServerPage'
-import { Main, ViewCalendar, Events, Login, Signup, NewCalendar } from './pages'
+import { Main, ViewCalendar, Login, Signup, NewCalendar } from './pages'
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -41,7 +41,6 @@ const router = createBrowserRouter([
       { path: "/serverhome", element: <ServerHome /> },
       { path: "/server/:id", element: <ServerPage /> },
       { path: "/newCalendar", element: <NewCalendar /> },
-      { path: "/events", element: <Events /> },
     ]
   },
   { path: "/Login", element: <Login /> },

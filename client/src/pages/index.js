@@ -4,7 +4,6 @@ import PageContent from './PageContent'
 import Group from './Group'
 import Home from './Home'
 import ViewCalendar from './ViewCalendar'
-import Events from './Events'
 import Login from './Login'
 import Signup from './Signup'
 import CreateDmPage from './CreateDmPage'
@@ -16,4 +15,4 @@ import NotesPage from './NotesPage'
 
 import Server from './Server';
 
-export {Messaging, Main, PageContent, Group, Home, NewCalendar, ViewCalendar, Events, Login, Signup, CreateDmPage, ProfileBar, FriendHub, NotesPage, Server};
+export {Messaging, Main, PageContent, Group, Home, NewCalendar, ViewCalendar, Login, Signup, CreateDmPage, ProfileBar, FriendHub, NotesPage, Server};
