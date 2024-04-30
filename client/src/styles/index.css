@@ -92,6 +92,19 @@ body{
   justify-content: center;
 }
 
+.serverSettingsIcon{
+  width: 13%;
+  margin-top: 2%;
+  margin-left: 85%;
+  aspect-ratio: 1;
+  cursor: pointer;
+  margin-bottom: -40px;
+}
+
+.serverSettingsIcon img:hover{
+  filter: brightness(60%);
+}
+
 .dmDir{
   background-color: #0f182a;
   

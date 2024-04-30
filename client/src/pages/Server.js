@@ -2,6 +2,7 @@ import { PageContent, Messaging, ServerPage } from '.'
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { GetTextChannels } from '../controllers'
+import { settings} from '../assets'
 import axios from 'axios';
 
 import '../styles/group.css'
@@ -67,11 +68,13 @@ const Server = ({ server }) => {
                 </div>
                 
                 {userStatus === "admin" && (
-                    <div onClick={() => setShowSettings(!showSettings)}>Edit Server</div>
-                    
+                    <div className="serverSettingsIcon">
+                        <img className="pfpInnards" src={settings} alt="server settings" onClick={() => setShowSettings(!showSettings)}/>
+                    </div>
+       
                 )}
 
-                <p></p>
+               
                 Channels:
                 {channels.length > 0 && (
                     <div className="group_left">
