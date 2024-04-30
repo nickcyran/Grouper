@@ -20,6 +20,26 @@ exports.getServers = async (req, res) => {
     }
 }
 
+//get servers user is specifically in
+exports.getUserServers = async (req, res) => {
+    const uID = req.query.userID
+    Server.find({ member_ID: {$in: uID}})
+        .then(servers => {
+            res.json(servers)
+        })
+        .catch(err => res.json(err))
+}
+
+//get servers user is specifically in(vited to)
+exports.getUserServerInvites = async (req, res) => {
+    const uID = req.query.userID
+    Server.find({ invite_ID: {$in: uID}})
+        .then(servers => {
+            res.json(servers)
+        })
+        .catch(err => res.json(err))
+}
+
 exports.getCurrentServer = async (req, res) => {
     const id = req.query.sID; //server ID
     Server.findOne({ _id : id}) //find current server

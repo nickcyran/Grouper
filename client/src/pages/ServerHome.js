@@ -77,30 +77,25 @@ const ServerHome = () => {
         alert("Error while creating server")})}
     } 
 
-    //get what servers the user is in & has an invite to (exclusive) (look thru ServerSchema passing in user --> retrieve matches for "members" and "invites")
-    useEffect(() => {
-        //all servers
-        axios.get('http://localhost:9000/getServers')
-        .then((res)=> {
-            setAllServers(res.data)
-
-            //trim down to servers that have member in it
-            for (var i =0; i<allServers.length; i++){
-                if(allServers[i].member_ID.includes(user_ID))
-                tempUserServers.push(allServers[i])
-
-                //trim to those user is invited to
-                if(allServers[i].invite_ID.includes(user_ID))
-                tempInvServers.push(allServers[i])
-            }
-            //set servers      
-            setUserServers(tempUserServers)
-
-            //set invites
-            setInvites(tempInvServers)
-        })
-        .catch(err=> console.log(err))
+//get what servers the user is in & has an invite to (exclusive) (look thru ServerSchema passing in user --> retrieve matches for "members" and "invites")
+useEffect(() => {
+    //servers user is in
+    axios.get('http://localhost:9000/getUserServers', {params: {userID : user_ID}})
+    .then(result => {
+        setUserServers(result.data)
+        console.log("user servers: " + result.data)
     })
+    .catch(err => console.log(err))
+
+    //servers user is invited to
+    axios.get('http://localhost:9000/getUserServerInvites', {params: {userID : user_ID}})
+    .then(result => {
+        setInvites(result.data)
+        console.log(result.data)
+    })
+    .catch(err => console.log(err))
+
+}, [])
 
     //for toggling visibility of server creation menu
     const openServerCreation = () => {

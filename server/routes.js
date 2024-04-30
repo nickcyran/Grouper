@@ -48,9 +48,11 @@ router.get('/getEvents', getEvents);
 router.post('/updateUserEvents', updateUserEvents);
 
 // [SERVER ROUTES] --------------------------------------------------------------
-const { createServer, getServers, getCurrentServer, changeServerName, getServerOwner, getServerMembers, getServerAdmins, addServerAdmins, removeServerAdmins, getServerAdminStatus, sendServerInvite, acceptServerInvite, declineServerInvite, removeServerMembers, getServerChannels, createServerChannels, removeServerChannels, addServerChannels} = require('./controllers/serverController');
+const { createServer, getServers, getUserServers, getUserServerInvites, getCurrentServer, changeServerName, getServerOwner, getServerMembers, getServerAdmins, addServerAdmins, removeServerAdmins, getServerAdminStatus, sendServerInvite, acceptServerInvite, declineServerInvite, removeServerMembers, getServerChannels, createServerChannels, removeServerChannels, addServerChannels} = require('./controllers/serverController');
 router.post('/createServer', createServer);
 router.get('/getServers', getServers);
+router.get('/getUserServers', getUserServers);
+router.get('/getUserServerInvites', getUserServerInvites);
 router.get('/getCurrentServer', getCurrentServer);
 router.get('/changeServerName', changeServerName);
 router.get('/getServerOwner', getServerOwner);
