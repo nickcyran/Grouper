@@ -7,6 +7,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar'
 import { format, parse, startOfWeek, getDay, startOfDay } from "date-fns"
 import DatePicker from "react-datepicker"
+import {refresh} from '../assets'
 
 function ViewCalendar() {
      /* MEMBERS */
@@ -96,7 +97,7 @@ function ViewCalendar() {
                <div id="side">
                     <label id="sideheader">Calendars</label>
                     <div id="side-button">
-                         <button id="refresh-button" onClick={updateSelection}>&#8634;</button>
+                    <img src={refresh} alt='refresh page' onClick={()=> updateSelection()}/>
                     </div>
                     <br />
                     <form>
