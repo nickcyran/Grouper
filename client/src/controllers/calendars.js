@@ -21,6 +21,7 @@ const AddEventToCal = async (event_id, cal_id) => {
 const GetUserEvents = async (calendar) => {
      try {
           let response = await axios.get('http://localhost:9000/getUserEvents', {params: { calendar: calendar}})
+          console.log(response.data)
           return response.data
      }
      catch (error) {

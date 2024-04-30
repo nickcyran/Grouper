@@ -1,13 +1,13 @@
 import '../styles/Calendar.css';
-import Select from 'react-select'
 import { React, useState, useEffect } from "react";
 import { GetCalendars, GetUserEvents } from "../controllers/calendars.js";
 import { Link } from 'react-router-dom'
+import { refresh } from '../assets'
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar'
 import { format, parse, startOfWeek, getDay, startOfDay } from "date-fns"
-import DatePicker from "react-datepicker"
-import {refresh} from '../assets'
+import DatePicker from "react-datepicker";
+
 
 function ViewCalendar() {
      /* MEMBERS */
@@ -30,17 +30,29 @@ function ViewCalendar() {
           getDay,
           locales
      })
+     let calStyle = {
+          height: 800, 
+          width: 1600,
+          backgroundColor: '#e3e4e7', 
+          color: '#2b2d31',
+          border: '5px',
+          
+     }
 
-     const updateSelection = async () => {
+     const updateSelection = () => {
           rerender(render + 1)
           selectedEvents.length = 0 //clear list
-          allEvents.map(eve => {
-               (eve.event_tags).map(eventTag => {
-                    if (selectedTags.includes(eventTag)) {
-                         selectedEvents.push(eve)
-                    } 
+          if (allEvents.length != 0) {
+
+               allEvents.map(eve => {
+                    (eve.event_tags).map(eventTag => {
+                         if (selectedTags.includes(eventTag)) {
+                              selectedEvents.push(eve)
+                         }
+                    })
                })
-          })
+          }
+
      }
 
 
@@ -93,14 +105,26 @@ function ViewCalendar() {
      }, [])
 
      return (
-          <div>
+          <div className="main-container">
                <div id="side">
-                    <label id="sideheader">Calendars</label>
-                    <div id="side-button">
-                    <img src={refresh} alt='refresh page' onClick={()=> updateSelection()}/>
-                    </div>
-                    <br />
-                    <form>
+                    <table className="label-button-table">
+                         <tr>
+                              <td>
+                                   <div className="sideheader">Calendars</div>
+                              </td>
+                              <td>
+                                   <div id="link-container">
+                                   <Link className="new-cal" to="/newCalendar">+</Link>
+                                   </div>
+                              </td>
+                              <td>
+                                   <div className="refresh-button-container">
+                                        <img className="refresh-button" id="cal-spacer" src={refresh} alt='refresh page' onClick={() => updateSelection()} />&nbsp; &nbsp;
+                                   </div>
+                              </td>
+                         </tr>
+                    </table>
+                    <form className="list">
                          {calendars.length > 0 &&
                               userID != null &&
                               calendars.map((cal, index) => {
@@ -140,16 +164,26 @@ function ViewCalendar() {
                               })
                          }
 
-                         {userID != null &&
-                              <Link to="/newCalendar">Add a calendar</Link>
-                         }
-
                          {userID == null &&
                               <p>Please login to view calendars.</p>}
                     </form>
-                    <br />
-                    <label id="sideheader">Tags</label><br />
-                    <form>
+
+                    <br /><br /><br />
+
+                    <table className="label-button-table">
+                         <tr>
+                              <td>
+                                   <div className="sideheader">Tags</div>
+                              </td>
+                              <td id="spacer"></td>
+                              <td>
+                                   <div className="refresh-button-container">
+                                        <img className="refresh-button" src={refresh} alt='refresh page' onClick={() => updateSelection()} />&nbsp; &nbsp;
+                                   </div>
+                              </td>
+                         </tr>
+                    </table>
+                    <form className="list">
                          {allTags.length != 0 &&
                               allTags.map((t, index) => {
                                    return (
@@ -195,13 +229,13 @@ function ViewCalendar() {
                          <p>Please login.</p>}
 
                     {userID != null &&
-                         <div >
-                              <Calendar
+                         <div>
+                              <Calendar className="calendar"
                                    localizer={localizer}
                                    events={selectedEvents}
                                    startAccessor={(event) => { return new Date(event.start) }}
                                    endAccessor={(event) => { return new Date(event.end) }}
-                                   style={{ height: 700, backgroundColor: 'gray' }}
+                                   style={calStyle}
                               />
                          </div>
                     }

@@ -82,7 +82,6 @@ function startServer() {
         try {
             //find user
             const user = await User.findOne({ _id: owner })
-            console.log(user)
             user.calanders_id.push(cal)
             user.save()
             res.send(user)
@@ -95,7 +94,6 @@ function startServer() {
     app.put('/addEventToCal', async (req, res) => {
         const cals = req.body.cal_id
         const event_id = req.body.event_id
-        console.log('---------------------------------------------------------------')
         try {
             //find Calendars
             for (i in cals) {
@@ -132,7 +130,6 @@ function startServer() {
 
     app.get('/getUserEvents', async (req, res) => {
         try {
-            console.log(req.query)
             let allEvents = []
             const calendar = req.query.calendar
             let calen
@@ -159,28 +156,28 @@ function startServer() {
                 }
             }
             else { //string
-                
+
                 let calen = await Calendar.find({ cal_name: calendar })
-                console.log(calen)
                 const calEvents = calen[0].events
-                console.log(calEvents)
 
                 for (const j in calEvents) { //go through each event in calendar
                     const eve = await Event.find({ _id: calEvents[j] })
+                    if (eve.length > 0) {
+                        const name = eve[0].event_name
+                        const tags = eve[0].event_tags
+                        const start = eve[0].start_date
+                        const end = eve[0].end_date
+                        allEvents.push({
+                            title: name,
+                            event_tags: tags,
+                            start: start,
+                            end: end
+                        })
+                    }
 
-                    const name = eve[0].event_name
-                    const tags = eve[0].event_tags
-                    const start = eve[0].start_date
-                    const end = eve[0].end_date
-
-                    allEvents.push({
-                        title: name,
-                        event_tags: tags,
-                        start: start,
-                        end: end
-                    })
                 }
             }
+            console.log(allEvents)
             res.send(allEvents)
         }
         catch (error) {
