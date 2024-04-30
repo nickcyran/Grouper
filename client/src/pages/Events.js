@@ -14,6 +14,8 @@ const Events = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [calendars, setCalendars] = useState([]);
   const [selectedCals, setSelectedCals] = useState([]);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [isEditPopupOpen, setIsEditPopupOpen] = useState(false);
   const userID = localStorage.getItem('userID');
 
   // get list of users to invite (should be friends with current user at a later date, currently gets all users)
@@ -177,11 +179,168 @@ const Events = () => {
     return differenceInDays;
   };
 
+  // Filter events where userId matches the owner
+  const userOwnedEvents = localEvents.filter(event => event.owner === userID);
+  // Create options for the dropdown menu
+  const eventOptions = userOwnedEvents.map(event => ({
+  label: event.event_name,
+  value: event._id
+  }));
+  
+  // Handle change in selected event
+  const handleSelectedEventChange = (selectedOption) => {
+    const selectedEvent = localEvents.find(event => event._id === selectedOption.value);
+    setSelectedEvent(selectedEvent);
+    if (selectedEvent) {
+      
+      // Populate form with selected event details
+      document.getElementById('eventName').value = selectedEvent.event_name;
+      document.getElementById('eventDescription').value = selectedEvent.event_description;
+      document.getElementById('startDate').value = new Date(selectedEvent.start_date).toISOString().split('T')[0];
+      document.getElementById('endDate').value = new Date(selectedEvent.end_date).toISOString().split('T')[0];
+      setTags(selectedEvent.event_tags);
+      setSelectedUsers(selectedEvent.invited_users.map((userId) => ({ label: userId, value: userId })));
+    }
+  };
+
+// Handle opening the edit popup
+const openEditPopup = () => {
+  setIsEditPopupOpen(true);
+};
+
+// Handle closing the edit popup
+const closeEditPopup = () => {
+  setIsEditPopupOpen(false);
+};
+
+var event_id = null;
+const handleEditEvent = () => {
+  // Get the selected event from the dropdown
+  let eventname = selectedEvent.event_name;
+  console.log('selectedEventElement:', eventname);
+  axios.get('http://localhost:9000/getEventId', { params: { event_name: eventname } })
+    .then(res => {
+      const event = res.data; // Assuming the entire event object is sent as response
+      event_id = event._id; // Accessing _id directly from the event object
+      console.log('EventId:', event_id);
+    })
+    .catch((error) => {
+      console.error('Error getting eventId:', error);
+    });
+
+  // Check if the user is the owner of the event
+  if (!selectedEvent) {
+    alert('Please select an event to edit.');
+    return;
+  }
+
+  if (selectedEvent.owner !== userID) {
+    alert('You are not the owner of this event and cannot edit it.');
+    return;
+  }
+
+  // Retrieve updated event data from form fields
+  const updatedEventData = {
+    event_name: document.getElementById('eventName').value,
+    event_description: document.getElementById('eventDescription').value,
+    event_tags: tags,
+    invited_users: selectedUsers.map(user => user.value),
+    start_date: new Date(document.getElementById('startDate').value),
+    end_date: new Date(document.getElementById('endDate').value),
+    date_created: new Date(),
+    owner: userID,
+  };
+
+  axios.post('http://localhost:9000/createEvent', updatedEventData)
+    .then((res) => {
+      console.log('Event created successfully:', res.data);
+    // Send a request to update the event
+    axios.delete(`http://localhost:9000/deleteEvent/${event_id}`)
+    .then((res) => {
+    console.log('Event deleted successfully');
+    // Update the localEvents state by filtering out the deleted event
+    const updatedEvents = localEvents.filter(event => event._id !== event_id);
+    setLocalEvents(updatedEvents);
+    setIsEditPopupOpen(false);
+  })
+      .catch(error => {
+      console.error('Error updating event:', error);
+  });
+  }).catch((error) => console.error('Error creating event:', error));
+};
 
   return (
     <div className="events-container">
-      {/* Create Event button */}
-      <button onClick={openPopup} className="create-event-button">+ Create Event</button>
+    {/* Create Event button */}
+    <button onClick={openPopup} className="create-event-button">+ Create Event</button>
+    
+    {/* Edit Events button */}
+    <button onClick={openEditPopup} className="edit-events-button">Edit My Events</button>
+    
+    {/* Popup for editing events */}
+    {isEditPopupOpen && (
+  <div className="popup-overlay">
+    <div className="popup">
+      <div className="popup-content">
+        <span className="close" onClick={closeEditPopup}>&times;</span>
+        <h2>Edit Event</h2>
+        <div className="form-group">
+          <label htmlFor="selectEvent">Select Event:</label>
+          <Select
+            value={selectedEvent}
+            onChange={handleSelectedEventChange}
+            options={eventOptions}
+          />
+        </div>
+        <form>
+          {/* Input fields for editing event details */}
+          <div className="form-group">
+            <label htmlFor="eventName">Event Name:</label>
+            <input type="text" id="eventName" name="eventName" />
+          </div>
+          <div className="form-group">
+            <label htmlFor="eventDescription">Event Description:</label>
+            <textarea id="eventDescription" name="eventDescription" rows="4"></textarea>
+          </div>
+          <div className="form-group">
+            <label htmlFor="startDate">Start Date:</label>
+            <input type="date" id="startDate" name="startDate" />
+          </div>
+          <div className="form-group">
+            <label htmlFor="endDate">End Date:</label>
+            <input type="date" id="endDate" name="endDate" />
+          </div>
+          <div className="form-group">
+            <label htmlFor="eventTags">Event Tags:</label>
+            <div>
+              <input type="text" value={tagInput} onChange={handleTagInputChange} placeholder="Add tags" />
+              <button type="button" onClick={handleAddTag}>Add</button>
+            </div>
+            <div className="tags">
+              {tags.map((tag, index) => (
+                <span key={index} className="tag">
+                  {tag}
+                  <button type="button" onClick={() => handleRemoveTag(index)}>x</button>
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="invitedUsers">Invite Users:</label>
+            <Select
+              isMulti
+              value={selectedUsers}
+              onChange={setSelectedUsers}
+              options={userOptions}
+            />
+          </div>
+          <button type="button" onClick={handleEditEvent}>Update</button>
+        </form>
+      </div>
+    </div>
+  </div>
+)}
+
 
       {/* Event display list */}
       <div className="events-box">
