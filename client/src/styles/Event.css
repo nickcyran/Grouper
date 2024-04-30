@@ -45,6 +45,9 @@
     text-align: left;
     display: flex;
     flex-direction: column;
+    color: black;
+    overflow-y: auto;
+    position: relative;
 }
 
 .close {
@@ -119,9 +122,7 @@
     justify-content: center;
     height: 100%;
     align-items: center;
-  
     text-align: center;
-    
     margin-top: 5%;
     color: black !important;
 }

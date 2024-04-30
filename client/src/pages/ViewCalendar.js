@@ -71,7 +71,7 @@ function VvviewCalendar({ state, set }) {
   }
   // get list of users to invite (should be friends with current user at a later date, currently gets all users)
   useEffect(() => {
-    axios.get('http://localhost:9000/getUsers')
+    axios.get('http://localhost:9000/getFriends', { params: { id: userID } })
       .then((res) => setUsers(res.data))
       .catch((error) => console.error('Error fetching users:', error));
 
@@ -83,7 +83,7 @@ function VvviewCalendar({ state, set }) {
       .catch(error => {
         console.log(error)
       })
-  }, []);
+  }, [userID]);
 
   // gets all events that user is invited to or is owner of
   useEffect(() => {
