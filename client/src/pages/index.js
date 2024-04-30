@@ -15,5 +15,6 @@ import NotesPage from './NotesPage'
 
 import Server from './Server';
 import ServerHome from './ServerHome'
+import ServerPage from './ServerPage'
 
-export {Messaging, Main, PageContent, Group, Home, NewCalendar, ViewCalendar, Login, Signup, CreateDmPage, ProfileBar, FriendHub, NotesPage, Server, ServerHome};
+export {Messaging, Main, PageContent, Group, Home, NewCalendar, ViewCalendar, Login, Signup, CreateDmPage, ProfileBar, FriendHub, NotesPage, Server, ServerHome, ServerPage};

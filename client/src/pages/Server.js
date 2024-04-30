@@ -1,4 +1,4 @@
-import { PageContent, Messaging } from '.'
+import { PageContent, Messaging, ServerPage } from '.'
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { GetTextChannels } from '../controllers'
@@ -56,6 +56,10 @@ const Server = ({ server }) => {
             //.catch(err => console.log(err))
         }, [])
 
+        const [showSettings, setShowSettings] = useState(false)
+
+
+
         return (
             <>
                 <div className="l_bar_head shadow serverName">
@@ -63,7 +67,8 @@ const Server = ({ server }) => {
                 </div>
                 
                 {userStatus === "admin" && (
-                    <Link to={`/Server/${server}`}> Edit server </Link>
+                    <div onClick={() => setShowSettings(!showSettings)}>Edit Server</div>
+                    
                 )}
 
                 <p></p>
@@ -80,6 +85,8 @@ const Server = ({ server }) => {
                 {channels.length === 0 && (
                     <p>No channels in server.</p>
                 )}
+
+                {showSettings && <ServerPage id={server} set={setShowSettings}/>}
             </>
         )
     }

@@ -20,9 +20,7 @@ export default function Navbar() {
 
      return (<nav className="nav" id="navbar">
           <div className="wrap">
-               <div className="links">
-                    <Link to="/">Messaging</Link>&nbsp;
-               </div>
+               <div className="links" />
 
                <div className="notesBox">
                     <img src={calendar} alt='calendar' onClick={() => setShowCal(!showNotes)} />

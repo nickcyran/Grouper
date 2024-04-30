@@ -3,8 +3,8 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 //server home page, view channels by selecting them on side. admin has an option to go to a different page via. div w/ links (determine who has access via. search by userID)
-const ServerPage = () => {
-    const { id } = useParams() //get the ref to the server id
+const SsserverPage = ({id}) => {
+    // const { id } = useParams() //get the ref to the server id
     const user_ID = localStorage.getItem('userID')
     const [userStatus, setUserStatus] = useState([]) //whether user is a member or admin
     const [thisServer, setThisServer] = useState([]) //get a reference to current server (for server name display)
@@ -355,7 +355,7 @@ const ServerPage = () => {
 
     return (
         <div>
-            <h1> Admin Page for {thisServer.serverName} </h1>
+            <h1 style={{marginTop: "30px"}}> Admin Page for {thisServer.serverName} </h1>
             {(userStatus === "admin") && ((
                 <div>
                     <h3>Admin permissions: </h3>
@@ -542,6 +542,15 @@ const ServerPage = () => {
                 </div>
             ))
             }
+        </div>
+    )
+}
+
+const ServerPage = ({id,set}) => {
+    return(
+        <div className="fform">
+            <div className="xSettings" onClick={() => set(false)}>x</div>
+            <SsserverPage id={id}/>
         </div>
     )
 }
