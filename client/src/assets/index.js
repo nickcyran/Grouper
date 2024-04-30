@@ -7,5 +7,6 @@ import settings from './settings.png'
 import notes from './notes.png'
 import refresh from './refresh.png'
 import icon from './icon.png'
+import Begin_phone from './BeginPhone.gif'
 
-export {messages_icon,msg, friend, accept, decline, settings, notes, refresh, icon};
+export {messages_icon,msg, friend, accept, decline, settings, notes, refresh, icon, Begin_phone};

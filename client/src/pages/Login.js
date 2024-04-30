@@ -1,10 +1,32 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
-
+import {Begin_phone} from '../assets'
 import '../styles/Login.css'
 
-function Login() {
+const Login = () => {
+  return(
+      <div className="BeginScreen">
+          <div className="BeginTitleCard">
+          <div className="PROJTITLE">GROUPER</div>
+
+              <div className="BeginDesign">
+                  <div className="BeginCircle BeginShadow" />
+
+                  <div className="PhoneBox">
+                      <img  src={Begin_phone} alt="phone gif"/>
+                  </div>
+              </div>
+          </div>
+
+          <div className="BeginFormBasis">
+              <LogingIn />
+          </div>
+      </div>
+  )
+}
+
+function LogingIn() {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -35,12 +57,12 @@ function Login() {
 
       <form className='BeginForm'>
         <div className="BeginInput">
-          <span> User ID:</span><br />
+          <span> User ID:</span>
           <input type="text" name="Username" placeholder="Enter your username" onChange={(e) => setUserName(e.target.value)} />
         </div>
 
         <div className="BeginInput">
-          <span> Password:</span><br />
+          <span> Password:</span>
           <input type="password" name="Password" placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)} />
         </div>
 

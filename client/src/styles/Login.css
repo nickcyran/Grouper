@@ -1,40 +1,41 @@
 .Begin{
-    width: 30rem;
+    width: 80%;
+    height: fit-content;
     background-color: #1b2439;
-    margin: 4rem auto;
-    border-radius: 10px;
+    border-radius: 1vw;
     box-shadow: 6px 6px 10px rgba(8, 5, 3, 0.2);
 }
 
 .BeginTitle{
-    font-size: 3rem;
+    font-size: 3vw;
     font-weight: 700;
 }
 
 .BeginForm{
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding: 0 20px;
+    padding: 0 3vw;
 }
 
 .BeginInput{
+    display: flex;
+    flex-direction: column;
+    margin: 2vh 0;
     text-align: left;
 }
 
 .BeginInput span{
-    font-size: 1.6rem;
+    font-size: 1.7vw;
     font-weight: 700;
 }
 
 .BeginInput input{
-    font-size: 1.6rem;
+    font-size: 1.6vw;
     color: white;
     width: 100%;
-    border-radius: 6px;
+    border-radius: .4vw;
     border: 0;
     background-color: #39496f;
-    padding: 0 4px;
 }
 
 .BeginInput input::placeholder{
@@ -42,13 +43,13 @@
 }
 
 .BeginButton{
-    border-radius: 6px;
+    border-radius: .4vw;
     cursor: pointer;
-    margin: 12px auto;
+    margin: 3% auto;
    
     width: 30%;
     color: white;
-    font-size: 1.4rem;
+    font-size: 1.4vw;
     font-weight: 700;
     border: 0;
     background-color:#2a3550
@@ -59,7 +60,8 @@
 }
 
 .BeginLink{
-    margin: 8px auto 16px;
+    font-size: 1vw;
+    margin: 2vh auto 3vh;
 }
 
 .BeginLink .link{
@@ -70,3 +72,58 @@
     color: rgb(92, 90, 255);
 }
 
+.BeginFormBasis{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-basis: 40%;
+}
+
+.BeginScreen{
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+}
+
+.BeginTitleCard{
+    flex-basis: 50%;
+}
+
+.PROJTITLE{
+    font-size: 5vw;
+    font-weight: 800;
+}
+
+.BeginDesign{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    height: fit-content;
+}
+
+.BeginCircle{
+    margin-top: 2vh;
+    border-radius: 100%;
+    aspect-ratio: 1;
+    background-color:#39496f;
+    width: 60%;
+    height: auto;
+}
+
+.BeginShadow{
+    box-shadow: .5vw 1vw 2vw 0 rgb(0 0 0 / 0.4)
+}
+
+.PhoneBox{
+    aspect-ratio: 1;
+    width: 35vw;
+    
+    position: absolute;
+}
+
+.BeginDesign img{
+   width: 100%;
+}
