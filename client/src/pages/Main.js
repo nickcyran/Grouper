@@ -12,11 +12,11 @@ const Main = () => {
     const [selectedGroup, setSelectedGroup] = useState()
     const [homeButton, setHomeButton] = useState(false)
     const [servers, setServers] = useState([]); 
-    const [selectedServer, setSelectedServer] = useState([]);
+    const [selectedServer, setSelectedServer] = useState();
 
     //
     const HandleSwitchToServer = (server_id) => {
-        setSelectedGroup(server_id)
+        setSelectedServer(server_id)
     }
 
     //replaced fetch data func with just axios sorry ik it looks gross but I tried the pretty way and it didn't work and I couldn't figure out why
@@ -48,7 +48,7 @@ const Main = () => {
                             setOnFriendsPage(false);
                         }} />
                     ))}
-                    </div>)}  
+                    </div>)} 
             </div>
             <></>
 
