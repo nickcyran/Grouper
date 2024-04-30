@@ -144,4 +144,8 @@ body{
   width: 0;
 }
 
+.slider{
+  overflow-x: scroll;
+}
+
 

@@ -1,5 +1,5 @@
 import { icon, addGroup } from '../assets'
-import { Home, Group, Server } from '.'
+import { Home, Server, ServerHome } from '.'
 import { useState, useEffect } from 'react';
 import { Link} from 'react-router-dom';
 import axios from 'axios';
@@ -10,6 +10,16 @@ const Main = () => {
     const [homeButton, setHomeButton] = useState(false)
     const [servers, setServers] = useState([]);
     const [selectedServer, setSelectedServer] = useState();
+    const [serverHubVisible, setServerHubVisible] = useState(false);
+    const [refreshServers, setRefreshServers] = useState(false)
+
+    const toggleServerHub = () => {
+        setServerHubVisible(!serverHubVisible)
+    }
+
+    const refresh = () => {
+        setRefreshServers(!refreshServers)
+    }
 
     const HandleSwitchToServer = (server_id) => {
         setSelectedServer(server_id)
@@ -25,7 +35,7 @@ const Main = () => {
             .catch(err => console.log(err))
 
         //console.log("saved servers: " + servers)
-    }, [])
+    }, [refreshServers])
 
     return (
         <div className="main">
@@ -46,14 +56,13 @@ const Main = () => {
                     </div>)}
 
                 <div className="serverHub">
-                    <Link className="serverlink" to="/serverhome">
-                        <img src={addGroup} alt="add a server" />
-                    </Link>
+                    <img src={addGroup} alt="add a server" onClick={toggleServerHub}/>
                 </div>
             </div>
             <></>
 
             {onFriendsPage ? <Home selectedDm={selectedGroup} setDm={setSelectedGroup} homeClick={homeButton} /> : <Server server={selectedServer} />}
+            {serverHubVisible && <ServerHome toggle={toggleServerHub} refresh={refresh}/>}
         </div>
     );
 }

@@ -1,10 +1,33 @@
-//Show users the servers that they're currently in and give users the option to create a new server.
-import { Link, useNavigate } from 'react-router-dom';
+
+import { accept, decline } from '../assets'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
-const ServerHome = () => {
+import '../styles/server.css'
+
+const InviteCard = ({ invite, toggle, handleServerInvite }) => {
+    return (
+        <div className="inviteCard">
+            <div className="ServerName">
+                {invite.serverName}
+            </div>
+
+            <div className="InviteOptions">
+                <div className="FriendOption">
+                    <img src={accept} alt='accept invite' onClick={(e) => handleServerInvite(e, invite._id, "a")} />
+                </div>
+
+                <div className="FriendOption">
+                    <img src={decline} alt='decline invite' onClick={(e) => handleServerInvite(e, invite._id, "d")} />
+                </div>
+            </div>
+        </div>
+    )
+}
+
+const ServerHome = ({refresh, toggle }) => {
     const [serverName, setServerName] = useState([])
+    const [trigger, setTrigger] = useState(false)
     const [allServers, setAllServers] = useState([])
     const [userServers, setUserServers] = useState([])
     const tempUserServers = []
@@ -29,6 +52,7 @@ const ServerHome = () => {
             .then(result => {
                 if (resp !== "a")
                     alert("Declined server invitation.")
+                refreshInvites()
                 //not sure what to do here/if doing anything here is needed tbh
             })
             .catch(err => {
@@ -41,18 +65,15 @@ const ServerHome = () => {
             //update on server end (move invite entry to member)
             axios.get('http://localhost:9000/acceptServerInvite', { params: { sID: sID, cUser: user_ID } })
                 .then(result => {
-                    //alert(result)
                     alert("Joined server!")
-                    window.location.reload();
+                    refresh()
+                    refreshInvites()
                 })
                 .catch(err => {
                     console.log(err)
                     alert("Issue when updating invited server status.")
                 })
-
         }
-        else //refresh page (declined invite)
-            window.location.reload();
     }
 
     //send server creation data to (MongoDB) server
@@ -72,6 +93,8 @@ const ServerHome = () => {
                 .then(result => {
                     console.log(result)
                     alert("Server created successfully")
+                    refresh()
+                    toggle()
                 })
                 .catch(err => {
                     console.log(err)
@@ -83,12 +106,12 @@ const ServerHome = () => {
     //get what servers the user is in & has an invite to (exclusive) (look thru ServerSchema passing in user --> retrieve matches for "members" and "invites")
     useEffect(() => {
         //servers user is in
-        axios.get('http://localhost:9000/getUserServers', { params: { userID: user_ID } })
-            .then(result => {
-                setUserServers(result.data)
-                console.log("user servers: " + result.data)
-            })
-            .catch(err => console.log(err))
+        // axios.get('http://localhost:9000/getUserServers', { params: { userID: user_ID } })
+        //     .then(result => {
+        //         setUserServers(result.data)
+        //         console.log("user servers: " + result.data)
+        //     })
+        //     .catch(err => console.log(err))
 
         //servers user is invited to
         axios.get('http://localhost:9000/getUserServerInvites', { params: { userID: user_ID } })
@@ -98,7 +121,13 @@ const ServerHome = () => {
             })
             .catch(err => console.log(err))
 
-    }, [])
+    }, [trigger])
+
+
+
+    const refreshInvites = () => {
+        setTrigger(!trigger)
+    }
 
     //for toggling visibility of server creation menu
     const openServerCreation = () => {
@@ -119,51 +148,49 @@ const ServerHome = () => {
 
     //4/20/24 NOTE: using all servers rather than just servers user is a member in since that get function still needs work
     return (
-        <>
-            <h1> SERVERS </h1>
-            <div>
-                {(userServers.length > 0) && (
-                    <p>
-                        {userServers.map((server, index) => {
-                            return <Link key={index} to={`/Server/${server._id}`}>{server.serverName}</Link>
-                        })}
-                    </p>
-                )}
+        <div className="serverhubform">
+            <div className="innerForm">
+                <div className="x" onClick={toggle}>
+                    x
+                </div>
 
-                {(userServers.length === 0) && (
-                    <p>
-                        Not in any servers.
-                    </p>
-                )}
+                <h1 style={{ fontSize: "2rem" }}>SERVERS</h1>
 
+                {!serverCreation && (
+                    <button className="serverButton shadow" type="button" onClick={openServerCreation}> New server </button>)}
 
-                {((invites.length > 0)) && (
-                    <div>
-                        <h3> Currently invited to: </h3>
-                        {invites.map((invite, index) => {
-                            return <li key={index}> {invite.serverName} <button type="button" onClick={(event) => handleServerInvite(event, invite._id, "d")}> Decline </button> <button type="button" onClick={(event) => handleServerInvite(event, invite._id, "a")}> Accept </button></li>
-                        })}
+                {serverCreation && (
+                    <div className="serverCreation">
+                        <form onSubmit={handleServerCreation}>
+                            <h3> Create a Server</h3>
+                            <input type="text" 
+                                placeholder="Enter server name" 
+                                autoComplete="off"
+                                id="serverName"
+                                name="serverName"
+                                onChange={(event) => setServerName(event.target.value)} 
+                            />
+                            <br></br>
+                            <button type="submit">Create</button>
+                            <button type="button" onClick={closeServerCreation}>Cancel</button>
+                        </form>
+                    </div>)}
+
+                <div>
+                    <div className="formtitle">Pending Invites:</div>
+                    <div className="friendInvites">
+                        {invites.length === 0 && <div className="noInvte"> no invites</div>}
+                        {invites.map((invite, key) => (
+                            <InviteCard key={key} invite={invite} toggle={refreshInvites} handleServerInvite={handleServerInvite} />
+                        ))}
                     </div>
-                )}
-
+                </div>
             </div>
-
-            {!serverCreation && (
-                <button type="button" onClick={openServerCreation}> New server </button>)}
-
-            {serverCreation && (
-                <div className="serverCreation">
-                    <form onSubmit={handleServerCreation}>
-                        <h3> Create a Server</h3>
-                        <input type="text" placeholder="Enter server name" autoComplete="off" id="serverName" name="serverName" onChange={(event) => setServerName(event.target.value)}></input>
-                        <br></br>
-                        <button type="submit">Create</button>
-                        <button type="button" onClick={closeServerCreation}>Cancel</button>
-                    </form>
-                </div>)}
-        </>
+        </div>
     )
-
 }
+
+
+
 
 export default ServerHome;

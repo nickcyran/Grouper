@@ -1,4 +1,4 @@
-.page{
+.page {
     border-top-left-radius: 13px; /* Adjust the value as needed */
     width: 95%;
     background-color: #1b2439;
@@ -10,18 +10,28 @@
     object-fit: contain;
     flex-basis: 16%;
     overflow-y: scroll;
-    
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Hide overflowing content */
+    text-overflow: ellipsis; /* Display ellipsis (...) when text overflows */
 }
-.leftSideBar::-webkit-scrollbar{
+
+.leftSideBar::-webkit-scrollbar {
     width: 0;
 }
 
-.rightSideBar{
+.rightSideBar {
     object-fit: contain;
     flex-basis: 19%;
+    overflow: hidden; /* Hide overflowing content */
 }
 
-.mainContent{
+.rightSideBar p {
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden; /* Hide overflowing content */
+    text-overflow: ellipsis; /* Display ellipsis (...) when text overflows */
+}
+
+.mainContent {
     width: 60%;
     height: 100%;
     background-color: #2a3550;
@@ -30,19 +40,17 @@
     overflow-y: scroll;
 }
 
-.mainContent::-webkit-scrollbar{
+.mainContent::-webkit-scrollbar {
     width: 0;
 }
 
-
 @media screen and (max-width: 900px) {
-
     .rightSideBar {
         display: none;
         /* Hide the right sidebar when zoomed in */
     }
 
-    .mainContent{
+    .mainContent {
         flex-basis: 84%;
     }
 }
