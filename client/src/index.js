@@ -37,7 +37,6 @@ const router = createBrowserRouter([
     element: <NavbarWrapper />,
     children: [
       { path: "/", element: <Main /> },
-      { path: "/viewCalendar", element: <ViewCalendar /> },
       { path: "/server/:id", element: <ServerPage /> },
       { path: "/newCalendar", element: <NewCalendar /> },
     ]

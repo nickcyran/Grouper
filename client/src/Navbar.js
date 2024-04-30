@@ -2,13 +2,15 @@ import React from 'react'
 import './styles/Navbar.css';
 import { notes, calendar } from './assets'
 
-import { NotesPage } from './pages'
+import { NotesPage, ViewCalendar} from './pages'
 
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom';
 
 export default function Navbar() {
      const [showNotes, setShowNotes] = useState(false);
+     const [showCal, setShowCal] = useState(false);
+
      const navigate = useNavigate();
 
      const signOut = () => {
@@ -23,9 +25,7 @@ export default function Navbar() {
                </div>
 
                <div className="notesBox">
-                    <Link to="/viewcalendar" className="cal" >
-                         <img src={calendar} alt='calendar' onClick={() => console.log("Click")} />
-                    </Link>
+                    <img src={calendar} alt='calendar' onClick={() => setShowCal(!showNotes)} />
                </div>
 
                <div className="notesBox">
@@ -36,7 +36,8 @@ export default function Navbar() {
                     <div className="signoutButton" onClick={() => signOut()}>sign out</div>
                </div>
           </div>
-
+          
+          {showCal && <ViewCalendar state={showCal} set={setShowCal}/>}
           {showNotes && <NotesPage state={showNotes} setState={setShowNotes} />}
      </nav>)
 }

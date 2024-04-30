@@ -1,5 +1,6 @@
  /* Events.css */
  .popup {
+    z-index: 10000;
     position: fixed;
     top: 0;
     left: 0;
@@ -12,31 +13,54 @@
 }
 
 .popup-content {
-    text-align: left;
-    background-color: gray!important;
+    width: 40%;
+    color: white;
+    font-size: 20px;
+    text-align: right; /* Align text to the right */
+    background-color: #1b2439!important;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3)!important;
-    width: 300px;
+}
+
+.popup-content h2{
+    margin-top: -20px;
+    text-align: center;
+}
+
+.pp{
+    display: flex;
+    gap: 6%;
+    justify-content: center;
+}
+
+.mybutton{
+    margin: 0 auto;
+    width: 60%;
+}
+
+.PopupForm{
+    overflow: hidden;
+    width: 100%;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
 }
 
 .close {
-    position: absolute;
-    top: 20px;
-    right: 40px;
-    width: 40px;
-    height: 40px;
     cursor: pointer;
     font-size: 60px;
-    color: red;
-    background-color: grey;
     line-height: 40px;
     text-align: center;
 }
 
+.close:hover {
+    color: rgb(252, 93, 93);
+}
+
 /* Create Event button */
 .create-event-button {
-    position: fixed;
+    
     bottom: 20px;
     left: 20px;
     padding: 10px 20px;
@@ -48,10 +72,7 @@
     border-radius: 5px;
 }
 
-.edit-events-button {
-    position: fixed;
-    bottom: 145px!important;
-    left: 65px;
+.edit-events-button {   
     padding: 10px 20px;
     height: 50px;
     width: 150px;
@@ -63,14 +84,12 @@
 
 /* Events Box */ 
 .events-box {
-    position: fixed;
-    bottom: 200px!important;
-    left: 40px;
-    width: 200px;
-    height: 200px;
+    margin: 0 auto;
+    width: 90%;
+    height: 100%;
     overflow-y: auto;
     border: 2px solid #ccc;
-    color: white!important;
+    color: white;
 }
 
 .events-box ul {
@@ -82,19 +101,28 @@
 }
 
 .events-box ul li {
+    
     margin-bottom: 2px;
 }
 
 .events-box h2 {
+    
     margin: 0;
     border-bottom: 1px solid #ccc;
     padding: 5px 2; /* Line spacing */
 }
 
 .events-container {
+ 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
+  
     text-align: center;
-    justify-content: space-between;
-    margin-top: 10px;
+    
+    margin-top: 5%;
     color: black !important;
 }
 
@@ -104,6 +132,7 @@
 
 /* Add styles for form elements */
 .form-group {
+    text-align: left;
     margin-bottom: 20px; /* Add margin between form groups */
  }
 
@@ -132,9 +161,3 @@ label {
     margin-left: 5px; /* Add some spacing between tag text and remove button */
 }
 
-.popup-content {
-    max-height: 900px; /* Set a maximum height for the popup content */
-    overflow-y: auto; /* Enable vertical scrolling when content overflows */
-    max-width: 16vw; /* Set a maximum width for the popup content */
-    overflow-x: auto; /* Enable horizontal scrolling when content overflows */
-}

@@ -9,11 +9,15 @@
 }
 
 .NotesX {
+    z-index: 999;
+    background-color: #1b2439;
     font-size: 38px;
     font-weight: 700;
     position: absolute;
-    right: 20px;
-    top: 20px;
+    right: .3vw;
+    top: .3vh;
+    border-radius: 10vw;
+    padding: 0 1.1vw;
     cursor: pointer;
     color: #fff;
 }
@@ -51,3 +55,15 @@
 .SaveButton:hover {
     background-color: #58a9ff;
 }
+
+.CalBG {
+    position: absolute;
+
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.589);
+    backdrop-filter: blur(5px);
+    top: 0;
+    z-index: 100;
+}
+

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link } from 'react-router-dom'
 import {UpdateUserCal} from "../controllers/calendars.js";
+import '../styles/newCal.css'
 
-function NewCalendar() {
+function NewCalendar({set}) {
      const [name, setName] = useState("")
      const [desc, setDesc] = useState("")
      const [users, setUsers] = useState([])
@@ -20,7 +21,12 @@ function NewCalendar() {
      }
 
      return (
-          <div>
+          <div className="CalendarForm">
+                <div className="somex" onClick={() => set(false)}>
+                    x
+                </div>
+                
+               <div className="Calendertitle">New Calendar</div>
                {userID != null && 
                     <form>
                     <label>Calendar Name<br />

@@ -1,0 +1,28 @@
+.CalendarForm{
+    position: absolute;
+    padding: 12px 20px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: fit-content;
+    height: fit-content;
+    background-color: #131b30;
+    z-index: 10;
+    box-shadow: 6px 6px 10px rgba(8, 5, 3, 0.4);
+    border-radius: 8px;
+}
+
+.somex{
+    font-size: 1.6rem;
+    font-weight: 600;
+    position: absolute;
+    right: 12px;
+    top: 0;
+    cursor: pointer;
+}
+
+.Calendertitle{
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 12px 0;
+}
