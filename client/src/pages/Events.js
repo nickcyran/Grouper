@@ -5,7 +5,6 @@ import Select from 'react-select';
 import { GetCalendars, AddEventToCal } from "../controllers/calendars.js";
 import Multiselect from 'multiselect-react-dropdown';
 
-
 const Events = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [tags, setTags] = useState([]);
@@ -33,16 +32,17 @@ const Events = () => {
       })
   }, []);
 
-  // // gets all events that user is invited to or is owner of
-  // useEffect(() => {
-  //   axios.get('http://localhost:9000/getEvents')
-  //     .then(response => {
-  //       setLocalEvents(response.data);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching events:', error);
-  //     });
-  // }, []);
+  // gets all events that user is invited to or is owner of
+  useEffect(() => {
+
+    axios.get('http://localhost:9000/getEvents', { params: { userId: userID } })
+      .then(response => {
+        setLocalEvents(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching events:', error);
+      });
+  }, [userID]);
 
   // populates dropdown box of users
   const userOptions = users.map(user => ({
@@ -87,13 +87,13 @@ const Events = () => {
 
   // checks for valid input and creates event
   const handleCreateEvent = () => {
-    let event_id
     const eventName = document.getElementById('eventName').value;
     const eventDescription = document.getElementById('eventDescription').value;
     const startDate = document.getElementById('startDate').value;
     const endDateString = document.getElementById('endDate').value;
     const endDate = new Date(endDateString);
     const currentDate = new Date();
+    const eventOwner = userID;
 
     // does not allow for past dates to be a start/end date
     if (startDate < currentDate || endDate < currentDate) {
@@ -110,36 +110,53 @@ const Events = () => {
       start_date: new Date(startDate),
       end_date: new Date(endDate),
       date_created: currentDate,
+      owner: eventOwner,
     };
 
     // debug data
     console.log('Event Data:', eventData);
 
     axios.post('http://localhost:9000/createEvent', eventData)
-      .then((res) => {
-        console.log('Event created successfully:', res.data);
-        setLocalEvents([...localEvents, res.data]); // adds new event to local list
-        setIsPopupOpen(false); // closes popup
-        setTags([]); // reset tags
-        setSelectedUsers([]);
-        AddEventToCal(res.data._id, selectedCals) // Add event to specified calendars
-          .then('Event successfully added')
-          .catch(error => {
-            console.log(error)
-          })
-      })
-      .catch((error) => console.error('Error creating event:', error));
+    .then((res) => {
+      const eventId = res.data._id; // Define eventId here
+      console.log('Event created successfully:', res.data);
 
-    console.log('New Event Data:', eventData);
-    // Update local state with the new event
-    setLocalEvents([...localEvents]);
+      // Adds the eventId to the created user's events
+      fetch('http://localhost:9000/updateUserEvents', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ eventId }),
+    })
+        .then((response) => {
+          console.log('User events updated successfully:', response.data);
+          // Update local state or perform any other necessary actions
+        })
+        .catch((error) => console.error('Error updating user events:', error));
+  
+      setLocalEvents([...localEvents, res.data]); // adds new event to local list
+      setIsPopupOpen(false); // closes popup
+      setTags([]); // reset tags
+      setSelectedUsers([]); // reset selected users
+  
+      AddEventToCal(res.data._id, selectedCals) // Add event to specified calendars
+        .then(() => console.log('Event successfully added'))
+        .catch(error => console.log(error));
+    })
+    .catch((error) => console.error('Error creating event:', error));
+  
 
-    // Reset form fields and state
-    setIsPopupOpen(false);
-    setTags([]);
-    setSelectedUsers([]);
-  };
-
+  console.log('New Event Data:', eventData);
+  // Update local state with the new event
+  setLocalEvents([...localEvents]);
+  
+  // Reset form fields and state
+  setIsPopupOpen(false);
+  setTags([]);
+  setSelectedUsers([]);
+  }
+  
   // calculates days until end date
   const daysUntilEndDate = (endDate) => {
     const endDateObj = new Date(endDate);
