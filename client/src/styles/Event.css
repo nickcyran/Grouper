@@ -48,6 +48,19 @@
         border-radius: 5px;
     }
 
+    .edit-events-button {
+        position: fixed;
+        bottom: 340px;
+        right: 65px;
+        padding: 10px 20px;
+        height: 50px;
+        width: 150px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
     /* Events Box */ 
     .events-box {
         position: fixed;
@@ -120,11 +133,11 @@
     }
 
     .popup-content {
-        max-height: 800px; /* Set a maximum height for the popup content */
+        max-height: 900px; /* Set a maximum height for the popup content */
         overflow-y: auto; /* Enable vertical scrolling when content overflows */
-        max-width: 12vw; /* Set a maximum width for the popup content */
+        max-width: 16vw; /* Set a maximum width for the popup content */
         overflow-x: auto; /* Enable horizontal scrolling when content overflows */
     }
-      
+    
       
   

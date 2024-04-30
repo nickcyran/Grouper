@@ -41,16 +41,20 @@ router.post('/createGroup', createGroup);
 router.get('/getTextChannels', getTextChannels); 
 
 // [EVENT ROUTES] ---------------------------------------------------------------
-const { createEvent, getUsers, getEvents, updateUserEvents } = require('./controllers/eventController');
+const { createEvent, getUsers, getEvents, updateUserEvents, deleteEvent, getEventId } = require('./controllers/eventController');
 router.post('/createEvent', createEvent);
 router.get('/getUsers', getUsers);
 router.get('/getEvents', getEvents);
 router.post('/updateUserEvents', updateUserEvents);
+router.delete('/deleteEvent/:eventId', deleteEvent);
+router.get('/getEventId', getEventId);
 
 // [SERVER ROUTES] --------------------------------------------------------------
-const { createServer, getServers, getCurrentServer, changeServerName, getServerOwner, getServerMembers, getServerAdmins, addServerAdmins, removeServerAdmins, getServerAdminStatus, sendServerInvite, acceptServerInvite, declineServerInvite, removeServerMembers, getServerChannels, createServerChannels, removeServerChannels, addServerChannels} = require('./controllers/serverController');
+const { createServer, getServers, getUserServers, getUserServerInvites, getCurrentServer, changeServerName, getServerOwner, getServerMembers, getServerAdmins, addServerAdmins, removeServerAdmins, getServerAdminStatus, sendServerInvite, acceptServerInvite, declineServerInvite, removeServerMembers, getServerChannels, createServerChannels, removeServerChannels, addServerChannels} = require('./controllers/serverController');
 router.post('/createServer', createServer);
 router.get('/getServers', getServers);
+router.get('/getUserServers', getUserServers);
+router.get('/getUserServerInvites', getUserServerInvites);
 router.get('/getCurrentServer', getCurrentServer);
 router.get('/changeServerName', changeServerName);
 router.get('/getServerOwner', getServerOwner);

@@ -146,3 +146,42 @@ exports.updateUserEvents = async (req, res) => {
     res.status(500).send('An unexpected error occurred');
   }
 };
+
+exports.deleteEvent = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).send('Event not found');
+    }
+
+    // Delete the event
+    await Event.findByIdAndDelete(event._id);
+
+    // Return a success response
+    return res.status(200).json({ message: 'Event deleted successfully' });
+  } catch (error) {
+    // Handle any errors
+    console.error('Error deleting event:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+exports.getEventId = async (req, res) => {
+  try {
+    const eventname = req.query.event_name;
+    if (!eventname) {
+      return res.status(400).send('Event name not provided');
+    }
+
+    const event = await Event.findOne({ event_name: eventname });
+    if (!event) {
+      return res.status(404).send('Event not found');
+    }
+    console.log(event);
+    res.send(event);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal server error');
+  }
+};

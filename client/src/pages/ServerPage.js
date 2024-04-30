@@ -277,13 +277,14 @@ const handleAdminAddition = (event) => {
     axios.get('http://localhost:9000/getServerChannels', {params: {sID: id}})
         .then(result => {
            // console.log("channels " + JSON.stringify(result.data))
-            if(result.data === null || result.data === "" || result.data === "No channels in server.") {
-                const tempNoChannels = []
-                tempNoChannels.push( {channelName : "No channels in server."} )
+            //if(result.data === null || result.data === "" || result.data === "No channels in server.") {
+                //const tempNoChannels = []
+                //tempNoChannels.push( {channelName : "No channels in server."} )
                 //setChannels(tempNoChannels)
-                setChannels([{channelName : "No channels in server."}])
-            }
-            else
+                //setChannels([{channelName : "No channels in server."}])
+            //}
+            //else
+            if(!((result.data === null || result.data === "" || result.data === "No channels in server.")))
             setChannels(result.data)
         })
     axios.get('http://localhost:9000/getServerOwner', {params: {sID :id}})
@@ -350,20 +351,12 @@ const handleAdminAddition = (event) => {
     return (
         <div>
         <h1> Admin Page for {thisServer.serverName} </h1>
-        <p>
-            Currently in a server
-        </p>
-        
-        <p> Channels: </p>
-        {channels.map((channel)=> {
-                return <p>{channel.channelName}</p>})}
-
-
             {(userStatus === "admin") && ((
                 <div>
                     <h3>Admin permissions: </h3>
+        
                     <p>Removing & Inviting Members</p>
-                    {!memberInvitation && (
+                    {(!memberInvitation && !memberRemoval) && (
                         <button type="button" onClick={openMemberInvitation}> Invite a new member </button>)}
 
                     {memberInvitation && (
@@ -379,9 +372,8 @@ const handleAdminAddition = (event) => {
                             </form>
                         </div>)}
                     
-                        <p> Removing Members </p>
-                    {!memberRemoval && (
-                        <button type="button" onClick={(toggleMemberRemoval)}> Remove a member from the server </button>
+                    {(!memberRemoval && !memberInvitation) && (
+                        <button type="button" onClick={(toggleMemberRemoval)}> Remove a member </button>
                     )}
 
                     {memberRemoval && (
@@ -401,7 +393,10 @@ const handleAdminAddition = (event) => {
                             )}
 
                             {(!adminsE_OU || adminsE_OU.length === 0) && (
-                            <p> No members in server that can be removed by the current user. </p>
+                                <div>
+                                <p> No members in server that can be removed by the current user. </p>
+                                <button type="button" onClick={(toggleMemberRemoval)}> Return </button>
+                                </div>
                             )}
 
                         </div>
@@ -410,7 +405,7 @@ const handleAdminAddition = (event) => {
                     
 
                     <p>Adding & Removing Channels</p>
-                    {!channelCreation && (
+                    {(!channelCreation && !channelRemoval) && (
                         <button type="button" onClick={toggleChannelCreation}> Create a new channel </button>)}
 
                     {channelCreation && (
@@ -427,13 +422,16 @@ const handleAdminAddition = (event) => {
                         </div>
                     )}
 
-                    {!channelRemoval && (
+                    {(!channelRemoval && !channelCreation) && (
                         <button type="button" onClick={toggleChannelRemoval}> Remove a channel </button>)}
 
                     {channelRemoval && (
                         <div className="channelCreation">
                             {(!channels || channels.length === 0) && (
+                                <div>
                                 <p> No channels in server to remove.</p>
+                                <button type="button" onClick={(toggleChannelRemoval)}> Return </button>
+                                </div>
                             )}
 
                             {(channels && channels.length > 0) && (
@@ -451,16 +449,34 @@ const handleAdminAddition = (event) => {
                         </div>
                     )}
 
+                    <p>  </p>
 
                     {(user_ID === owner._id) && (
+                        <div>
                         <h3>Owner permissions: </h3>
+                        </div>
                     )}
 
-                    {(!adminAddition && (user_ID === owner._id)) && (
+                    {(!editingSN && (user_ID === owner._id)) && ( <div>
+                        <button type="button" onClick={(toggleServerNameEdit)}> Edit server name </button>
+                        <p>Adding & Removing Admins</p> </div>
+                    )}
+
+                    {(editingSN && (user_ID === owner._id)) && (
                         <div>
+                        <input type="text" defaultValue={thisServer.serverName} autoComplete="off" id="newServerName" name="newServerName" onChange={(event) => setNSN(event.target.value)}></input>
+                                <br></br>
+
+                                <button type="button" onClick={toggleServerNameEdit}>Cancel</button>
+                                <button type="button" onClick={(handleServerNameEdit)}> Change server name </button>
+                        
                         <p>Adding & Removing Admins</p>
-                        <button type="button" onClick={(toggleAdminAddition)}> Add admins </button>
                         </div>
+
+                    )}
+
+                    {((!adminAddition && !adminRemoval) && (user_ID === owner._id)) && (
+                        <button type="button" onClick={(toggleAdminAddition)}> Add admins </button>
                     )}
 
                     {(adminAddition && (user_ID === owner._id)) && (
@@ -481,13 +497,15 @@ const handleAdminAddition = (event) => {
                             )}
 
                             {(!membersE_OA || membersE_OA.length === 0) && (
-                            <p> No members in server that are not an admin. </p>
+                                <div>
+                                <p> No members in server that are not an admin. </p>
+                                <button type="button" onClick={(toggleAdminAddition)}> Return </button>
+                                </div>
                             )}
-
                         </div>
                     )}
 
-                    {(!adminRemoval && (user_ID === owner._id)) && (
+                    {((!adminAddition && !adminRemoval) && (user_ID === owner._id)) && (
                         <button type="button" onClick={(toggleAdminRemoval)}> Remove admins </button>
                     )}
                     {(adminRemoval && (user_ID === owner._id)) && (
@@ -507,27 +525,15 @@ const handleAdminAddition = (event) => {
                             )}
 
                             {(!adminsE_OU || adminsE_OU.length === 0) && (
-                            <p> No members in server that can have their admin status revoked by the current user. </p>
+                                <div>
+                                <p> No members in server that can have their admin status revoked by the current user. </p>
+                                <button type="button" onClick={(toggleAdminRemoval)}> Return </button>
+                                </div>
                             )}
 
                         </div>
                     )}
                     <p></p>
-
-                    {(!editingSN && (user_ID === owner._id)) && (
-                        <button type="button" onClick={(toggleServerNameEdit)}> Edit server name </button>
-                    )}
-
-                    {(editingSN && (user_ID === owner._id)) && (
-                        <div>
-                        <input type="text" defaultValue={thisServer.serverName} autoComplete="off" id="newServerName" name="newServerName" onChange={(event) => setNSN(event.target.value)}></input>
-                                <br></br>
-
-                                <button type="button" onClick={closeMemberInvitation}>Cancel</button>
-                                <button type="button" onClick={(handleServerNameEdit)}> Change server name </button>
-                        </div>
-                    )}
-
                 </div>
             ))
             }

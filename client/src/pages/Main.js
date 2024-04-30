@@ -1,6 +1,7 @@
 import { messages_icon } from '../assets'
-import { Home, Group } from '.'
+import { Home, Group, Server } from '.' 
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 import { GetUserGroups } from '../controllers'
 
@@ -10,39 +11,48 @@ const Main = () => {
     const [onFriendsPage, setOnFriendsPage] = useState(true);
     const [selectedGroup, setSelectedGroup] = useState()
     const [homeButton, setHomeButton] = useState(false)
+    const [servers, setServers] = useState([]); 
+    const [selectedServer, setSelectedServer] = useState();
 
-    const HandleSwitchToGroup = (group_id) => {
-        setSelectedGroup(group_id)
+    //
+    const HandleSwitchToServer = (server_id) => {
+        setSelectedServer(server_id)
     }
 
+    //replaced fetch data func with just axios sorry ik it looks gross but I tried the pretty way and it didn't work and I couldn't figure out why
     useEffect(() => {
-        const fetchData = async () => {
-            setGroups(await GetUserGroups({ id: localStorage.getItem('userID') }))
-        };
+        axios.get('http://localhost:9000/getUserServers', {params: {userID : localStorage.getItem('userID')}})
+        .then(result => {
+            setServers(result.data)
+            //console.log("user servers: " + result.data + " length: " + result.data.length)
+        })
+        .catch(err => console.log(err))
 
-        fetchData();
+        //console.log("saved servers: " + servers)
     }, [])
 
     return (
         <div className="main">
             <div className="navBar">
                 <div className="dmDir" onClick={() => setOnFriendsPage(true)}>
-                    <img src={messages_icon} alt="direct messages" onClick={()=> {setHomeButton(!homeButton); setSelectedGroup()}}/>
+                    <img src={messages_icon} alt="direct messages" onClick={()=> {setHomeButton(!homeButton); setSelectedServer()}}/>
                 </div>
 
                 {/* DISPLAY ALL OF THE USERS GROUPS */}
-                <div className="groupBar">
-                    {groups.map((group, index) => (
+                
+                {(servers.length > 0 ) && (  
+                    <div className="groupBar">
+                    {servers.map((server, index) => (
                         <div className="square" key={index} onClick={() => {
-                            HandleSwitchToGroup(group._id)
+                            HandleSwitchToServer(server._id)
                             setOnFriendsPage(false);
                         }} />
-                    ))} 
-                </div>
+                    ))}
+                    </div>)} 
             </div>
             <></>
 
-            {onFriendsPage ? <Home  selectedDm={selectedGroup} setDm={setSelectedGroup} homeClick={homeButton}/> : <Group group={selectedGroup}/>}
+            {onFriendsPage ? <Home  selectedDm={selectedGroup} setDm={setSelectedGroup} homeClick={homeButton}/> : <Server server={selectedServer}/>}
         </div>
     );
 }
