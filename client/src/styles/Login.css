@@ -1,0 +1,72 @@
+.Begin{
+    width: 30rem;
+    background-color: #1b2439;
+    margin: 4rem auto;
+    border-radius: 10px;
+    box-shadow: 6px 6px 10px rgba(8, 5, 3, 0.2);
+}
+
+.BeginTitle{
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+.BeginForm{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 20px;
+}
+
+.BeginInput{
+    text-align: left;
+}
+
+.BeginInput span{
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+
+.BeginInput input{
+    font-size: 1.6rem;
+    color: white;
+    width: 100%;
+    border-radius: 6px;
+    border: 0;
+    background-color: #39496f;
+    padding: 0 4px;
+}
+
+.BeginInput input::placeholder{
+    color:rgb(136, 151, 194);
+}
+
+.BeginButton{
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 12px auto;
+   
+    width: 30%;
+    color: white;
+    font-size: 1.4rem;
+    font-weight: 700;
+    border: 0;
+    background-color:#2a3550
+}
+
+.BeginButton:hover{
+    background-color: #39496f;
+}
+
+.BeginLink{
+    margin: 8px auto 16px;
+}
+
+.BeginLink .link{
+    color: rgb(148, 147, 255);
+}
+
+.BeginLink .link:hover{
+    color: rgb(92, 90, 255);
+}
+

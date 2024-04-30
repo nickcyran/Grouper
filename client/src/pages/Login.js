@@ -2,6 +2,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
 
+import '../styles/Login.css'
+
 function Login() {
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
@@ -25,29 +27,31 @@ function Login() {
   }
 
   return (
-    <div className="Login">
-      <header className='Login-header'>
-        <br />
+    <div className="Begin">
+
+      <div className="BeginTitle">
         Log In
-        <form className='Login-form'>
-          <label className='inputs'>
-            User ID:  <br />  <input type="text" name="Username" onChange={(e) => setUserName(e.target.value)} />
-          </label>
-          <br />
+      </div>
 
-          <label className='inputs'>
-            Password: <br /><input type="password" name="Password" onChange={(e) => setPassword(e.target.value)} />
-          </label>
-          <br />
-          <br />
-          <button className='LoginButton' onClick={(e) => handleLogin(e)}>
-            Login
-          </button>
-        </form>
-        <br />
+      <form className='BeginForm'>
+        <div className="BeginInput">
+          <span> User ID:</span><br />
+          <input type="text" name="Username" placeholder="Enter your username" onChange={(e) => setUserName(e.target.value)} />
+        </div>
 
-        <Link className='Signup-link' to="/SignUp"> SignUp</Link>
-      </header>
+        <div className="BeginInput">
+          <span> Password:</span><br />
+          <input type="password" name="Password" placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)} />
+        </div>
+
+        <button className='BeginButton shadow' onClick={(e) => handleLogin(e)}>
+          Login
+        </button>
+      </form>
+
+      <div className="BeginLink">Don't have an account? <Link className='link' to="/SignUp"> SignUp</Link></div>
+      
+
     </div>
   );
 }
