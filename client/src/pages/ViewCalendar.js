@@ -651,16 +651,6 @@ function VvviewCalendar({ state, set }) {
                             }
                           </div>
                         </div>
-
-
-                        <div className="tags">
-                          {tags.map((tag, index) => (
-                            <span key={index} className="tag">
-                              {tag}
-                              <button type="button" onClick={() => handleRemoveTag(index)}>x</button>
-                            </span>
-                          ))}
-                        </div>
                       </div>
 
                       <div className="PopupSide">
