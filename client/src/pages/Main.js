@@ -1,7 +1,9 @@
-import { messages_icon } from '../assets'
+import { icon } from '../assets'
 import { Home, Group, Server } from '.' 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+
+
 
 import { GetUserGroups } from '../controllers'
 
@@ -33,7 +35,7 @@ const Main = () => {
         <div className="main">
             <div className="navBar">
                 <div className="dmDir" onClick={() => setOnFriendsPage(true)}>
-                    <img src={messages_icon} alt="direct messages" onClick={()=> {setHomeButton(!homeButton); setSelectedGroup()}}/>
+                    <img src={icon} alt="direct messages" onClick={()=> {setHomeButton(!homeButton); setSelectedGroup()}}/>
                 </div>
 
                 {/* DISPLAY ALL OF THE USERS GROUPS */}

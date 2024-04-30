@@ -21,7 +21,7 @@
 }
 
 .friendBox:hover {
-    background-color: #2b2d31;
+    background-color: #39496f;
 }
 
 .pfp {
@@ -53,11 +53,11 @@
 }
 
 .dmBox:hover {
-    background: #313338;
+    background: #2a3550;
 }
 
 .dmName {
-    color: rgb(138, 138, 138);
+    color: #64748b;
     padding-left: 3px;
     font-size: 26px;
     text-align: left;
@@ -150,7 +150,7 @@
 }
 
 .title{
-    background-color: #313338;
+    background-color: #2a3550;
     width: 100%;
     font-weight: 600;
     font-size: 2rem;
@@ -179,7 +179,7 @@
 }
 
 .memberBox:hover{
-    background-color: #313338;
+    background-color: #2a3550;
 }
 
 .memberpfp{
@@ -213,4 +213,11 @@
 
 .dmBox.selected .dmName {
     color: white; /* Change text color of the name when selected */
+}
+
+.serverName {
+    font-size: 180%; /* Adjust the value as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

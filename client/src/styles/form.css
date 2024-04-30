@@ -6,9 +6,9 @@
     transform: translate(-50%, -50%);
     width: 30rem;
     height: fit-content;
-    background-color: #1e1f22;
+    background-color: #131b30;
     z-index: 10;
-    box-shadow: 2px 6px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 6px 6px 10px rgba(8, 5, 3, 0.4);
     border-radius: 8px;
 }
 
@@ -50,7 +50,7 @@
 }
 
 .submit {
-    background-color: #2b2d31;
+    background-color: #2a3550;
     cursor: pointer;
     margin: 16px auto;
     border-radius: 8px;
@@ -64,5 +64,5 @@
 }
 
 .submit:hover{
-    background-color: #414349;
+    background-color: #39496f;
 }

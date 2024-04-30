@@ -6,9 +6,9 @@
     transform: translate(-50%, -50%);
     width: 50rem;
     height: fit-content;
-    background-color: #1e1f22;
+    background-color: #131b30;
     z-index: 10;
-    box-shadow: 2px 6px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 6px 6px 10px rgba(8, 5, 3, 0.4);
     border-radius: 8px;
     padding-bottom: 20px;
 }
@@ -22,7 +22,7 @@
     right: 10px; /* Position at the far right */
     top: 14%; /* Align with the top of the input field */
 
-    background-color: #2b2d31;
+    background-color: #2a3550;
     cursor: pointer;
     border-radius: 5px;
     border: none;
@@ -34,12 +34,12 @@
 }
 
 .SendInvite:hover {
-    background-color: #414349;
+    background-color: #39496f;
 }
 
 .friendInvites {
     overflow-y: scroll;
-    background-color: #2b2d31;
+    background-color: #2a3550;
     border-radius: 10px;
     width: 100%;
     height: 16rem;
@@ -57,7 +57,7 @@
 }
 
 .inviteCard:hover{
-    background-color: #414349;
+    background-color: #39496f;
 }
 
 .FriendPFP{

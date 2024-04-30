@@ -58,8 +58,10 @@ const Server = ({ server }) => {
 
         return (
             <>
-                <h3>{thisServer.serverName}</h3>
-
+                <div className="l_bar_head shadow serverName">
+                    {thisServer.serverName}
+                </div>
+                
                 {userStatus === "admin" && (
                     <Link to={`/Server/${server}`}> Edit server </Link>
                 )}
@@ -97,7 +99,7 @@ const Server = ({ server }) => {
 
         return (
             <>
-                <div className="title shadow" style={{ backgroundColor: "#2b2d31" }}>
+                <div className="title shadow" style={{ backgroundColor: "#1b2439" }}>
                     Members
                 </div>
 

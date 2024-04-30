@@ -44,12 +44,13 @@ a:visited {
 
 .signoutBox{
     cursor: pointer;
-    background-color: #313338;
+    background-color: #2a3550;
     border-radius: .5vh;
     flex-basis: 5%;
-    padding: .2vh;
+    font-weight: 600;
+    padding: .3vh;
 }
 
 .signoutBox:hover{
-    background-color: #4b4d52;
+    background-color: #39496f;
 }

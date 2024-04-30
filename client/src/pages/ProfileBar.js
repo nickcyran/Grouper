@@ -39,7 +39,7 @@ const ProfileBar = ({ profile_id }) => {
 
     return (
         <div className="rightSideBar">
-            <div className="title shadow" style={{ backgroundColor: "#2b2d31" }}>
+            <div className="title shadow" style={{ backgroundColor: "#1b2439" }}>
                 User Profile
             </div>
 

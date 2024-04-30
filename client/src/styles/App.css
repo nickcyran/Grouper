@@ -37,33 +37,12 @@ body{
     justify-content: center;
 }
 
-.dmDir{
-    left: .1vw;
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
-.dmDir img{
-   width: 4.8vw; 
-   background-color: #1e1f22;
-   cursor: pointer;
-}
+
+
 
 .groupBar::-webkit-scrollbar {
     width: 0;
     height: 0;
 }
 
-.square {
-    border-radius: .5vw;
-    width: 70%;
-    padding-bottom: 70%; 
-    background-color: rgb(255, 0, 255);
-    cursor: pointer;
-}
-
-.square:hover{
-    border: 1px solid white;
-}
