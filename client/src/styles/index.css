@@ -63,13 +63,15 @@ body{
 
 .dmDir{
   background-color: #0f182a;
-  top: 7vh;
+
   width: 4.7vw;
   left: .1vw;
   position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-top: 2vh;
+  padding-bottom: 1.3vh;
 }
 
 .dmDir img{

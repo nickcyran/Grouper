@@ -34,7 +34,7 @@ const Main = () => {
     return (
         <div className="main">
             <div className="navBar">
-                <div className="dmDir" onClick={() => setOnFriendsPage(true)}>
+                <div className="dmDir shadow" onClick={() => setOnFriendsPage(true)}>
                     <img src={icon} alt="direct messages" onClick={()=> {setHomeButton(!homeButton); setSelectedGroup()}}/>
                 </div>
 
