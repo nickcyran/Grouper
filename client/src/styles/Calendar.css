@@ -75,6 +75,9 @@
      font-size: largest;
      box-shadow: 0 0 5px #29292A;
 }
+.black{
+     color: black;
+}
 
 .calendar{
      width: 100%;

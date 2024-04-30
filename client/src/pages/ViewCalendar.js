@@ -506,11 +506,13 @@ function VvviewCalendar({ state, set }) {
                       <div className="PopupForm">
                         <div className="form-group">
                           <label htmlFor="selectEvent">Select Event:</label>
-                          <Select
-                            value={selectedEvent}
-                            onChange={handleSelectedEventChange}
-                            options={eventOptions}
-                          />
+                          <div className="black">
+                            <Select
+                              value={selectedEvent}
+                              onChange={handleSelectedEventChange}
+                              options={eventOptions}
+                            />
+                          </div>
                         </div>
 
                         <div className="form-group">
@@ -550,12 +552,15 @@ function VvviewCalendar({ state, set }) {
                         </div>
                         <div className="form-group">
                           <label htmlFor="invitedUsers">Invite Users:</label>
-                          <Select
-                            isMulti
-                            value={selectedUsers}
-                            onChange={setSelectedUsers}
-                            options={userOptions}
-                          />
+                          <div className="black">
+                            <Select
+                              isMulti
+                              value={selectedUsers}
+                              onChange={setSelectedUsers}
+                              options={userOptions}
+                            />
+                          </div>
+
                         </div>
                       </div>
                     </div>
@@ -620,6 +625,7 @@ function VvviewCalendar({ state, set }) {
                               <p>You have no calendars!</p>}
 
                             {userID != null && calendars.length > 0 &&
+                            <div className="black" >
                               <Multiselect
                                 options={calOptions}
                                 displayValue="label"
@@ -641,6 +647,7 @@ function VvviewCalendar({ state, set }) {
                                     }
                                   })
                                 }} />
+                                </div>
                             }
                           </div>
                         </div>
@@ -674,12 +681,14 @@ function VvviewCalendar({ state, set }) {
                         </div>
                         <div className="form-group">
                           <label htmlFor="invitedUsers">Invite Users:</label>
+                          <div className="black">
                           <Select
                             isMulti
                             value={selectedUsers}
                             onChange={setSelectedUsers}
                             options={userOptions}
                           />
+                          </div>
                         </div>
                         <div className="form-group">
                           <label htmlFor="startDate">*Start Date:</label>

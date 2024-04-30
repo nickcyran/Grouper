@@ -23,6 +23,7 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3)!important;
 }
 
+
 .popup-content h2{
     margin-top: -20px;
     text-align: center;
@@ -45,7 +46,7 @@
     text-align: left;
     display: flex;
     flex-direction: column;
-    color: black;
+    color: white;
     overflow-y: auto;
     position: relative;
 }
