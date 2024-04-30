@@ -1,11 +1,11 @@
 import React from 'react'
 import './styles/Navbar.css';
-import {notes} from './assets'
+import { notes, calendar } from './assets'
 
-import {NotesPage} from './pages'
+import { NotesPage } from './pages'
 
 import { useState } from 'react'
-import { useNavigate, Link} from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function Navbar() {
      const [showNotes, setShowNotes] = useState(false);
@@ -20,12 +20,16 @@ export default function Navbar() {
           <div className="wrap">
                <div className="links">
                     <Link to="/">Messaging</Link>&nbsp;
-                    <Link to="/viewcalendar">Calendar</Link>&nbsp;
-                    <Link to="/serverhome">Servers</Link>&nbsp;
                </div>
 
                <div className="notesBox">
-                    <img src={notes} alt='notes' onClick={() => setShowNotes(!showNotes)}/>
+                    <Link to="/viewcalendar" className="cal" >
+                         <img src={calendar} alt='calendar' onClick={() => console.log("Click")} />
+                    </Link>
+               </div>
+
+               <div className="notesBox">
+                    <img src={notes} alt='notes' onClick={() => setShowNotes(!showNotes)} />
                </div>
 
                <div className="signoutBox">
@@ -33,6 +37,6 @@ export default function Navbar() {
                </div>
           </div>
 
-          {showNotes && <NotesPage state={showNotes} setState={setShowNotes}/>}
+          {showNotes && <NotesPage state={showNotes} setState={setShowNotes} />}
      </nav>)
 }

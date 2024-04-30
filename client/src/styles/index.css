@@ -48,14 +48,45 @@ body{
   width: 0; 
 }
 
+.serverHub{
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #0f182a;
+  width: 4.8vw;
+  bottom: 0;
+  left: .1vw;
+  height: 10vh;
+}
+
+.serverHub img{
+  width: 65%; 
+  padding: 1vh 0 1.5vh;
+  cursor: pointer;
+}
+
+.serverlink{
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.serverHub:hover{
+  img{
+    filter: brightness(60%);
+  }
+ 
+}
+
 .groupBar{
   overflow-x: hidden;
   overflow-y: scroll;
-  margin-top: 12vh;
-  width: 100%;
+  margin-top: 13vh;
+  width: 98%;
+  padding-bottom: 9vh;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 1.2vh;
 
   align-items: center;
   justify-content: center;
@@ -63,8 +94,8 @@ body{
 
 .dmDir{
   background-color: #0f182a;
-
-  width: 4.7vw;
+  
+  width: 4.8vw;
   left: .1vw;
   position: absolute;
   display: flex;
@@ -91,7 +122,8 @@ body{
 .square {
   border-radius: .5vw;
   width: 70%;
-  padding-bottom: 70%; 
+  aspect-ratio: 1;
+
   background-color: rgb(61, 61, 61);
   cursor: pointer;
 }

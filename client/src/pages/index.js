@@ -14,5 +14,6 @@ import FriendHub from './FriendHub';
 import NotesPage from './NotesPage'
 
 import Server from './Server';
+import ServerHome from './ServerHome'
 
 export {Messaging, Main, PageContent, Group, Home, NewCalendar, ViewCalendar, Login, Signup, CreateDmPage, ProfileBar, FriendHub, NotesPage, Server};

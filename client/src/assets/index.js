@@ -8,5 +8,7 @@ import notes from './notes.png'
 import refresh from './refresh.png'
 import icon from './icon.png'
 import Begin_phone from './BeginPhone.gif'
+import addGroup from './addGroup.png'
+import calendar from './calendar.png'
 
-export {messages_icon,msg, friend, accept, decline, settings, notes, refresh, icon, Begin_phone};
+export {messages_icon,msg, friend, accept, decline, settings, notes, refresh, icon, Begin_phone, addGroup, calendar};

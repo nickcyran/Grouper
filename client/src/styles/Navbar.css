@@ -38,6 +38,18 @@ a:visited {
     width: 80%;
 }
 
+.cal{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.cal img{
+    cursor: pointer;
+    width: 80%;
+}
+
 .notesBox img:hover{
     filter: brightness(60%);
 }
