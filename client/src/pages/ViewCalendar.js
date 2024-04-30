@@ -197,6 +197,11 @@ function VvviewCalendar({ state, set }) {
     const currentDate = new Date();
     const eventOwner = userID;
 
+    currentDate.setHours(0);
+    currentDate.setMinutes(0);
+    currentDate.setSeconds(0);
+    currentDate.setMilliseconds(0);
+
     // does not allow for past dates to be a start/end date
     if (startDate < currentDate || endDate < currentDate) {
       alert('Cannot create event with a start date in the past.');
@@ -211,7 +216,7 @@ function VvviewCalendar({ state, set }) {
       invited_users: selectedUsers.map(user => user.value),
       start_date: new Date(startDate),
       end_date: new Date(endDate),
-      date_created: currentDate,
+      date_created: new Date(),
       owner: eventOwner,
     };
 
