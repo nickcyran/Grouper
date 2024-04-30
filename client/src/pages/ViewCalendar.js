@@ -31,12 +31,12 @@ function ViewCalendar() {
           locales
      })
      let calStyle = {
-          height: 800, 
+          height: 800,
           width: 1600,
-          backgroundColor: '#e3e4e7', 
+          backgroundColor: '#e3e4e7',
           color: '#2b2d31',
           border: '5px',
-          
+
      }
 
      const updateSelection = () => {
@@ -114,7 +114,7 @@ function ViewCalendar() {
                               </td>
                               <td>
                                    <div id="link-container">
-                                   <Link className="new-cal" to="/newCalendar">+</Link>
+                                        <Link className="new-cal" to="/newCalendar">+</Link>
                                    </div>
                               </td>
                               <td>
@@ -164,8 +164,11 @@ function ViewCalendar() {
                               })
                          }
 
+                         {userID != null && calendars.length == 0 &&
+                              <p id="warning">Please add a calendar.</p>}
+
                          {userID == null &&
-                              <p>Please login to view calendars.</p>}
+                              <p id="warning">Please login to view calendars.</p>}
                     </form>
 
                     <br /><br /><br />
@@ -220,7 +223,7 @@ function ViewCalendar() {
                          }
 
                          {allTags.length === 0 &&
-                              <p>You have no tags.</p>}
+                              <p id="warning">You have no tags.</p>}
                     </form>
                </div>
 

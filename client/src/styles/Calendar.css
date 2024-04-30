@@ -43,6 +43,7 @@
      text-align: left;
      background-color: #2b2d31;
      box-shadow: 0 0 5px #29292A;
+     padding-bottom: 21px;
 }
 
 .rbc-calendar {
@@ -128,6 +129,11 @@
   #link-container {
      margin-top:3px;
      padding-left: 40px;
+  }
+
+  #warning {
+     color:#a1a2a5;
+     padding: 10px;
   }
 
 
