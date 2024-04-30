@@ -21,7 +21,6 @@ export default function Navbar() {
                <div className="links">
                     <Link to="/">Messaging</Link>&nbsp;
                     <Link to="/viewcalendar">Calendar</Link>&nbsp;
-                    <Link to="/events">Events</Link>&nbsp;
                     <Link to="/serverhome">Servers</Link>&nbsp;
                </div>
 

@@ -36,7 +36,6 @@ const Events = () => {
 
   // gets all events that user is invited to or is owner of
   useEffect(() => {
-
     axios.get('http://localhost:9000/getEvents', { params: { userId: userID } })
       .then(response => {
         setLocalEvents(response.data);
@@ -118,12 +117,13 @@ const Events = () => {
     // debug data
     console.log('Event Data:', eventData);
 
+    // create new event
     axios.post('http://localhost:9000/createEvent', eventData)
     .then((res) => {
       const eventId = res.data._id; // Define eventId here
       console.log('Event created successfully:', res.data);
 
-      // Adds the eventId to the created user's events
+      // adds the event to the owners and invited users calendars
       fetch('http://localhost:9000/updateUserEvents', {
       method: 'POST',
       headers: {
@@ -133,7 +133,6 @@ const Events = () => {
     })
         .then((response) => {
           console.log('User events updated successfully:', response.data);
-          // Update local state or perform any other necessary actions
         })
         .catch((error) => console.error('Error updating user events:', error));
   
@@ -148,34 +147,28 @@ const Events = () => {
     })
     .catch((error) => console.error('Error creating event:', error));
   
-
   console.log('New Event Data:', eventData);
   // Update local state with the new event
   setLocalEvents([...localEvents]);
-  
   // Reset form fields and state
   setIsPopupOpen(false);
   setTags([]);
   setSelectedUsers([]);
   }
-  
-  // calculates days until end date
+  // calculates days until end or start date
   const daysUntilEndDate = (endDate) => {
     const endDateObj = new Date(endDate);
-
+  
     if (!endDateObj || typeof endDateObj !== 'object' || !endDateObj.getTime) {
       return 0; // Return 0 days if endDate is not a valid Date object
     }
-
     const currentDate = new Date();
     const differenceInTime = endDateObj.getTime() - currentDate.getTime();
     const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
-
-    // If the difference is negative, it means the event has already started, so return 0 days
+    // If the difference is negative it means the event has already started and returns 0
     if (differenceInDays < 0) {
       return 0;
     }
-
     return differenceInDays;
   };
 
@@ -211,6 +204,10 @@ const openEditPopup = () => {
 // Handle closing the edit popup
 const closeEditPopup = () => {
   setIsEditPopupOpen(false);
+  // Reset form fields and state
+  setIsPopupOpen(false);
+  setTags([]);
+  setSelectedUsers([]);
 };
 
 var event_id = null;
@@ -220,25 +217,23 @@ const handleEditEvent = () => {
   console.log('selectedEventElement:', eventname);
   axios.get('http://localhost:9000/getEventId', { params: { event_name: eventname } })
     .then(res => {
-      const event = res.data; // Assuming the entire event object is sent as response
-      event_id = event._id; // Accessing _id directly from the event object
+      const event = res.data; // returns the entire event with matching name
+      event_id = event._id; // gets the eventId from event
       console.log('EventId:', event_id);
     })
     .catch((error) => {
       console.error('Error getting eventId:', error);
     });
 
-  // Check if the user is the owner of the event
   if (!selectedEvent) {
     alert('Please select an event to edit.');
     return;
   }
-
+  // Check if the user is the owner of the event
   if (selectedEvent.owner !== userID) {
     alert('You are not the owner of this event and cannot edit it.');
     return;
   }
-
   // Retrieve updated event data from form fields
   const updatedEventData = {
     event_name: document.getElementById('eventName').value,
@@ -250,11 +245,11 @@ const handleEditEvent = () => {
     date_created: new Date(),
     owner: userID,
   };
-
+  // create new event
   axios.post('http://localhost:9000/createEvent', updatedEventData)
     .then((res) => {
       console.log('Event created successfully:', res.data);
-    // Send a request to update the event
+    // deletes old event
     axios.delete(`http://localhost:9000/deleteEvent/${event_id}`)
     .then((res) => {
     console.log('Event deleted successfully');
@@ -271,44 +266,151 @@ const handleEditEvent = () => {
 
   return (
     <div className="events-container">
-    {/* Create Event button */}
     <button onClick={openPopup} className="create-event-button">+ Create Event</button>
-    
-    {/* Edit Events button */}
     <button onClick={openEditPopup} className="edit-events-button">Edit My Events</button>
-    
-    {/* Popup for editing events */}
+
     {isEditPopupOpen && (
+      <div className="popup-overlay">
+        <div className="popup">
+          <div className="popup-content">
+            <span className="close" onClick={closeEditPopup}>&times;</span>
+            <h2>Edit Event</h2>
+            <div className="form-group">
+              <label htmlFor="selectEvent">Select Event:</label>
+              <Select
+                value={selectedEvent}
+                onChange={handleSelectedEventChange}
+                options={eventOptions}
+              />
+            </div>
+            <form>
+              <div className="form-group">
+                <label htmlFor="eventName">Event Name:</label>
+                <input type="text" id="eventName" name="eventName" />
+              </div>
+              <div className="form-group">
+                <label htmlFor="eventDescription">Event Description:</label>
+                <textarea id="eventDescription" name="eventDescription" rows="4"></textarea>
+              </div>
+              <div className="form-group">
+                <label htmlFor="startDate">Start Date:</label>
+                <input type="date" id="startDate" name="startDate" />
+              </div>
+              <div className="form-group">
+                <label htmlFor="endDate">End Date:</label>
+                <input type="date" id="endDate" name="endDate" />
+              </div>
+              <div className="form-group">
+                <label htmlFor="eventTags">Event Tags:</label>
+                <div>
+                  <input type="text" value={tagInput} onChange={handleTagInputChange} placeholder="Add tags" />
+                  <button type="button" onClick={handleAddTag}>Add</button>
+                </div>
+                <div className="tags">
+                  {tags.map((tag, index) => (
+                    <span key={index} className="tag">
+                      {tag}
+                      <button type="button" onClick={() => handleRemoveTag(index)}>x</button>
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="form-group">
+                <label htmlFor="invitedUsers">Invite Users:</label>
+                <Select
+                  isMulti
+                  value={selectedUsers}
+                  onChange={setSelectedUsers}
+                  options={userOptions}
+                />
+              </div>
+              <button type="button" onClick={handleEditEvent}>Update</button>
+            </form>
+          </div>
+        </div>
+      </div>
+)}
+
+
+      {/* Event display list */}
+      <div className="events-box">
+        <h2>Events:</h2>
+        <ul>
+          {localEvents.map((event) => (
+            <li key={event._id}>
+  {event.event_name}: 
+  {(() => {
+    // Calculate countdown for start and end dates
+    const daysUntilStart = daysUntilEndDate(event.start_date);
+    const daysUntilEnd = daysUntilEndDate(event.end_date);
+
+    // Determine if the event has already started
+    const eventHasStarted = daysUntilStart <= 0;
+
+    // Display countdown based on whether the event has started
+    return eventHasStarted ? ` Ends in ${daysUntilEnd} days` : ` Starts in ${daysUntilStart} days`;
+  })()}
+</li>
+          ))}
+        </ul>
+      </div>
+{/* Popup window */}
+{isPopupOpen && (
   <div className="popup-overlay">
     <div className="popup">
       <div className="popup-content">
-        <span className="close" onClick={closeEditPopup}>&times;</span>
-        <h2>Edit Event</h2>
-        <div className="form-group">
-          <label htmlFor="selectEvent">Select Event:</label>
-          <Select
-            value={selectedEvent}
-            onChange={handleSelectedEventChange}
-            options={eventOptions}
-          />
-        </div>
+        <span className="close" onClick={closePopup}>&times;</span>
+        <h2>Create Event</h2>
         <form>
-          {/* Input fields for editing event details */}
           <div className="form-group">
-            <label htmlFor="eventName">Event Name:</label>
+            <label htmlFor="eventName">*Event Name:</label>
             <input type="text" id="eventName" name="eventName" />
           </div>
           <div className="form-group">
-            <label htmlFor="eventDescription">Event Description:</label>
+            <label htmlFor="eventDescription">*Event Description:</label>
             <textarea id="eventDescription" name="eventDescription" rows="4"></textarea>
           </div>
           <div className="form-group">
-            <label htmlFor="startDate">Start Date:</label>
-            <input type="date" id="startDate" name="startDate" />
-          </div>
-          <div className="form-group">
-            <label htmlFor="endDate">End Date:</label>
-            <input type="date" id="endDate" name="endDate" />
+            <label>Add to Calendar:</label>
+            <div>
+              {userID == null &&
+                <p>Please login to select a calendar.</p>}
+
+              {userID != null && calendars.length == 0 &&
+                <p>You have no calendars!</p>}
+
+              {userID != null && calendars.length > 0 &&
+                <Multiselect
+                  options={calOptions}
+                  displayValue="label"
+                  selected={selectedCals}
+                  //add calendars from selected list
+                  onSelect={(sel) => {
+                    for (const i in sel) {
+                      if (!(selectedCals.includes(sel[i].label)))
+                        selectedCals.push(sel[i].label)
+                    }
+                  }}
+                  //remove calendars from selected list
+                  onRemove={(sel) => {
+                    selectedCals.length = 0; //clear list
+                    sel.map((i) => {
+                      let ex = (selectedCals.includes(i.label))
+                      if (ex === false) {
+                        selectedCals.push(i.value)
+                      }
+                    })
+                  }} />
+              }
+            </div>
+            <div className="tags">
+              {tags.map((tag, index) => (
+                <span key={index} className="tag">
+                  {tag}
+                  <button type="button" onClick={() => handleRemoveTag(index)}>x</button>
+                </span>
+              ))}
+            </div>
           </div>
           <div className="form-group">
             <label htmlFor="eventTags">Event Tags:</label>
@@ -334,126 +436,24 @@ const handleEditEvent = () => {
               options={userOptions}
             />
           </div>
-          <button type="button" onClick={handleEditEvent}>Update</button>
+          <div className="form-group">
+            <label htmlFor="startDate">*Start Date:</label>
+            <input type="date" id="startDate" name="startDate" />
+          </div>
+          <div className="form-group">
+            <label htmlFor="endDate">*End Date:</label>
+            <input type="date" id="endDate" name="endDate" />
+          </div>
+          <button type="button" onClick={() => handleCreateEvent({
+            name: document.getElementById('eventName').value,
+            startDate: new Date(document.getElementById('startDate').value),
+            endDate: new Date(document.getElementById('endDate').value)
+          })}>Create</button>
         </form>
       </div>
     </div>
   </div>
 )}
-
-
-      {/* Event display list */}
-      <div className="events-box">
-        <h2>Events:</h2>
-        <ul>
-          {localEvents.map((event) => (
-            <li key={event._id}>
-              {event.event_name} : {event.start_date >= new Date() ? `Starts in ${daysUntilEndDate(event.start_date)} days` : `Ends in ${daysUntilEndDate(event.end_date)} days`}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Popup window */}
-      {isPopupOpen && (
-        <div className="popup-overlay">
-          <div className="popup">
-            <div className="popup-content">
-              <span className="close" onClick={closePopup}>&times;</span>
-              <h2>Create Event</h2>
-              <form>
-                <div className="form-group">
-                  <label htmlFor="eventName">Event Name:</label>
-                  <input type="text" id="eventName" name="eventName" />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="eventDescription">Event Description:</label>
-                  <textarea id="eventDescription" name="eventDescription" rows="4"></textarea>
-                </div>
-                <div className="form-group">
-                  <label>Add to Calendar:</label>
-                  <div>
-                    {userID == null &&
-                      <p>Please login to select a calendar.</p>}
-
-                    {userID != null && calendars.length == 0 &&
-                      <p>You have no calendars!</p>}
-
-                    {userID != null && calendars.length > 0 &&
-                      <Multiselect
-                        options={calOptions}
-                        displayValue="label"
-                        selected={selectedCals}
-                        //add calendars from selected list
-                        onSelect={(sel) => {
-                          for (const i in sel) {
-                            if (!(selectedCals.includes(sel[i].label)))
-                              selectedCals.push(sel[i].label)
-                          }
-                        }}
-                        //remove calendars from selected list
-                        onRemove={(sel) => {
-                          selectedCals.length = 0; //clear list
-                          sel.map((i) => {
-                            let ex = (selectedCals.includes(i.label))
-                            if (ex === false) {
-                              selectedCals.push(i.value)
-                            }
-                          })
-                        }} />
-                    }
-                  </div>
-                  <div className="tags">
-                    {tags.map((tag, index) => (
-                      <span key={index} className="tag">
-                        {tag}
-                        <button type="button" onClick={() => handleRemoveTag(index)}>x</button>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="eventTags">Event Tags:</label>
-                  <div>
-                    <input type="text" value={tagInput} onChange={handleTagInputChange} placeholder="Add tags" />
-                    <button type="button" onClick={handleAddTag}>Add</button>
-                  </div>
-                  <div className="tags">
-                    {tags.map((tag, index) => (
-                      <span key={index} className="tag">
-                        {tag}
-                        <button type="button" onClick={() => handleRemoveTag(index)}>x</button>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="invitedUsers">Invite Users:</label>
-                  <Select
-                    isMulti
-                    value={selectedUsers}
-                    onChange={setSelectedUsers}
-                    options={userOptions}
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="startDate">Start Date:</label>
-                  <input type="date" id="startDate" name="startDate" />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="endDate">End Date:</label>
-                  <input type="date" id="endDate" name="endDate" />
-                </div>
-                <button type="button" onClick={() => handleCreateEvent({
-                  name: document.getElementById('eventName').value,
-                  startDate: new Date(document.getElementById('startDate').value),
-                  endDate: new Date(document.getElementById('endDate').value)
-                })}>Create</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
