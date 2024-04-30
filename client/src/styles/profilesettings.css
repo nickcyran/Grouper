@@ -48,29 +48,37 @@
 .topWrung{
     display: flex;
     align-items: flex-start;
+    justify-content: center;
+    align-items: center;
+    gap: 3%;
 }
 
 .pfpBasis{
-    flex-basis: 30%;
+    flex-basis: 35%;
+}
+
+.fileinput{
+    width: 100%;
 }
 
 .profilePicSetting {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 160px;
+    width: 100%;
     aspect-ratio: 1;
     border-radius: 100%;
     overflow: hidden;
 }
 
 .userNames{
+
     display: flex;
     flex-direction: column;
     gap: 20px;
     font-size: 28px;
 
-    flex-basis: 70%;
+    flex-basis: 62%;
     text-align: left;
 }
 

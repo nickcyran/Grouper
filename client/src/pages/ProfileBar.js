@@ -144,7 +144,7 @@ const ProfileOptions = ({ toggle }) => {
                     <div className="xSettings" onClick={() => setShown(false)}>
                         x
                     </div>
-                    <h2>Profile Settings</h2>
+                    <h2 style={{fontSize: "2rem"}}>Profile Settings</h2>
 
                     <div className="settingsBox">
                         <div className="topWrung">
@@ -152,7 +152,7 @@ const ProfileOptions = ({ toggle }) => {
                                 <div className="profilePicSetting">
                                     <img className="pfpInnards" src={'http://localhost:9000/Images/' + pfp} />
                                 </div>
-                                <input type="file" onChange={(e) => setFile(e.target.files[0])} />
+                                <input className="fileinput" type="file" onChange={(e) => setFile(e.target.files[0])} />
                             </div>
 
                             <div className="userNames">
