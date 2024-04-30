@@ -2,7 +2,10 @@ const mongoose = require("mongoose")
 
 const channelSchema = new mongoose.Schema({
     channelName: String, //set upon creation
-    message_ID: [{type: mongoose.Schema.Types.ObjectId, ref: 'Message' }],
+    chatroom_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Chat'
+    }
 })
 
 const Channel = mongoose.model("channel", channelSchema);

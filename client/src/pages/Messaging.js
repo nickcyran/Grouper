@@ -3,7 +3,7 @@ import { GetMessagesFromChat, SendMessageToChat, DeleteMessage } from '../contro
 
 import '../styles/chat.css'
 
-const MsgDisplay = ({ chatLog, chatroom }) => {
+const MsgDisplay = ({ chatLog, chatroom, isAdmin }) => {
     const messagesEndRef = useRef(null);
 
     useEffect(() => {
@@ -43,7 +43,7 @@ const MsgDisplay = ({ chatLog, chatroom }) => {
                             </div>
 
                             {/* Conditionally render the settings icon */}
-                            {localStorage.getItem('userID') === chat.user_id && (
+                            {(localStorage.getItem('userID') === chat.user_id || isAdmin ) && (
                                 <div className="Delete" onClick={() => handleDelete(chatroom, chat._id)}>delete</div>
                             )}
                         </div>
@@ -55,7 +55,7 @@ const MsgDisplay = ({ chatLog, chatroom }) => {
     );
 };
 
-const Messaging = ({ group }) => {
+const Messaging = ({ group, isAdmin }) => {
     const [chat, setChat] = useState([]);
 
     useEffect(() => {
@@ -111,7 +111,7 @@ const Messaging = ({ group }) => {
             {group &&
                 <div className="msgContainer">
                     <div className="pastChats">
-                        <MsgDisplay chatLog={chat} chatroom={group} />
+                        <MsgDisplay chatLog={chat} chatroom={group} isAdmin={isAdmin}/>
                     </div>
                     <MessageBar />
                 </div>

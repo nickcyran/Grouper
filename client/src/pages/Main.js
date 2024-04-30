@@ -7,14 +7,12 @@ import { GetUserGroups } from '../controllers'
 
 
 const Main = () => {
-    const [groups, setGroups] = useState([]);
     const [onFriendsPage, setOnFriendsPage] = useState(true);
     const [selectedGroup, setSelectedGroup] = useState()
     const [homeButton, setHomeButton] = useState(false)
     const [servers, setServers] = useState([]); 
     const [selectedServer, setSelectedServer] = useState();
 
-    //
     const HandleSwitchToServer = (server_id) => {
         setSelectedServer(server_id)
     }
@@ -35,11 +33,10 @@ const Main = () => {
         <div className="main">
             <div className="navBar">
                 <div className="dmDir" onClick={() => setOnFriendsPage(true)}>
-                    <img src={messages_icon} alt="direct messages" onClick={()=> {setHomeButton(!homeButton); setSelectedServer()}}/>
+                    <img src={messages_icon} alt="direct messages" onClick={()=> {setHomeButton(!homeButton); setSelectedGroup()}}/>
                 </div>
 
                 {/* DISPLAY ALL OF THE USERS GROUPS */}
-                
                 {(servers.length > 0 ) && (  
                     <div className="groupBar">
                     {servers.map((server, index) => (
@@ -52,7 +49,7 @@ const Main = () => {
             </div>
             <></>
 
-            {onFriendsPage ? <Home  selectedDm={selectedGroup} setDm={setSelectedGroup} homeClick={homeButton}/> : <Server server={selectedServer}/>}
+            {onFriendsPage ? <Home selectedDm={selectedGroup} setDm={setSelectedGroup} homeClick={homeButton}/> : <Server server={selectedServer}/>}
         </div>
     );
 }

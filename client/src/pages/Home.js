@@ -167,6 +167,7 @@ const Home = ({ selectedDm, setDm, homeClick }) => {
 
     useEffect(() => {
         if (!selectedDm) {
+            console.log("click")
             setSelectedProfile(localStorage.getItem('userID'))
             setSelectedDm()
             setMembers()
