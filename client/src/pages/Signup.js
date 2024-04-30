@@ -38,10 +38,18 @@ function Signededup() {
     const handleSignUp = (event) => {
         event.preventDefault()
 
-        if (createUser({ f_name, l_name, username, password })) {
-            navigate('/Login')
-        }
-
+        axios.post('http://localhost:9000/createUser', {f_name, l_name, username, password})
+        .then((res) => {
+            if(!res.data){
+                alert("Username is taken");
+            }
+            else{
+                navigate('/Login')
+            }
+        })
+        .catch((err) => {
+            alert('Error in Signing Up: ' + err)}
+        )
     }
 
     return (
