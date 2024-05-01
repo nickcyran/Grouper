@@ -32,6 +32,11 @@ const Server = ({ server }) => {
     const Server_Left = () => {
         const [channels, setChannels] = useState([])        //channels in server
         const [thisServer, setThisServer] = useState('')
+        const [state, setState] = useState(false)
+
+        const toggle = () => {
+            setState(!state)
+        }
 
         useEffect(() => {
             //get whether or not current user is an admin --USE THIS TO DETERMINE WHETHER OR NOT A LIL GEAR BOX APPEARS THAT LEADS TO SERVER ADMIN PAGE
@@ -55,7 +60,7 @@ const Server = ({ server }) => {
                         setChannels(result.data)
                 })
             //.catch(err => console.log(err))
-        }, [])
+        }, [state])
 
         const [showSettings, setShowSettings] = useState(false)
 
@@ -89,7 +94,7 @@ const Server = ({ server }) => {
                     <p>No channels in server.</p>
                 )}
 
-                {showSettings && <ServerPage id={server} set={setShowSettings}/>}
+                {showSettings && <ServerPage id={server} set={setShowSettings} toggleOut={toggle}/>}
             </>
         )
     }

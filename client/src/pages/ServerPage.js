@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 //server home page, view channels by selecting them on side. admin has an option to go to a different page via. div w/ links (determine who has access via. search by userID)
-const SsserverPage = ({id}) => {
+const SsserverPage = ({id, toggleOut}) => {
     // const { id } = useParams() //get the ref to the server id
     const user_ID = localStorage.getItem('userID')
     const [userStatus, setUserStatus] = useState([]) //whether user is a member or admin
@@ -143,6 +143,12 @@ const SsserverPage = ({id}) => {
         setMemberRemoval(false)
     }
 
+    const [state, setState] = useState(false)
+    const toggle = () => {
+        toggleOut()
+        setState(!state)
+    }
+
     //CREATING/VIEWING CHANNELS ---------------------------------------------
     const handleChannelCreation = (event) => {
         event.preventDefault()
@@ -152,8 +158,11 @@ const SsserverPage = ({id}) => {
                 //console.log(result.data)
                 //setNewChannelID(result.data[0]._id)
                 handleChannelAddition()                //calling outside to ensure channel was created
-                if (result.data !== "Error: Server not found" && result.data !== "Error: Could not create channel")
+                if (result.data !== "Error: Server not found" && result.data !== "Error: Could not create channel"){
                     console.log(result.data._id);
+                    console.log("ADASD")
+                    toggle();
+                }
                 else
                     alert("Error: Server not found. Could not create channel");
             })
@@ -167,7 +176,8 @@ const SsserverPage = ({id}) => {
                 console.log(result)
                 if (result.data !== "Error: Server not found" && result.data !== "Error: Could not create channel") {
                     console.log(result.data);
-                    window.location.reload();
+                    toggle();
+           
                 }
                 else
                     alert("Error: Server not found. Could not create channel");
@@ -185,7 +195,8 @@ const SsserverPage = ({id}) => {
             axios.get('http://localhost:9000/changeServerName', { params: { sID: id, nSN: newServerName } })
                 .then(result => {
                     alert(result.data)
-                    window.location.reload();
+                    
+                    toggle();
                 })
                 .catch(err => { console.log(err) })
         }
@@ -202,7 +213,7 @@ const SsserverPage = ({id}) => {
                 .then(result => {
                     alert(result.data)
                     setSelectedC("")
-                    window.location.reload();
+                    toggle();
                 })
                 .catch(err => console.log(err))
         }
@@ -226,7 +237,7 @@ const SsserverPage = ({id}) => {
             axios.get('http://localhost:9000/addServerAdmins', { params: { sID: id, aID: adID } })
                 .then(result => {
                     alert("Added admin.")
-                    window.location.reload();
+                    toggle();
                 })
                 .catch(err => console.log(err))
         }
@@ -240,7 +251,7 @@ const SsserverPage = ({id}) => {
             axios.get('http://localhost:9000/removeServerAdmins', { params: { sID: id, aID: adID } })
                 .then(result => {
                     alert("Removed admin.")
-                    window.location.reload();
+                    toggle();
                 })
                 .catch(err => console.log(err))
         }
@@ -254,7 +265,7 @@ const SsserverPage = ({id}) => {
             axios.get('http://localhost:9000/removeServerMembers', { params: { sID: id, sUser: memID } })
                 .then(result => {
                     alert("Removed member.")
-                    window.location.reload();
+                    toggle();
                 })
                 .catch(err => console.log(err))
         }
@@ -296,7 +307,7 @@ const SsserverPage = ({id}) => {
                 setOwner(result.data)
             })
             .catch(err => console.log(err))
-    }, [])
+    }, [state])
 
     useEffect(() => {
         //get members, set excl. OA, set excl OU
@@ -546,11 +557,11 @@ const SsserverPage = ({id}) => {
     )
 }
 
-const ServerPage = ({id,set}) => {
+const ServerPage = ({id, set, toggleOut}) => {
     return(
         <div className="fform">
             <div className="xSettings" onClick={() => set(false)}>x</div>
-            <SsserverPage id={id}/>
+            <SsserverPage id={id} toggleOut={toggleOut}/>
         </div>
     )
 }
